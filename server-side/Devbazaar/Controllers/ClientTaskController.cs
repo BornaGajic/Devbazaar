@@ -14,6 +14,7 @@ using Microsoft.AspNet.Identity;
 
 namespace Devbazaar.Controllers
 {
+    [Authorize]
 	[RoutePrefix("Devbazaar/Task")]
     public class ClientTaskController : ApiController
     {
@@ -26,7 +27,6 @@ namespace Devbazaar.Controllers
             ClientTaskService = clientTaskService;
         }
 
-        [Authorize]
         [Route("Create")]
         [HttpPost]
         public async Task<HttpResponseMessage> CreateAsync ([FromBody] CreateClientTaskRest newTask)
@@ -46,7 +46,6 @@ namespace Devbazaar.Controllers
             }
         }
 
-        [Authorize]
         [Route("Update")]
         [HttpPut]
         public async Task<HttpResponseMessage> UpdateAsync ([FromBody] UpdateClientTaskRest updatedTask)
@@ -73,7 +72,7 @@ namespace Devbazaar.Controllers
             }
         }
 
-        [Authorize]
+        
         [Route("Delete")]
         [HttpDelete]
         public async Task<HttpResponseMessage> DeleteAsync ([FromBody] DeleteClientTaskRest task)
@@ -88,22 +87,22 @@ namespace Devbazaar.Controllers
             }
         }
 
-        [AllowAnonymous]
         [Route("Tasks")]
         [HttpGet]
         public async Task<HttpResponseMessage> PaginatedGetAsync ([FromBody] ClientTaskPage pageData)
         {
-            return Request.CreateResponse(HttpStatusCode.OK, await ClientTaskService.PaginatedGetAsync(pageData));
-        }
+            Guid? clientId = null;
+            if (pageData.isMyTasks == true)
+            {
+                clientId = Guid.Parse(User.Identity.GetUserId());
+            }
 
-        [Authorize]
-        [Route("MyTasks")]
-        [HttpGet]
-        public async Task<HttpResponseMessage> SelfPaginatedGetASync ([FromBody] ClientTaskPage pageData)
-        {
-            Guid clientId = Guid.Parse(User.Identity.GetUserId());
+            object returnDto = new {
+               pageResult = await ClientTaskService.PaginatedGetAsync(pageData, clientId),
+               totalItems = Utility.Utility.TotalClientTaskCount
+            };
 
-            return Request.CreateResponse(HttpStatusCode.OK, await ClientTaskService.PaginatedGetAsync(pageData, clientId));
+            return Request.CreateResponse(HttpStatusCode.OK, returnDto);
         }
     }
 }

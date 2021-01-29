@@ -12,9 +12,11 @@ using Devbazaar.Model.Common;
 using Devbazaar.RestModels.BusinessRest;
 using Devbazaar.Service.Common.IBusinessServices;
 using Microsoft.AspNet.Identity;
+using static Devbazaar.Utility.Utility;
 
 namespace Devbazaar.Controllers
 {
+    [Authorize]
     [RoutePrefix("Devbazaar/Business")]
     public class BusinessController : ApiController
     {
@@ -27,7 +29,6 @@ namespace Devbazaar.Controllers
             Mapper = mapper;
         }
 
-        [Authorize]
         [HttpPost]
         [Route("Create")]
         public async Task<HttpResponseMessage> CreateAsync ([FromBody] CreateBusinessRest createBusinessRest)
@@ -51,7 +52,6 @@ namespace Devbazaar.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, createBusinessRest);
         }
 
-        [Authorize]
         [HttpPut]
         [Route("Update")]
         public async Task<HttpResponseMessage> UpdateAsync ([FromBody] UpdateBusinessRest updateBusinessRest)
@@ -81,7 +81,6 @@ namespace Devbazaar.Controllers
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
-        [Authorize]
         [HttpPut]
         [Route("Acquire")]
         public async Task<HttpResponseMessage> AcquireClientTaskAsync ([FromUri] Guid clientTaskId)
@@ -96,26 +95,40 @@ namespace Devbazaar.Controllers
             return Request.CreateResponse(HttpStatusCode.InternalServerError);
         }
 
-        [Authorize]
         [HttpGet]
         [Route("Tasks")]
         public async Task<HttpResponseMessage> AcquiredClientTasks ([FromBody] ClientTaskPage pageData)
         {
             Guid businessId = Guid.Parse(User.Identity.GetUserId());
 
-            return Request.CreateResponse(HttpStatusCode.OK, await BusinessService.AcquiredClientTasksAsync(pageData, businessId));
+            object returnDto = new {
+               pageResult = await BusinessService.AcquiredClientTasksAsync(pageData, businessId),
+               totalItems = Utility.Utility.TotalClientTaskCount
+            };
+
+            return Request.CreateResponse(HttpStatusCode.OK, returnDto);
         }
 
-		[AllowAnonymous]
 		[HttpGet]
 		[Route("Businesses")]
 		public async Task<HttpResponseMessage> PaginatedGetAsync ([FromBody] BusinessPage pageData)
 		{
-            return Request.CreateResponse(HttpStatusCode.OK, await BusinessService.PaginatedGetAsync(pageData));
+            if (User.IsInRole("Client"))
+            {
+                Guid clientId = Guid.Parse(User.Identity.GetUserId());
+                
+                return Request.CreateResponse(HttpStatusCode.OK, await BusinessService.PaginatedGetAsync(pageData, clientId));
+            }
+
+            object returnDto = new {
+               pageResult = await BusinessService.PaginatedGetAsync(pageData),
+               totalItems = Utility.Utility.TotalBusinessCount
+            };
+
+            return Request.CreateResponse(HttpStatusCode.OK, returnDto);
 		}
 
         /* TO-DO:
-         * `Popular this week` -> popularity by number of times a business was favourited. Updates by itself every week.
          * Add option to update business categories.
          */
 	}

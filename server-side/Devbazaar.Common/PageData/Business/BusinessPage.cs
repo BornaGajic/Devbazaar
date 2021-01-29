@@ -16,5 +16,6 @@ namespace Devbazaar.Common.PageData.Business
 
 		// sort
 		public bool? NameAsc { get; set; } = null;
+		public bool? FavouriteCount { get; set; } = false;
 	}
 }

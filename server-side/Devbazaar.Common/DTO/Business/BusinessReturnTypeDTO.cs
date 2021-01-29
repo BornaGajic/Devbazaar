@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Devbazaar.Common.IPageData.Business;
+using Devbazaar.Model.Common;
 
 namespace Devbazaar.Common.DTO.Business
 {
-	public class BusinessReturnTypeDTO
+	public class BusinessReturnTypeDTO : IBusinessReturnType
 	{
 		public Guid Id { get; set; }
 		public string Username { get; set; }
@@ -15,8 +17,11 @@ namespace Devbazaar.Common.DTO.Business
 		public string About { get; set; }
 		public string Website { get; set; }
 		public bool Available { get; set; }
+		public bool IsFavourited { get; set; } = false;
 		public string Country { get; set; }
 		public string City { get; set; }
 		public int PostalCode { get; set; }
+		public int Popularity { get; set; }
+		public List<ICategory> Categories { get; set; } = null;
 	}
 }

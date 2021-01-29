@@ -12,5 +12,7 @@ namespace Devbazaar.Utility
 		};
 
 		public static int PageItemLimit = 5;
+		public static int TotalBusinessCount = 0;
+		public static int TotalClientTaskCount = 0;
 	}
 }

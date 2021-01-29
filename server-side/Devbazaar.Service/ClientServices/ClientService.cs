@@ -48,5 +48,25 @@ namespace Devbazaar.Service.ClientServices
 			
 			return true;
 		}
+
+		public async Task<bool> AddToFavourites (Guid clientId, Guid businessId)
+		{
+			var businessEntity = await (from business in UnitOfWork.BusinessRepository.Table where business.Id == businessId select business).SingleAsync();
+			var clientEntity = await (from client in UnitOfWork.ClientRepository.Table where client.Id == clientId select client).SingleAsync();
+
+			clientEntity.Businesses.Add(businessEntity);
+
+			try
+			{
+				await UnitOfWork.CommitAsync<ClientEntity>();
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e.Message);
+				return false;
+			}
+			
+			return true;
+		}
 	}
 }

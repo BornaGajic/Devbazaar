@@ -55,9 +55,22 @@ namespace Devbazaar.Controllers
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
-
-        /* TO-DO:
-         * Method for adding favourite Businesses
-         */
+        [Authorize]
+        [HttpPost]
+        [Route("AddFavourite")]
+        public async Task<HttpResponseMessage> AddBusinessToFavourites ([FromUri] Guid businessId)
+        {   
+            try
+            {
+                await ClientService.AddToFavourites(Guid.Parse(User.Identity.GetUserId()), businessId);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+            
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
     }
 }

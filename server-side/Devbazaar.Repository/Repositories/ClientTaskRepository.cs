@@ -90,6 +90,9 @@ namespace Devbazaar.Repository.Repositories
 							  (businessId != null ? ct.BusinessId == businessId : true)
 						select ct;
 
+
+			Utility.Utility.TotalClientTaskCount = await query.CountAsync();
+
 			// sort
 			if (pageData.OldestDate.HasValue)
 			{

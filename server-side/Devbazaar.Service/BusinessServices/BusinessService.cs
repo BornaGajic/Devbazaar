@@ -15,6 +15,7 @@ using Devbazaar.Common.IPageData.ClientTask;
 using Devbazaar.Common.PageData;
 using Devbazaar.Common.PageData.ClientTask;
 using Devbazaar.Common.DTO.Business;
+using static Devbazaar.Utility.Utility;
 
 namespace Devbazaar.Service.BusinessServices
 {
@@ -118,24 +119,40 @@ namespace Devbazaar.Service.BusinessServices
 			return clientTaskReturnTypes;
 		}
 
-		public async Task<List<IBusinessReturnType>> PaginatedGetAsync (BusinessPage pageData)
+		public async Task<List<IBusinessReturnType>> PaginatedGetAsync (BusinessPage pageData, Guid? clientId = null)
 		{
 			var businessTable = UnitOfWork.BusinessRepository.Table;
 
 			var businessList = await ApplyPageSeasoningAsync(pageData);
-			var businessPage = new List<IBusinessReturnType>();
+
+			List<BusinessEntity> clientFavourites = null;
+
+			if (clientId != null)
+			{
+				var clientEntity = await (from client in UnitOfWork.ClientRepository.Table where client.Id == clientId select client).SingleAsync();
+
+				clientFavourites = clientEntity.Businesses.ToList();
+			}
 
 			foreach (var business in businessList)
 			{
 				var categories = businessTable.Where(b => b.Id == business.Id).SelectMany(b => b.Categories);
 
-				var businessReturnType = Mapper.Map<BusinessReturnType>(business);
-				businessReturnType.Categories = Mapper.Map<List<ICategory>>(await categories.ToListAsync());
+				business.Categories = Mapper.Map<List<ICategory>>(await categories.ToListAsync());
 
-				businessPage.Add(businessReturnType);
+				if (clientFavourites != null)
+				{
+					foreach (BusinessEntity b in clientFavourites)
+					{
+						if (business.Id == b.Id)
+						{
+							business.IsFavourited = true;
+						}
+					}
+				}
 			}
 
-			return businessPage;
+			return Mapper.Map<List<IBusinessReturnType>>(businessList);
 		}
 
 		private async Task<List<BusinessReturnTypeDTO>> ApplyPageSeasoningAsync (BusinessPage pageData)
@@ -149,28 +166,41 @@ namespace Devbazaar.Service.BusinessServices
 			string likeCountry = string.IsNullOrEmpty(pageData.Country) ? "%" : "%" + pageData.Country + "%";
 			string likeCity = string.IsNullOrEmpty(pageData.City) ? "%" : "%" + pageData.City + "%";
 
-			var query = await (from business in businessTable
-							   join user in userTable
-							   on business.Id equals user.Id
-							   where 
-								  DbFunctions.Like(user.Username, likeUsername) &&
-								  DbFunctions.Like(business.Country, likeCountry) &&
-								  DbFunctions.Like(business.City, likeCity)
-							   orderby user.Username descending
-							   select new BusinessReturnTypeDTO {
-								  Id = business.Id,
-								  Description = business.Description,
-								  About = business.About,
-								  Available = business.Available,
-								  City = business.City,
-								  Country = business.Country,
-								  PostalCode = business.PostalCode,
-								  Email = user.Email,
-								  Username = user.Username,
-								  Website = business.Website, 
-							   }).Skip((pageData.PageNumber - 1) * pageItemCount).Take(pageItemCount).ToListAsync();
+			var query = (from business in businessTable
+					 	join user in userTable
+						on business.Id equals user.Id
+						where 
+							DbFunctions.Like(user.Username, likeUsername) &&
+							DbFunctions.Like(business.Country, likeCountry) &&
+							DbFunctions.Like(business.City, likeCity)
+						select new BusinessReturnTypeDTO {
+							Id = business.Id,
+							Description = business.Description,
+							About = business.About,
+							Available = business.Available,
+							City = business.City,
+							Country = business.Country,
+							PostalCode = business.PostalCode,
+							Email = user.Email,
+							Username = user.Username,
+							Website = business.Website,
+							Popularity = business.Clients.Count
+						});
 
-			return query;
+			Utility.Utility.TotalBusinessCount = await query.CountAsync();
+
+			if (pageData.FavouriteCount == true)
+			{
+				query = query.OrderByDescending(bDto => bDto.Popularity).ThenByDescending(bDto => bDto.Username);
+			}
+			else
+			{
+				query = query.OrderByDescending(bDto => bDto.Username);
+			}
+			
+			var pageResult = await query.Skip((pageData.PageNumber - 1) * pageItemCount).Take(pageItemCount).ToListAsync();			
+			
+			return pageResult;
 		}
 	}
 }

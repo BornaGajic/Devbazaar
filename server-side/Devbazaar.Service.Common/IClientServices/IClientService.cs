@@ -10,5 +10,6 @@ namespace Devbazaar.Service.Common.IClientServices
 	public interface IClientService
 	{
 		Task<bool> UpdateAsync (Dictionary<string, object> updateClient, Guid clientId);
+		Task<bool> AddToFavourites (Guid clientId, Guid businessId);
 	}
 }
