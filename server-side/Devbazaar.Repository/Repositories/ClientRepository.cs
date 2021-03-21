@@ -14,5 +14,10 @@ namespace Devbazaar.Repository.Repositories
 		public ClientRepository (DevbazaarDbContext context) : base(context)
 		{
 		}
+
+		public async Task<ClientEntity> GetByIdAsync (Guid id)
+		{
+			return await Entities.FindAsync(id);
+		}
 	}
 }

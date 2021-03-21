@@ -17,7 +17,7 @@ namespace Devbazaar.Repository.Repositories
 		{
 		}
 
-		public async Task<Guid> CheckExistence (string email, string password)
+		public async Task<UserEntity> CheckExistence (string email, string password)
 		{
 			var result = from user in TableAsNoTracking where user.Email == email && user.Password == password select user;
 			
@@ -28,10 +28,10 @@ namespace Devbazaar.Repository.Repositories
 			}
 			catch // ArgumentNullException
 			{
-				return Guid.Empty;
+				return null;
 			}
 
-			return registeredUser != null ? registeredUser.Id : Guid.Empty;
+			return registeredUser != null ? registeredUser : null;
 		}
 	}
 }

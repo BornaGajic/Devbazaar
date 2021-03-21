@@ -11,6 +11,6 @@ namespace Devbazaar.Repository.Common.Repositories
 {
 	public interface IUserRepository : IBaseRepository<UserEntity>
 	{
-		Task<Guid> CheckExistence (string email, string password);
+		Task<UserEntity> CheckExistence (string email, string password);
 	}
 }

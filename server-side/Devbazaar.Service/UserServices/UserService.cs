@@ -32,7 +32,7 @@ namespace Devbazaar.Service.UserServices
 		// creates new user, by default it creates new Business, else it creates Client
 		public async Task<string> CreateAsync (IUser user, TypeOfUser typeOfUser)
 		{
-			if (await UnitOfWork.UserRepository.CheckExistence(user.Email, user.Username) == Guid.Empty)
+			if (await UnitOfWork.UserRepository.CheckExistence(user.Email, user.Username) == null)
 			{
 				user.Id = Guid.NewGuid();
 				user.Password = EncodePassword(user.Password);
@@ -60,19 +60,20 @@ namespace Devbazaar.Service.UserServices
 		// returns token if User exists, else returns empty string
 		public async Task<string> LoginAsync (IUser user)
 		{
-			Guid userId = await UnitOfWork.UserRepository.CheckExistence(user.Email, EncodePassword(user.Password));
+			UserEntity thisUser = await UnitOfWork.UserRepository.CheckExistence(user.Email, EncodePassword(user.Password));
 			TypeOfUser role = TypeOfUser.Business;
 
-			if (userId == Guid.Empty)
+			if (thisUser.Id == null)
 			{
 				return string.Empty;
 			}
-			else if (await UnitOfWork.BusinessRepository.GetByIdAsync(userId) == null)
+			else if (await UnitOfWork.BusinessRepository.GetByIdAsync(thisUser.Id) == null)
 			{
 				role = TypeOfUser.Client;
 			}
 
-			user.Id = userId;
+			user.Id = thisUser.Id;
+			user.Logo = thisUser.Logo;
 
 			return GenerateToken(user, role);
 		}
@@ -123,8 +124,8 @@ namespace Devbazaar.Service.UserServices
 			List<Claim> claims = new List<Claim>()
 			{
 				new Claim(JwtRegisteredClaimNames.Jti, user.Id.ToString()),
-				new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-				new Claim(ClaimTypes.Email, user.Email.ToString()),
+				new Claim(ClaimTypes.GivenName, user.Username),
+				new Claim(ClaimTypes.Email, user.Email),
 				new Claim(ClaimTypes.Role, role.ToString())
 			};
 

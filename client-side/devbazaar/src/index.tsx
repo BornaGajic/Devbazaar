@@ -3,12 +3,15 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 
-import Login from './components/login-registerComponents/Login/index';
-import App from './components/appComponent/App';
+import { StoreProvider } from './contexts'
+
+import App from './components/app/App';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <StoreProvider>
+      <App />
+    </StoreProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

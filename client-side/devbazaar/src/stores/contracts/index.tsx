@@ -1,0 +1,1 @@
+export type { IUserStore } from './IUserStore';

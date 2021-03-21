@@ -1,11 +1,10 @@
 import logo from './logo.svg';
 import './App.css';
-
-import { Header } from '../templateComponents/Header/index';
+import { Login } from '../login-register';
 
 function App() {
   return (
-    <Header />
+    <Login naslov="NASLOV" />
   );
 }
 
