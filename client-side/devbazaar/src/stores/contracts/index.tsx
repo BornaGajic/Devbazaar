@@ -1,1 +1,1 @@
-export type { IUserStore } from './IUserStore';
+export type { IUser } from './IUserStore';

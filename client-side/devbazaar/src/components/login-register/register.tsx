@@ -14,8 +14,10 @@ const Register = observer(({naslov} : IRegisterProps) =>
     const store = useStores();
 
     return (
-        <div className="d-flex justify-content-center display-4">
-            {store.UserStore.Email}
+        <div className="d-flex justify-content-center">
+            {
+                JSON.stringify(store.UserStore.User.asJson())
+            }
         </div>
     );
 })

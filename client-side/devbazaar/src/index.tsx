@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 
+import './axios-config';
+
 import { StoreProvider } from './contexts'
 
 import App from './components/app/App';

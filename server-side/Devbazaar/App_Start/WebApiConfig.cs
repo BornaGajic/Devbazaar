@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using Microsoft.Owin.Security.OAuth;
 
 namespace Devbazaar
@@ -11,7 +12,8 @@ namespace Devbazaar
 		public static void Register (HttpConfiguration config)
 		{
 			// Web API configuration and services	
-			config.EnableCors();
+			var cors = new EnableCorsAttribute("*", "*", "*");
+			config.EnableCors(cors);
             config.SuppressDefaultHostAuthentication();
             config.Filters.Add(new HostAuthenticationFilter(OAuthDefaults.AuthenticationType));
 

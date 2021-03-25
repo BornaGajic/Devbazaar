@@ -63,7 +63,7 @@ namespace Devbazaar.Service.UserServices
 			UserEntity thisUser = await UnitOfWork.UserRepository.CheckExistence(user.Email, EncodePassword(user.Password));
 			TypeOfUser role = TypeOfUser.Business;
 
-			if (thisUser.Id == null)
+			if (thisUser == null)
 			{
 				return string.Empty;
 			}
@@ -74,6 +74,7 @@ namespace Devbazaar.Service.UserServices
 
 			user.Id = thisUser.Id;
 			user.Logo = thisUser.Logo;
+			user.Username = thisUser.Username;
 
 			return GenerateToken(user, role);
 		}
@@ -123,10 +124,11 @@ namespace Devbazaar.Service.UserServices
 
 			List<Claim> claims = new List<Claim>()
 			{
-				new Claim(JwtRegisteredClaimNames.Jti, user.Id.ToString()),
-				new Claim(ClaimTypes.GivenName, user.Username),
-				new Claim(ClaimTypes.Email, user.Email),
-				new Claim(ClaimTypes.Role, role.ToString())
+				new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+				new Claim("Username", user.Username),
+				new Claim("Email", user.Email),
+				new Claim("Role", role.ToString()),
+				new Claim("Logo", user.Logo ?? string.Empty)
 			};
 
 			string issuer = ConfigurationManager.AppSettings["issuer"];

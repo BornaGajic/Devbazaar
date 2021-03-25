@@ -1,36 +1,62 @@
 import axios from 'axios'
+import { IUser } from '../stores/contracts';
+import { IEditUser } from '../stores/rest';
 
 import { IUserService } from './contracts'
 
-class UserService implements IUserService
+class UserService
 {
     constructor ()
     {
     }
     
-    async LoginAsync (email: string, password: string)
+    async loginAsync (email: string, password: string): Promise<string>
     {
-        let reponse = await axios.get(`${axios.defaults.baseURL}/Login`,
+        let response = await axios.post(`${axios.defaults.baseURL}/User/Login`,
         {
-            data : {
-                loginData : {
-                    Email : email,
-                    Password : password
-                }
-            }
+            Email : email,
+            Password : password
         });
 
-        return reponse.data;
+        if (response.status == 400 || response.status == 404)
+        {
+            throw new Error("Not found");
+        }
+
+        return response.data;
     }
 
-    async RegisterAsync (username: string, password: string, email: string)
+    async registerAsync (data: IEditUser): Promise<string>
     {
+        let response = await axios.post(`${axios.defaults.baseURL}/User/Register`,
+        {
+            Username : data.Username,
+            Email : data.Email,
+            Password : data.Password
+        }, { params : { TypeOfUser : data.Role } });
+
+        if (response.status == 409)
+        {
+            throw new Error("User already exists!");
+        }
+
+        return response.data;
+    }
+
+    async updateAsync (data: IEditUser): Promise<void>
+    {
+        let response = await axios.put(`${axios.defaults.baseURL}/User/Update`,
+        {
+            Username: data.Username,
+            Email: data.Email,
+            Password: data.Password,
+            Logo: data.Logo
+        }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
         
-    }
-
-    async UpdateAsync (username?: string, password?: string, email?: string, logo?: string)
-    {
-
+        if (response.status == 400)
+        {
+            throw new Error(response.statusText);   
+        }
     }
 }
 

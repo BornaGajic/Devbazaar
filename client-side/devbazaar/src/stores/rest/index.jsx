@@ -1,0 +1,1 @@
+export { IEditUser } from './IEditUser';

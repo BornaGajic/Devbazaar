@@ -3,6 +3,7 @@ import { stringifyKey } from 'mobx/dist/internal';
 import React, { ChangeEvent } from 'react';
 import { Register } from '.';
 import { useStores } from '../../hooks/useStores';
+import { IEditUser } from '../../stores/rest';
 
 import './login.css';
 
@@ -14,21 +15,27 @@ interface ILoginProps
 const Login = observer(({naslov} : ILoginProps) =>
 {
     const store = useStores();
-    // store.UserStore.Login(store.UserStore.Email, store.UserStore.Password)
 
-    function updateProperty (e : ChangeEvent<HTMLInputElement>)
-    {
-        // koristiti action od userstorea
-        store.UserStore.Email = e.target.value;
-        
-    }
+    let email: string = '';
+    let username: string = '';
+    let password: string = '';
 
     return (
         <div>
-        <form onSubmit={ (e) => { console.log(store.UserStore.Email); e.preventDefault(); } }>
+        <form onSubmit={ (e) => { store.UserStore.loginAsync(email, password); e.preventDefault(); } }>
 
-            <label htmlFor="lname">Last name:</label><br/>
-            <input type="text" id="lname" onChange={ (e) => updateProperty(e) } /><br/><br/>
+            <label htmlFor="emailBox">Email:</label><br/>
+            <input type="text" id="emailBox" onChange={ (e) => email =  e.target.value } /><br/><br/>
+
+            <label htmlFor="passwordBox">Password:</label><br/>
+            <input type="text" id="passwordBox" onChange={ (e) => password = e.target.value } /><br/><br/>
+
+            <input type="submit" value="Submit" />
+        </form> 
+        <form onSubmit={ (e) => { store.UserStore.updateAsync({Username: username} as IEditUser); e.preventDefault(); } }>
+
+            <label htmlFor="usernameBox">Email:</label><br/>
+            <input type="text" id="usernameBox" onChange={ (e) => username =  e.target.value } /><br/><br/>
 
             <input type="submit" value="Submit" />
         </form> 

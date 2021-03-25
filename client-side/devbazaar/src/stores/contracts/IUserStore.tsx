@@ -1,8 +1,8 @@
-export interface IUserStore 
+export interface IUser 
 {
     Id?: string;
     Username?: string;
     Email?: string;
-    Password?: string;
     Logo?: string;
+    Role?: string;
 }

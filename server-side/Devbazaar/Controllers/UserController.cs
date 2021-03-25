@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Cors;
 using AutoMapper;
 using Devbazaar.Model.Common.IUser;
 using Devbazaar.RestModels.UserRest;
@@ -55,7 +56,7 @@ namespace Devbazaar.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet]
+        [HttpPost]
         [Route("Login")]
         public async Task<HttpResponseMessage> LoginAsync ([FromBody] LoginRest loginData)
         {
@@ -89,8 +90,8 @@ namespace Devbazaar.Controllers
                     changedValues[property.Name] = property.GetValue(updateData);
                 }
             }
-
-            var userId = Guid.Parse(User.Identity.GetUserId());
+            var X = User.Identity.GetUserId();
+            var userId = Guid.Parse(X);
 
             var result = await UserService.UpdateAsync(changedValues, userId);
 
