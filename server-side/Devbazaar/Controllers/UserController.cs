@@ -64,9 +64,10 @@ namespace Devbazaar.Controllers
 
             try
             {
-                string token = await UserService.LoginAsync(user);
+                var loginDto = await UserService.LoginAsync(user);
 
-                return string.IsNullOrEmpty(token) ? Request.CreateResponse(HttpStatusCode.NotFound) : Request.CreateResponse(HttpStatusCode.OK, token);
+                return loginDto == null ? Request.CreateResponse(HttpStatusCode.NotFound) : 
+                                          Request.CreateResponse(HttpStatusCode.OK, loginDto);
             }
             catch (Exception e)
             {

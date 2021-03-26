@@ -1,8 +1,5 @@
 import axios from 'axios'
-import { IUser } from '../stores/contracts';
-import { IEditUser } from '../stores/rest';
-
-import { IUserService } from './contracts'
+import { IUserData } from '../stores/contracts';
 
 class UserService
 {
@@ -23,10 +20,12 @@ class UserService
             throw new Error("Not found");
         }
 
+        console.log(response.data);
+
         return response.data;
     }
 
-    async registerAsync (data: IEditUser): Promise<string>
+    async registerAsync (data: IUserData): Promise<string>
     {
         let response = await axios.post(`${axios.defaults.baseURL}/User/Register`,
         {
@@ -43,7 +42,7 @@ class UserService
         return response.data;
     }
 
-    async updateAsync (data: IEditUser): Promise<void>
+    async updateAsync (data: IUserData): Promise<void>
     {
         let response = await axios.put(`${axios.defaults.baseURL}/User/Update`,
         {

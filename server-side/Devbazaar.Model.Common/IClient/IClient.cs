@@ -10,5 +10,8 @@ namespace Devbazaar.Model.Common
 	{
 		string FirstName { get; set; }
 		string LastName { get; set; }
+
+		List<IClientTask> Tasks { get; set; }
+		List<IBusiness> Businesses { get; set; }
 	}
 }

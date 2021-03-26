@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Devbazaar.DAL.EntityModels;
 using Devbazaar.DAL.Context;
 using Devbazaar.Repository.Common.Repositories;
+using Devbazaar.Common.DTO.Business;
+using System.Data.Entity;
 
 namespace Devbazaar.Repository.Repositories
 {
@@ -18,7 +20,15 @@ namespace Devbazaar.Repository.Repositories
 
 		public async Task<BusinessEntity> GetByIdAsync (Guid id)
 		{
-			return await Entities.FindAsync(id);
+			var business = await Entities.FindAsync(id);
+
+			if (business == null) return null;
+
+			var categories = Table.Where(b => b.Id == business.Id).SelectMany(b => b.Categories);
+
+			business.Categories = await categories.ToListAsync();
+
+			return business;
 		}
 	}
 }

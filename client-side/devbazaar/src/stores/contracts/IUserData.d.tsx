@@ -1,4 +1,4 @@
-export interface IEditUser
+export interface IUserData
 {
     Username?: string,
     Email?: string,

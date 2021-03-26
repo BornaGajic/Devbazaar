@@ -69,7 +69,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DTO\Business\BusinessReturnTypeDTO.cs" />
+    <Compile Include="DTO\Business\BusinessReturnTypeDto.cs" />
+    <Compile Include="DTO\Client\ClientDto.cs" />
+    <Compile Include="DTO\User\UserDto.cs" />
     <Compile Include="IPageData\Business\IBusinessReturnType.cs" />
     <Compile Include="IPageData\ClientTask\IClientTaskReturnType.cs" />
     <Compile Include="PageData\Business\BusinessPage.cs" />

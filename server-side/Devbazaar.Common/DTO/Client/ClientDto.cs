@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Devbazaar.Model.Common;
 
-namespace Devbazaar.Model
+namespace Devbazaar.Common.DTO.Client
 {
-	public class Client : User, IClient
+	public class ClientDto
 	{
 		public string FirstName { get; set; }
 		public string LastName { get; set; }

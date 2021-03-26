@@ -9,6 +9,11 @@ namespace Devbazaar.DAL.EntityModels
 {
 	public class ClientEntity : BaseEntity, IClientEntity
 	{
+		public ClientEntity ()
+		{
+			this.Businesses = new HashSet<BusinessEntity>();
+		}
+
 		public virtual UserEntity User { get; set; }
 		public string FirstName { get; set; }
 		public string LastName { get; set; }

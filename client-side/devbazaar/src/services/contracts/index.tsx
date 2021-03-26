@@ -1,1 +1,1 @@
-export type { IUserService } from './IUserService';
+export type { IUserService } from './IUserService.d';

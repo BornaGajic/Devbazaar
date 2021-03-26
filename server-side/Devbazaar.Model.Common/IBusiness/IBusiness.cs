@@ -14,6 +14,7 @@ namespace Devbazaar.Model.Common
 		string Website { get; set; }
 		string Country { get; set; }
 		string City { get; set; }
+		int PostalCode { get; set; }
 		bool Available { get; set; }
 
 		List<ICategory> Categories { get; set; }

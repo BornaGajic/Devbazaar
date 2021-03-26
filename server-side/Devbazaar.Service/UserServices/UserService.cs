@@ -15,6 +15,10 @@ using static Devbazaar.Utility.Utility;
 using System.Security.Cryptography;
 using Devbazaar.Service.Common.IUserServices;
 using System.Data.Entity;
+using Devbazaar.Model;
+using Devbazaar.Model.Common;
+using Devbazaar.Common.DTO.Client;
+using Devbazaar.Common.DTO.User;
 
 namespace Devbazaar.Service.UserServices
 {
@@ -58,14 +62,14 @@ namespace Devbazaar.Service.UserServices
 		}
 
 		// returns token if User exists, else returns empty string
-		public async Task<string> LoginAsync (IUser user)
+		public async Task<UserDto> LoginAsync (IUser user)
 		{
 			UserEntity thisUser = await UnitOfWork.UserRepository.CheckExistence(user.Email, EncodePassword(user.Password));
 			TypeOfUser role = TypeOfUser.Business;
 
 			if (thisUser == null)
 			{
-				return string.Empty;
+				return null;
 			}
 			else if (await UnitOfWork.BusinessRepository.GetByIdAsync(thisUser.Id) == null)
 			{
@@ -76,7 +80,18 @@ namespace Devbazaar.Service.UserServices
 			user.Logo = thisUser.Logo;
 			user.Username = thisUser.Username;
 
-			return GenerateToken(user, role);
+			var token = GenerateToken(user, role);
+
+			var x = await UnitOfWork.ClientRepository.GetByIdAsync(thisUser.Id);
+			
+			ClientDto clientDto = new ClientDto () { 
+			FirstName = x.FirstName, 
+			LastName = x.LastName, 
+			Businesses = Mapper.Map<List<IBusiness>>(x.Businesses), 
+			Tasks = Mapper.Map<List<IClientTask>>(x.Tasks)
+			};
+			
+			return new UserDto { Token = token, clientDto = clientDto };
 		}
 
 		public async Task<bool> UpdateAsync (Dictionary<string, object> changedValues, Guid userId)

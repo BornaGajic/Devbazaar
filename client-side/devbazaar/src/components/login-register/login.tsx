@@ -3,7 +3,7 @@ import { stringifyKey } from 'mobx/dist/internal';
 import React, { ChangeEvent } from 'react';
 import { Register } from '.';
 import { useStores } from '../../hooks/useStores';
-import { IEditUser } from '../../stores/rest';
+import { IUserData } from '../../stores/contracts';
 
 import './login.css';
 
@@ -32,7 +32,7 @@ const Login = observer(({naslov} : ILoginProps) =>
 
             <input type="submit" value="Submit" />
         </form> 
-        <form onSubmit={ (e) => { store.UserStore.updateAsync({Username: username} as IEditUser); e.preventDefault(); } }>
+        <form onSubmit={ (e) => { store.UserStore.updateAsync({Username: username} as IUserData); e.preventDefault(); } }>
 
             <label htmlFor="usernameBox">Email:</label><br/>
             <input type="text" id="usernameBox" onChange={ (e) => username =  e.target.value } /><br/><br/>

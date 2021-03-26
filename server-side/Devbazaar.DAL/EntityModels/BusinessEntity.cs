@@ -14,6 +14,7 @@ namespace Devbazaar.DAL.EntityModels
 		public BusinessEntity ()
 		{
 			this.Categories = new HashSet<CategoryEntity>();
+			this.Clients = new HashSet<ClientEntity>();
 		}
 
 		public string Description { get; set; }

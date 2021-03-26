@@ -1,13 +1,11 @@
-import { action, computed, makeAutoObservable, makeObservable, observable } from 'mobx';
-import { ChangeEvent } from 'react';
+import { makeAutoObservable} from 'mobx';
 import jwtDecode from 'jwt-decode';
 
 
 import RootStore from './RootStore';
-import { IUser } from './contracts';
+import { IUser, IUserData } from './contracts';
+
 import { UserServiceInstance } from '../services';
-import { exception } from 'node:console';
-import { IEditUser } from './rest/index';
 
 export class UserStore
 {
@@ -24,41 +22,43 @@ export class UserStore
 
     async loginAsync (username: string, password: string): Promise<void>
     {
-        let token: string;
+        let loginDto: any;
         try
         {
-            token = await UserServiceInstance.loginAsync(username, password);
+            loginDto = await UserServiceInstance.loginAsync(username, password);
         }
         catch (error)
         {
             console.log(error);return
         }
 
-        let payload: jwtPayload = jwtDecode(token);
-        localStorage.setItem('token', token);
+        console.log(loginDto);
+
+        let payload: jwtPayload = jwtDecode(loginDto.Token);
+        localStorage.setItem('token', loginDto.Token);
 
         this.User.updateFromJson(payload);
     }
 
-    async registerAsync (data: IEditUser): Promise<void>
+    async registerAsync (data: IUserData): Promise<void>
     {
-        let token: string;
+        let loginDto: any;
         try
         {
-            token = await UserServiceInstance.registerAsync(data);
+            loginDto = await UserServiceInstance.registerAsync(data);
         }
         catch (error)
         {
             console.log(error);return
         }
 
-        let payload: jwtPayload = jwtDecode(token);
-        localStorage.setItem('token', token);
+        let payload: jwtPayload = jwtDecode(loginDto.Token);
+        localStorage.setItem('token', loginDto.Token);
 
         this.User.updateFromJson(payload);
     }
 
-    async updateAsync (data: IEditUser): Promise<void>
+    async updateAsync (data: IUserData): Promise<void>
     {
         try
         {
@@ -76,8 +76,8 @@ export class UserStore
 export class User implements IUser
 {
     Id?: string;
-    Username: string = '';
-    Email: string = '';
+    Username?: string;
+    Email?: string;
     Logo?: string;
     Role?: string;
 
@@ -95,7 +95,7 @@ export class User implements IUser
         this.Role = json.Role ?? this.Role;
     }
 
-    asJson ()
+    get asJson ()
     {
         return {
             Id: this.Id,
