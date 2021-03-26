@@ -19,6 +19,7 @@ using Devbazaar.Model;
 using Devbazaar.Model.Common;
 using Devbazaar.Common.DTO.Client;
 using Devbazaar.Common.DTO.User;
+using Devbazaar.Common.DTO.Business;
 
 namespace Devbazaar.Service.UserServices
 {
@@ -82,16 +83,39 @@ namespace Devbazaar.Service.UserServices
 
 			var token = GenerateToken(user, role);
 
-			var x = await UnitOfWork.ClientRepository.GetByIdAsync(thisUser.Id);
-			
-			ClientDto clientDto = new ClientDto () { 
-			FirstName = x.FirstName, 
-			LastName = x.LastName, 
-			Businesses = Mapper.Map<List<IBusiness>>(x.Businesses), 
-			Tasks = Mapper.Map<List<IClientTask>>(x.Tasks)
-			};
-			
-			return new UserDto { Token = token, clientDto = clientDto };
+			if (role == TypeOfUser.Client)
+			{
+				var clientEntity = await UnitOfWork.ClientRepository.GetByIdAsync(thisUser.Id);	
+
+				ClientDto clientDto = new ClientDto () { 
+					//Businesses = Mapper.Map<List<IBusiness>>(clientEntity.Businesses), 
+					//Tasks = Mapper.Map<List<IClientTask>>(clientEntity.Tasks)
+				};
+
+				return new UserDto { Token = token, clientDto = clientDto, businessDto = null };
+			}
+			else
+			{
+				var businessEntity = await UnitOfWork.BusinessRepository.GetByIdAsync(thisUser.Id);	
+
+				 BusinessDto businessDto = new BusinessDto () { 
+					Id = businessEntity.Id,
+					Description = businessEntity.Description,
+					About = businessEntity.About,
+					Available = businessEntity.Available,
+					City = businessEntity.City,
+					Country = businessEntity.Country,
+					PostalCode = businessEntity.PostalCode,
+					Email = user.Email,
+					Username = user.Username,
+					Website = businessEntity.Website,
+					Popularity = businessEntity.Clients.Count,
+					Categories = Mapper.Map<List<ICategory>>(businessEntity.Categories)
+				};
+
+				return new UserDto { Token = token, businessDto = businessDto, clientDto = null };
+			}
+
 		}
 
 		public async Task<bool> UpdateAsync (Dictionary<string, object> changedValues, Guid userId)

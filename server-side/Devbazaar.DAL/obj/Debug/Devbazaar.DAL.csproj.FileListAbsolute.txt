@@ -88,3 +88,4 @@ D:\GitHubRepository\Devbazaar\server-side\Devbazaar.DAL\obj\Debug\Devbazaar.DAL.
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.DAL\obj\Debug\Devbazaar.DAL.csproj.CopyComplete
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.DAL\obj\Debug\Devbazaar.DAL.dll
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.DAL\obj\Debug\Devbazaar.DAL.pdb
+D:\GitHubRepository\Devbazaar\server-side\Devbazaar.DAL\obj\Debug\Devbazaar.DAL.Migrations.ClientFnameLnameRemoved.resources

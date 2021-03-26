@@ -28,9 +28,6 @@ namespace Devbazaar.Repository.Repositories
 			var tasks = Table.Where(c => c.Id == client.Id).SelectMany(c => c.Tasks);
 			client.Tasks = await tasks.ToListAsync();
 
-			var user = Table.Where(c => c.Id == client.Id).Select(c => c.User);
-			client.User = await user.SingleAsync();
-			
 			return client;
 		}
 	}

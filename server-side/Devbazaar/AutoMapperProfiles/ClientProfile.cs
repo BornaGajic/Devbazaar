@@ -16,10 +16,6 @@ namespace Devbazaar.AutoMapperProfiles
 		public ClientProfile ()
 		{
 			CreateMap<UpdateClientRest, IClient>();
-
-			CreateMap<ClientEntity, ClientDto>()
-			.ForMember(dest => dest.Businesses, opt => opt.UseDestinationValue())
-			.ForMember(dest => dest.Tasks, opt => opt.UseDestinationValue());
 			CreateMap<ClientEntity, ClientDto>().ReverseMap();
 
 			CreateMap<IClient, Client>().ReverseMap();

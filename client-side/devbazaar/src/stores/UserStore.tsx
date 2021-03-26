@@ -38,6 +38,16 @@ export class UserStore
         localStorage.setItem('token', loginDto.Token);
 
         this.User.updateFromJson(payload);
+        
+        if (payload['Role'] === 'Business')
+        {
+            this.RootStore.BusinessStore.Business.updateAsyc(payload);
+        }
+        else
+        {
+            // update client data
+        }
+
     }
 
     async registerAsync (data: IUserData): Promise<void>

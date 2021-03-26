@@ -155,7 +155,7 @@ namespace Devbazaar.Service.BusinessServices
 			return Mapper.Map<List<IBusinessReturnType>>(businessList);
 		}
 
-		private async Task<List<BusinessReturnTypeDto>> ApplyPageSeasoningAsync (BusinessPage pageData)
+		private async Task<List<BusinessDto>> ApplyPageSeasoningAsync (BusinessPage pageData)
 		{
 			var userTable = UnitOfWork.UserRepository.Table;
 			var businessTable = UnitOfWork.BusinessRepository.Table;
@@ -173,7 +173,7 @@ namespace Devbazaar.Service.BusinessServices
 							DbFunctions.Like(user.Username, likeUsername) &&
 							DbFunctions.Like(business.Country, likeCountry) &&
 							DbFunctions.Like(business.City, likeCity)
-						select new BusinessReturnTypeDto {
+						select new BusinessDto {
 							Id = business.Id,
 							Description = business.Description,
 							About = business.About,

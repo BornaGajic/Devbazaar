@@ -9,9 +9,6 @@ namespace Devbazaar.Model
 {
 	public class Client : User, IClient
 	{
-		public string FirstName { get; set; }
-		public string LastName { get; set; }
-
 		public List<IClientTask> Tasks { get; set; }
 		public List<IBusiness> Businesses { get; set; }
 	}

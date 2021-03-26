@@ -44,8 +44,6 @@ namespace Devbazaar.DAL.Context
 
 			modelBuilder.Entity<ClientEntity>().ToTable("Clients");
 			modelBuilder.Entity<ClientEntity>().HasKey(p => p.Id).Property(p => p.Id).IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
-			modelBuilder.Entity<ClientEntity>().Property(p => p.FirstName).IsRequired();
-			modelBuilder.Entity<ClientEntity>().Property(p => p.LastName).IsRequired();
 			modelBuilder.Entity<ClientEntity>().HasMany<BusinessEntity>(p => p.Businesses).WithMany(b => b.Clients).Map(fav => {
 				fav.MapLeftKey("FavClientRefId");
 				fav.MapRightKey("FavBusinessRefId");

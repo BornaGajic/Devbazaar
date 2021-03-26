@@ -144,6 +144,10 @@
     <Compile Include="Migrations\202101272011479_Favourites.designer.cs">
       <DependentUpon>202101272011479_Favourites.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202103261504098_Client-FnameLname-Removed.cs" />
+    <Compile Include="Migrations\202103261504098_Client-FnameLname-Removed.designer.cs">
+      <DependentUpon>202103261504098_Client-FnameLname-Removed.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -190,6 +194,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202101272011479_Favourites.resx">
       <DependentUpon>202101272011479_Favourites.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202103261504098_Client-FnameLname-Removed.resx">
+      <DependentUpon>202103261504098_Client-FnameLname-Removed.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
