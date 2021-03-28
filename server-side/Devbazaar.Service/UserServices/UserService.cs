@@ -63,7 +63,7 @@ namespace Devbazaar.Service.UserServices
 		}
 
 		// returns token if User exists, else returns empty string
-		public async Task<UserDto> LoginAsync (IUser user)
+		public async Task<string> LoginAsync (IUser user)
 		{
 			UserEntity thisUser = await UnitOfWork.UserRepository.CheckExistence(user.Email, EncodePassword(user.Password));
 			TypeOfUser role = TypeOfUser.Business;
@@ -81,41 +81,7 @@ namespace Devbazaar.Service.UserServices
 			user.Logo = thisUser.Logo;
 			user.Username = thisUser.Username;
 
-			var token = GenerateToken(user, role);
-
-			if (role == TypeOfUser.Client)
-			{
-				var clientEntity = await UnitOfWork.ClientRepository.GetByIdAsync(thisUser.Id);	
-
-				ClientDto clientDto = new ClientDto () { 
-					//Businesses = Mapper.Map<List<IBusiness>>(clientEntity.Businesses), 
-					//Tasks = Mapper.Map<List<IClientTask>>(clientEntity.Tasks)
-				};
-
-				return new UserDto { Token = token, clientDto = clientDto, businessDto = null };
-			}
-			else
-			{
-				var businessEntity = await UnitOfWork.BusinessRepository.GetByIdAsync(thisUser.Id);	
-
-				 BusinessDto businessDto = new BusinessDto () { 
-					Id = businessEntity.Id,
-					Description = businessEntity.Description,
-					About = businessEntity.About,
-					Available = businessEntity.Available,
-					City = businessEntity.City,
-					Country = businessEntity.Country,
-					PostalCode = businessEntity.PostalCode,
-					Email = user.Email,
-					Username = user.Username,
-					Website = businessEntity.Website,
-					Popularity = businessEntity.Clients.Count,
-					Categories = Mapper.Map<List<ICategory>>(businessEntity.Categories)
-				};
-
-				return new UserDto { Token = token, businessDto = businessDto, clientDto = null };
-			}
-
+			return GenerateToken(user, role);
 		}
 
 		public async Task<bool> UpdateAsync (Dictionary<string, object> changedValues, Guid userId)

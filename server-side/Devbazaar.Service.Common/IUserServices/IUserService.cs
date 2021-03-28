@@ -15,6 +15,6 @@ namespace Devbazaar.Service.Common.IUserServices
 		Task<string> CreateAsync (IUser user, TypeOfUser typeOfUser);
 		Task<bool> UpdateAsync (Dictionary<string, object> item, Guid userId);
 		Task<bool> DeleteAsync (IUser user);
-		Task<UserDto> LoginAsync (IUser user);
+		Task<string> LoginAsync (IUser user);
 	}
 }

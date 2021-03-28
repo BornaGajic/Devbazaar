@@ -22,7 +22,7 @@ namespace Devbazaar.AutoMapperProfiles
 
 			CreateMap<UpdateBusinessRest, IBusiness>();
 
-			CreateMap<BusinessDto, IBusinessReturnType>();
+			CreateMap<BusinessDto, IBusinessDto>();
 		}
 	}
 }

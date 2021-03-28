@@ -2,40 +2,50 @@ import RootStore from './RootStore';
 import { User } from './UserStore';
 
 import { BusinessServiceInstance } from '../services/BusinessService';
-import { timeStamp } from 'node:console';
-
+import { IBusinessPage } from '../common';
+import { makeAutoObservable } from 'mobx';
+import { IBusiness } from './contracts/IBusiness';
 
 
 export class BusinessStore 
 {
     private RootStore: RootStore;
-    Business: Business;
+    businessList: IBusiness[] = [];
 
     constructor (rootStore: RootStore)
     {
+        makeAutoObservable(this);
+
         this.RootStore = rootStore;
-        this.Business = new Business(rootStore.UserStore.User);
+    }
+
+    async fetchPage (pageData: IBusinessPage): Promise<void>
+    {
+        let p = {
+            PageNumber: pageData.PageNumber
+        } as IBusinessPage;
+
+        this.businessList = await BusinessServiceInstance.fetchPage(p);
     }
 }
 
 export class Business 
 {
-    User: User;
-
     Description?: string;
     About?: string;
     Website?: string;
     Country?: string;
     City?: string;
     Available?: boolean;
+    Popularity?: number;
     Categories?: [];
 
-    constructor (user: User)
+    constructor ()
     {
-        this.User = user;
+        makeAutoObservable(this);
     }
 
-    updateAsyc (data: any): void
+    update (data: any): void
     {
         this.Description = data.Description ?? this.Description;
         this.About = data.About ?? this.About;
@@ -44,5 +54,6 @@ export class Business
         this.City = data.City ?? this.City;
         this.Available = data.Available ?? this.Available;
         this.Categories = data.Categories ?? this.Categories;
+        this.Popularity = data.Popularity ?? this.Popularity;
     }
 }

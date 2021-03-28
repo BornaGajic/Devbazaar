@@ -30,6 +30,26 @@ namespace Devbazaar.Service.BusinessServices
 			Mapper = mapper;
 		}
 
+		public async Task<IBusinessDto> GetBusinessDataById (Guid id)
+		{
+			var businessEntity = await UnitOfWork.BusinessRepository.GetByIdAsync(id);	
+
+			BusinessDto businessDto = new BusinessDto () { 
+				Id = businessEntity.Id,
+				Description = businessEntity.Description,
+				About = businessEntity.About,
+				Available = businessEntity.Available,
+				City = businessEntity.City,
+				Country = businessEntity.Country,
+				PostalCode = businessEntity.PostalCode,
+				Website = businessEntity.Website,
+				Popularity = businessEntity.Clients.Count,
+				Categories = Mapper.Map<List<ICategory>>(businessEntity.Categories)
+			};
+
+			return businessDto;
+		}
+
 		public async Task<int> CreateAsync (IBusiness newBusiness, List<ICategory> categories, Guid userId)
 		{
 			var businessEntity = Mapper.Map<BusinessEntity>(newBusiness);
@@ -119,7 +139,7 @@ namespace Devbazaar.Service.BusinessServices
 			return clientTaskReturnTypes;
 		}
 
-		public async Task<List<IBusinessReturnType>> PaginatedGetAsync (BusinessPage pageData, Guid? clientId = null)
+		public async Task<List<IBusinessDto>> PaginatedGetAsync (BusinessPage pageData, Guid? clientId = null)
 		{
 			var businessTable = UnitOfWork.BusinessRepository.Table;
 
@@ -127,6 +147,7 @@ namespace Devbazaar.Service.BusinessServices
 
 			List<BusinessEntity> clientFavourites = null;
 
+			// users favourite businesses
 			if (clientId != null)
 			{
 				var clientEntity = await (from client in UnitOfWork.ClientRepository.Table where client.Id == clientId select client).SingleAsync();
@@ -152,7 +173,7 @@ namespace Devbazaar.Service.BusinessServices
 				}
 			}
 
-			return Mapper.Map<List<IBusinessReturnType>>(businessList);
+			return Mapper.Map<List<IBusinessDto>>(businessList);
 		}
 
 		private async Task<List<BusinessDto>> ApplyPageSeasoningAsync (BusinessPage pageData)

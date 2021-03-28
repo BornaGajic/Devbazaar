@@ -72,7 +72,7 @@
     <Compile Include="DTO\Business\BusinessDto.cs" />
     <Compile Include="DTO\Client\ClientDto.cs" />
     <Compile Include="DTO\User\UserDto.cs" />
-    <Compile Include="IPageData\Business\IBusinessReturnType.cs" />
+    <Compile Include="IPageData\Business\IBusinessDto.cs" />
     <Compile Include="IPageData\ClientTask\IClientTaskReturnType.cs" />
     <Compile Include="PageData\Business\BusinessPage.cs" />
     <Compile Include="PageData\ClientTask\ClientTaskPage.cs" />

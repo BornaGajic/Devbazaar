@@ -15,9 +15,13 @@ const Register = observer(({naslov} : IRegisterProps) =>
 
     return (
         <div className="d-flex justify-content-center">
-            {
-                JSON.stringify(store.BusinessStore.Business.User.asJson)
-            }
+            <div>
+                { JSON.stringify(store.UserStore.User.asJson) }
+            </div>
+            <br/>
+            <div>
+                { JSON.stringify(store.BusinessStore.businessList) }
+            </div>
         </div>
     );
 })

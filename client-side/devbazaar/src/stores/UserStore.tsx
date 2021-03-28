@@ -1,11 +1,13 @@
 import { makeAutoObservable} from 'mobx';
 import jwtDecode from 'jwt-decode';
 
-
 import RootStore from './RootStore';
-import { IUser, IUserData } from './contracts';
+import { IUser } from './contracts';
+import { IBusiness } from './contracts/IBusiness';
 
 import { UserServiceInstance } from '../services';
+import { Business } from './BusinessStore';
+
 
 export class UserStore
 {
@@ -22,69 +24,59 @@ export class UserStore
 
     async loginAsync (username: string, password: string): Promise<void>
     {
-        let loginDto: any;
+        let token: string;
         try
         {
-            loginDto = await UserServiceInstance.loginAsync(username, password);
+            token = await UserServiceInstance.loginAsync(username, password);
         }
         catch (error)
         {
             console.log(error);return
         }
 
-        console.log(loginDto);
+        console.log(token);
 
-        let payload: jwtPayload = jwtDecode(loginDto.Token);
-        localStorage.setItem('token', loginDto.Token);
+        let payload: jwtPayload = jwtDecode(token);
+        localStorage.setItem('token', token);
 
-        this.User.updateFromJson(payload);
-        
-        if (payload['Role'] === 'Business')
-        {
-            this.RootStore.BusinessStore.Business.updateAsyc(payload);
-        }
-        else
-        {
-            // update client data
-        }
-
+        this.User.update({
+            Username: payload['Username'],
+            Email: payload['Email'],
+            Role: payload['Role'],
+            Logo: payload['Logo'],
+            Id: payload['NameIdentifier']
+        });
     }
 
-    async registerAsync (data: IUserData): Promise<void>
+    async registerAsync (data: IUser): Promise<void>
     {
-        let loginDto: any;
+        let token: string;
         try
         {
-            loginDto = await UserServiceInstance.registerAsync(data);
+            token = await UserServiceInstance.registerAsync(data);
         }
         catch (error)
         {
             console.log(error);return
         }
 
-        let payload: jwtPayload = jwtDecode(loginDto.Token);
-        localStorage.setItem('token', loginDto.Token);
+        let payload: jwtPayload = jwtDecode(token);
+        localStorage.setItem('token', token);
 
-        this.User.updateFromJson(payload);
-    }
-
-    async updateAsync (data: IUserData): Promise<void>
-    {
-        try
-        {
-            await UserServiceInstance.updateAsync(data);
-        }
-        catch (error)
-        {
-            console.log(error);return
-        }
-
-        this.User.updateFromJson(data);
+        this.User.update({
+            Username: payload['Username'],
+            Email: payload['Email'],
+            Role: payload['Role'],
+            Logo: payload['Logo'],
+            Id: payload['NameIdentifier']
+        });
     }
 }
 
 export class User implements IUser
 {
+    RoleData?: IBusiness;
+
     Id?: string;
     Username?: string;
     Email?: string;
@@ -96,13 +88,24 @@ export class User implements IUser
         makeAutoObservable(this);
     }
 
-    updateFromJson (json: any): void
+    update (data: any): void
     {
-        this.Username = json.Username ?? this.Username;
-        this.Email = json.Email ?? this.Email;
-        this.Id = json.NameIdentifier ?? this.Id;
-        this.Logo = json.Logo ?? this.Logo;
-        this.Role = json.Role ?? this.Role;
+        this.Username = data.Username ?? this.Username;
+        this.Email = data.Email ?? this.Email;
+        this.Id = data.NameIdentifier ?? this.Id;
+        this.Logo = data.Logo ?? this.Logo;
+        this.Role = data.Role ?? this.Role;
+    }
+
+    /**
+     * Fetches business or client data from the server. (Depends on a role of the user)
+     */
+    async fetchRoleData (): Promise<void>
+    {
+        if (this.Role == 'Business')
+            this.RoleData = await UserServiceInstance.fetchRoleData();
+        else 
+            return undefined; // Client
     }
 
     get asJson ()
@@ -117,7 +120,7 @@ export class User implements IUser
 
 interface jwtPayload
 {
-    jti: string;
+    NameIdentifier: string;
     Username: string;
     Email: string;
     Role: string;

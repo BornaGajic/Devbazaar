@@ -29,6 +29,13 @@ namespace Devbazaar.Controllers
             Mapper = mapper;
         }
 
+        [HttpGet]
+        [Route("Data")]
+        public async Task<HttpResponseMessage> GetBusinessDataById ()
+        {
+             return Request.CreateResponse(HttpStatusCode.OK, await BusinessService.GetBusinessDataById(Guid.Parse(User.Identity.GetUserId())));
+        }
+
         [HttpPost]
         [Route("Create")]
         public async Task<HttpResponseMessage> CreateAsync ([FromBody] CreateBusinessRest createBusinessRest)
@@ -109,15 +116,18 @@ namespace Devbazaar.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, returnDto);
         }
 
-		[HttpGet]
+		[HttpPost]
 		[Route("Businesses")]
 		public async Task<HttpResponseMessage> PaginatedGetAsync ([FromBody] BusinessPage pageData)
 		{
             if (User.IsInRole("Client"))
             {
                 Guid clientId = Guid.Parse(User.Identity.GetUserId());
+
+                var businessList = await BusinessService.PaginatedGetAsync(pageData, clientId);
+                businessList.RemoveAll(x => x.Id == clientId);
                 
-                return Request.CreateResponse(HttpStatusCode.OK, await BusinessService.PaginatedGetAsync(pageData, clientId));
+                return Request.CreateResponse(HttpStatusCode.OK, businessList);
             }
 
             object returnDto = new {

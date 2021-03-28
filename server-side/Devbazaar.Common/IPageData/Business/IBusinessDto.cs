@@ -7,7 +7,7 @@ using Devbazaar.Model.Common;
 
 namespace Devbazaar.Common.IPageData.Business
 {
-	public interface IBusinessReturnType
+	public interface IBusinessDto
 	{
 		Guid Id { get; set; }
 		

@@ -1,4 +1,4 @@
-export interface IUserData
+export interface IUser
 {
     Username?: string,
     Email?: string,

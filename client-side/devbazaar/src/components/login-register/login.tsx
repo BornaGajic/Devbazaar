@@ -1,9 +1,11 @@
 import { observer } from 'mobx-react';
-import { stringifyKey } from 'mobx/dist/internal';
+import { observable, stringifyKey } from 'mobx/dist/internal';
 import React, { ChangeEvent } from 'react';
 import { Register } from '.';
+import { IBusinessPage } from '../../common';
 import { useStores } from '../../hooks/useStores';
-import { IUserData } from '../../stores/contracts';
+import { IUser } from '../../stores/contracts';
+
 
 import './login.css';
 
@@ -32,13 +34,18 @@ const Login = observer(({naslov} : ILoginProps) =>
 
             <input type="submit" value="Submit" />
         </form> 
-        <form onSubmit={ (e) => { store.UserStore.updateAsync({Username: username} as IUserData); e.preventDefault(); } }>
+        <form onSubmit={ (e) => { store.UserStore.User.update({Username: username} as IUser); e.preventDefault(); } }>
 
             <label htmlFor="usernameBox">Email:</label><br/>
             <input type="text" id="usernameBox" onChange={ (e) => username =  e.target.value } /><br/><br/>
 
             <input type="submit" value="Submit" />
         </form> 
+        <button onClick={ () => store.UserStore.User.fetchRoleData() }> Fetch Role Data </button>
+        <p>
+            { JSON.stringify(store.UserStore.User.RoleData) }
+        </p> 
+        <button onClick={ () => store.BusinessStore.fetchPage({ PageNumber: 1 } as IBusinessPage) }> fetch page </button>
         <Register naslov="" />
         </div>
     

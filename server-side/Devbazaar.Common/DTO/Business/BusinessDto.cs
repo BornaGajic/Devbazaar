@@ -8,7 +8,7 @@ using Devbazaar.Model.Common;
 
 namespace Devbazaar.Common.DTO.Business
 {
-	public class BusinessDto : IBusinessReturnType
+	public class BusinessDto : IBusinessDto
 	{
 		public Guid Id { get; set; }
 		public string Username { get; set; }

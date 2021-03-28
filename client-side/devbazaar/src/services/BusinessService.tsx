@@ -1,4 +1,6 @@
 import axios from 'axios'
+import { IBusinessPage } from '../common';
+import { IBusiness } from '../stores/contracts/IBusiness';
 
 class BusinessService
 {
@@ -6,9 +8,14 @@ class BusinessService
     {
     }
 
-    async fetchData (): Promise<Object>
+    async fetchPage (pageData: IBusinessPage): Promise<IBusiness[]>
     {
-        return {}
+        let response = await axios.post(`${axios.defaults.baseURL}/Business/Businesses`,
+        {
+           pageData: pageData
+        }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
+
+        return response.data;
     }
 }
 

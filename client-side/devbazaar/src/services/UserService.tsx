@@ -1,11 +1,11 @@
 import axios from 'axios'
-import { IUserData } from '../stores/contracts';
+import { Business } from '../stores/BusinessStore';
+import { IUser } from '../stores/contracts';
+import { IBusiness } from '../stores/contracts/IBusiness';
 
 class UserService
 {
-    constructor ()
-    {
-    }
+    constructor () {}
     
     async loginAsync (email: string, password: string): Promise<string>
     {
@@ -25,7 +25,7 @@ class UserService
         return response.data;
     }
 
-    async registerAsync (data: IUserData): Promise<string>
+    async registerAsync (data: IUser): Promise<string>
     {
         let response = await axios.post(`${axios.defaults.baseURL}/User/Register`,
         {
@@ -42,7 +42,7 @@ class UserService
         return response.data;
     }
 
-    async updateAsync (data: IUserData): Promise<void>
+    async updateAsync (data: IUser): Promise<void>
     {
         let response = await axios.put(`${axios.defaults.baseURL}/User/Update`,
         {
@@ -56,6 +56,16 @@ class UserService
         {
             throw new Error(response.statusText);   
         }
+    }
+
+    async fetchRoleData (): Promise<IBusiness>
+    {
+        let response = await axios.get(`${axios.defaults.baseURL}/Business/Data`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
+
+        let b = new Business();
+        b.update(response.data);
+
+        return b;
     }
 }
 
