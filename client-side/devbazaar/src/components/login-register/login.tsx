@@ -5,6 +5,7 @@ import { Register } from '.';
 import { IBusinessPage } from '../../common';
 import { useStores } from '../../hooks/useStores';
 import { IUser } from '../../stores/contracts';
+import { IBusiness } from '../../stores/contracts/IBusiness';
 
 
 import './login.css';
@@ -21,6 +22,7 @@ const Login = observer(({naslov} : ILoginProps) =>
     let email: string = '';
     let username: string = '';
     let password: string = '';
+    let description: string = '';
 
     return (
         <div>
@@ -36,16 +38,23 @@ const Login = observer(({naslov} : ILoginProps) =>
         </form> 
         <form onSubmit={ (e) => { store.UserStore.User.update({Username: username} as IUser); e.preventDefault(); } }>
 
-            <label htmlFor="usernameBox">Email:</label><br/>
+            <label htmlFor="usernameBox">change Username:</label><br/>
             <input type="text" id="usernameBox" onChange={ (e) => username =  e.target.value } /><br/><br/>
 
             <input type="submit" value="Submit" />
         </form> 
-        <button onClick={ () => store.UserStore.User.fetchRoleData() }> Fetch Role Data </button>
-        <p>
-            { JSON.stringify(store.UserStore.User.RoleData) }
-        </p> 
+        <button onClick={ async () => { console.count(); }  }> Fetch Role Data </button>
+        <div>
+            { JSON.stringify(store.UserStore.User.RoleActions.get(store.UserStore.User.Role)?.asJson ?? {BLABLA: "BLABAL"}) }
+        </div> 
         <button onClick={ () => store.BusinessStore.fetchPage({ PageNumber: 1 } as IBusinessPage) }> fetch page </button>
+        <form onSubmit={ (e) => { store.UserStore.User.RoleActions.get(store.UserStore.User.Role)?.update({ Description: description } as IBusiness); e.preventDefault(); } }>
+
+            <label htmlFor="usernameBox">change Description:</label><br/>
+            <input type="text" id="usernameBox" onChange={ (e) => description =  e.target.value } /><br/><br/>
+
+            <input type="submit" value="Submit" />
+        </form> 
         <Register naslov="" />
         </div>
     

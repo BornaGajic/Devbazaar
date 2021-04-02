@@ -7,6 +7,7 @@ import { IBusiness } from './contracts/IBusiness';
 
 import { UserServiceInstance } from '../services';
 import { Business } from './BusinessStore';
+import { IRole } from '../common/IRole';
 
 
 export class UserStore
@@ -22,6 +23,9 @@ export class UserStore
         this.User = new User();
     }
 
+    /**
+     * Logs in the user and updates its fields
+     */
     async loginAsync (username: string, password: string): Promise<void>
     {
         let token: string;
@@ -39,15 +43,20 @@ export class UserStore
         let payload: jwtPayload = jwtDecode(token);
         localStorage.setItem('token', token);
 
+        this.User.Id = payload['NameIdentifier']
         this.User.update({
             Username: payload['Username'],
             Email: payload['Email'],
             Role: payload['Role'],
-            Logo: payload['Logo'],
-            Id: payload['NameIdentifier']
-        });
+            Logo: payload['Logo']
+        } as IUser);
+
+        this.User.fetchRoleData();
     }
 
+    /**
+     * Registers the user and updates its fields, then pushes the field values to the database.
+     */
     async registerAsync (data: IUser): Promise<void>
     {
         let token: string;
@@ -63,52 +72,50 @@ export class UserStore
         let payload: jwtPayload = jwtDecode(token);
         localStorage.setItem('token', token);
 
+        this.User.Id = payload['NameIdentifier']
         this.User.update({
             Username: payload['Username'],
             Email: payload['Email'],
             Role: payload['Role'],
-            Logo: payload['Logo'],
-            Id: payload['NameIdentifier']
-        });
+            Logo: payload['Logo']
+        } as IUser);
+
+        // fetch role data?
     }
 }
 
 export class User implements IUser
 {
-    RoleData?: IBusiness;
+    RoleActions: Map<string, IRole> = new Map<string, IRole>();
 
     Id?: string;
     Username?: string;
     Email?: string;
     Logo?: string;
-    Role?: string;
+    Role: string = 'Client';
 
     constructor () 
     {
         makeAutoObservable(this);
     }
 
-    update (data: any): void
+    /*
+     *  Updates current user data to the database.
+     */
+    async update (data: IUser): Promise<void>
     {
+        UserServiceInstance.updateAsync(data);
+
         this.Username = data.Username ?? this.Username;
         this.Email = data.Email ?? this.Email;
-        this.Id = data.NameIdentifier ?? this.Id;
         this.Logo = data.Logo ?? this.Logo;
         this.Role = data.Role ?? this.Role;
     }
 
-    /**
-     * Fetches business or client data from the server. (Depends on a role of the user)
+    /*
+     *  Gets the users current field values.
      */
-    async fetchRoleData (): Promise<void>
-    {
-        if (this.Role == 'Business')
-            this.RoleData = await UserServiceInstance.fetchRoleData();
-        else 
-            return undefined; // Client
-    }
-
-    get asJson ()
+    get asJson (): Object
     {
         return {
             Id: this.Id,
@@ -116,6 +123,28 @@ export class User implements IUser
             Email: this.Email
         }
     }
+
+    /*
+     * Fetches business or client data from the server. (Depends on a role of the user)
+     */
+     public async fetchRoleData (): Promise<void>
+     {
+        if (this.RoleActions.has(this.Role)) 
+            throw new Error("RoleActions for this Role already exist.");
+
+        switch (this.Role) 
+        {
+            case 'Business':
+                let business: Business = new Business();
+                business.data = await UserServiceInstance.fetchRoleData();
+    
+                this.RoleActions.set(this.Role, business);   
+                break;
+        
+            default:
+                break;
+        }
+     }
 }
 
 interface jwtPayload

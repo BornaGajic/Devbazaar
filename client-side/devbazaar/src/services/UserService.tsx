@@ -1,4 +1,5 @@
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
+import { IRole } from '../common/IRole';
 import { Business } from '../stores/BusinessStore';
 import { IUser } from '../stores/contracts';
 import { IBusiness } from '../stores/contracts/IBusiness';
@@ -58,14 +59,11 @@ class UserService
         }
     }
 
-    async fetchRoleData (): Promise<IBusiness>
+    async fetchRoleData (): Promise<any>
     {
         let response = await axios.get(`${axios.defaults.baseURL}/Business/Data`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
 
-        let b = new Business();
-        b.update(response.data);
-
-        return b;
+        return response.data;
     }
 }
 
