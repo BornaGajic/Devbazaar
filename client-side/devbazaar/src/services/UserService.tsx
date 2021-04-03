@@ -1,8 +1,5 @@
-import axios, { AxiosResponse } from 'axios'
-import { IRole } from '../common/IRole';
-import { Business } from '../stores/BusinessStore';
+import axios from 'axios'
 import { IUser } from '../stores/contracts';
-import { IBusiness } from '../stores/contracts/IBusiness';
 
 class UserService
 {
@@ -59,6 +56,9 @@ class UserService
         }
     }
 
+    /** 
+     * Returnes Promise of own business card data.
+    */
     async fetchRoleData (): Promise<any>
     {
         let response = await axios.get(`${axios.defaults.baseURL}/Business/Data`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});

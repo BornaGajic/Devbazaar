@@ -47,7 +47,7 @@ const Login = observer(({naslov} : ILoginProps) =>
         <div>
             { JSON.stringify(store.UserStore.User.RoleActions.get(store.UserStore.User.Role)?.asJson ?? {BLABLA: "BLABAL"}) }
         </div> 
-        <button onClick={ () => store.BusinessStore.fetchPage({ PageNumber: 1 } as IBusinessPage) }> fetch page </button>
+        <button onClick={ () => store.BusinessStore.fetchBusinesses({ PageNumber: 1 } as IBusinessPage) }> fetch page </button>
         <form onSubmit={ (e) => { store.UserStore.User.RoleActions.get(store.UserStore.User.Role)?.update({ Description: description } as IBusiness); e.preventDefault(); } }>
 
             <label htmlFor="usernameBox">change Description:</label><br/>

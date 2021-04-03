@@ -1,14 +1,13 @@
 import RootStore from './RootStore';
-import { User } from './UserStore';
 
-import { BusinessServiceInstance } from '../services/BusinessService';
+import { BusinessServiceInstance } from '../services';
 import { IBusinessPage } from '../common';
 import { makeAutoObservable } from 'mobx';
 import { IBusiness } from './contracts/IBusiness';
 import { IRole } from '../common/IRole';
+import { UserStore } from './UserStore';
 
-
-export class BusinessStore 
+export class BusinessStore
 {
     private RootStore: RootStore;
     businessList: IBusiness[] = [];
@@ -16,11 +15,13 @@ export class BusinessStore
     constructor (rootStore: RootStore)
     {
         makeAutoObservable(this);
-
         this.RootStore = rootStore;
     }
 
-    async fetchPage (pageData: IBusinessPage): Promise<void>
+    /**
+     * Fetches a (sorted) page of business cards with defined filters and page number.
+     */
+    async fetchBusinesses (pageData: IBusinessPage): Promise<void>
     {
         let p = {
             PageNumber: pageData.PageNumber
@@ -32,6 +33,8 @@ export class BusinessStore
 
 export class Business implements IBusiness, IRole
 {
+    private RootStore: RootStore;
+
     Description?: string;
     About?: string;
     Website?: string;
@@ -41,11 +44,16 @@ export class Business implements IBusiness, IRole
     Popularity?: number;
     Categories?: [];
 
-    constructor ()
+    constructor (rootStore: RootStore)
     {
         makeAutoObservable(this);
+
+        this.RootStore = rootStore;
     }
 
+    /**
+     * Updates Business card 
+     */
     async update (data: IBusiness): Promise<void>
     {
         BusinessServiceInstance.updateAsync(data);
@@ -60,6 +68,14 @@ export class Business implements IBusiness, IRole
         this.Popularity = data.Popularity ?? this.Popularity;
     }
 
+    async pinTask (taskId: string): Promise<void>
+    {
+        
+    }
+
+    /**
+    * Returnes Business as Json object 
+    */
     get asJson (): Object
     {
         return {
@@ -74,6 +90,9 @@ export class Business implements IBusiness, IRole
         }
     }
 
+    /**
+     * Setter for Business fields
+     */
     set data (data: IBusiness)
     {
         this.Description = data.Description ?? this.Description;

@@ -3,7 +3,6 @@ import jwtDecode from 'jwt-decode';
 
 import RootStore from './RootStore';
 import { IUser } from './contracts';
-import { IBusiness } from './contracts/IBusiness';
 
 import { UserServiceInstance } from '../services';
 import { Business } from './BusinessStore';
@@ -12,15 +11,15 @@ import { IRole } from '../common/IRole';
 
 export class UserStore
 {
-    private RootStore: RootStore;
+    RootStore: RootStore;
     User: User;
 
     constructor (rootStore: RootStore)
     {
-        makeAutoObservable(this);
+        makeAutoObservable(this, { RootStore: false });
 
         this.RootStore = rootStore;
-        this.User = new User();
+        this.User = new User(this.RootStore);
     }
 
     /**
@@ -51,7 +50,7 @@ export class UserStore
             Logo: payload['Logo']
         } as IUser);
 
-        this.User.fetchRoleData();
+        this.User.fetchRoleActions();
     }
 
     /**
@@ -80,12 +79,14 @@ export class UserStore
             Logo: payload['Logo']
         } as IUser);
 
-        // fetch role data?
+        // fetch role actions?
     }
 }
 
 export class User implements IUser
 {
+    private RootStore: RootStore;
+
     RoleActions: Map<string, IRole> = new Map<string, IRole>();
 
     Id?: string;
@@ -94,13 +95,14 @@ export class User implements IUser
     Logo?: string;
     Role: string = 'Client';
 
-    constructor () 
+    constructor (RootStore: RootStore) 
     {
         makeAutoObservable(this);
+        this.RootStore = RootStore;
     }
 
-    /*
-     *  Updates current user data to the database.
+    /**
+     * Updates current user data to the database.
      */
     async update (data: IUser): Promise<void>
     {
@@ -112,7 +114,7 @@ export class User implements IUser
         this.Role = data.Role ?? this.Role;
     }
 
-    /*
+    /**
      *  Gets the users current field values.
      */
     get asJson (): Object
@@ -124,10 +126,12 @@ export class User implements IUser
         }
     }
 
-    /*
-     * Fetches business or client data from the server. (Depends on a role of the user)
+    /**
+     * Fetches business or client data from the server. (Depends on a role of the user).
+     * And saves it as a new key value pair in the RoleActions map.
+     * Throws Error if RoleActions already has defined key value pair.
      */
-     public async fetchRoleData (): Promise<void>
+     public async fetchRoleActions (): Promise<void>
      {
         if (this.RoleActions.has(this.Role)) 
             throw new Error("RoleActions for this Role already exist.");
@@ -135,10 +139,10 @@ export class User implements IUser
         switch (this.Role) 
         {
             case 'Business':
-                let business: Business = new Business();
+                let business: Business = new Business(this.RootStore);
                 business.data = await UserServiceInstance.fetchRoleData();
     
-                this.RoleActions.set(this.Role, business);   
+                this.RoleActions.set(this.Role, business);
                 break;
         
             default:
