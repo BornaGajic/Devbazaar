@@ -1,25 +1,105 @@
-import { makeAutoObservable} from 'mobx';
 import jwtDecode from 'jwt-decode';
+import { makeAutoObservable} from 'mobx';
+import { hydrateStore, makePersistable, StorageAdapter } from 'mobx-persist-store';
 
-import RootStore from './RootStore';
-import { IUser } from './contracts';
+import { RootStore } from "../stores";
 
 import { UserServiceInstance } from '../services';
-import { Business } from './BusinessStore';
-import { IRole } from '../common/IRole';
 
+import { Business, User } from '../models';
+import { IUser } from '../models/contracts';
+import { objectPrototype, stringifyKey, toJS } from 'mobx/dist/internal';
+
+const modelMap = new Map<string, Object>([[User.className, new User()], [Business.className , new Business()]]);
 
 export class UserStore
 {
     RootStore: RootStore;
-    User: User;
+    User: User = new User();
 
     constructor (rootStore: RootStore)
     {
         makeAutoObservable(this, { RootStore: false });
-
         this.RootStore = rootStore;
-        this.User = new User(this.RootStore);
+
+        makePersistable(this, {
+            name: "UserStore",
+            properties: ["User"],
+            storage: {
+              setItem: (name: string, content: Object) => {
+                  
+                return new Promise((resolve) => {
+                  let selfIterator = (map: Map<string, Object>): Record<string, Object> => 
+                  {
+                    return Array.from(map).reduce<Record<string, Object>>(
+                      (acc, [key, value]) => 
+                      {
+                          if (value instanceof Map) 
+                          {
+                            acc[key] = selfIterator(value);
+                          }
+                          else
+                          {
+                            acc[key] = value;
+                          }
+
+                          return acc;
+                      }, {} );
+                  };
+      
+                  let objectifyMap = (myMap: Map<string, Object>): Record<string, Object> => {
+                    return selfIterator(myMap);
+                  };
+      
+                  let replacer = (i_name: string, val: Object) => 
+                  {
+                      if (val && val.constructor === Map)
+                      {
+                        return objectifyMap(val);
+                      }
+                      else
+                      {
+                          return val
+                      }
+                  };
+      
+                  let result = JSON.stringify(content, replacer);
+      
+                  localStorage.setItem(name, result);
+      
+                  resolve();
+                });
+              },
+              removeItem: window.localStorage.removeItem,
+              getItem: (key: string) => {
+
+                let item = window.localStorage.getItem(key);
+                
+                let reviver = (i_name: string, value: any) =>
+                {
+                    if (i_name.length == 0) return value;
+
+                    if (value && typeof value === 'object' && !Array.isArray(value))
+                    {
+                        for (let entry of modelMap.entries())
+                        {
+                            if (i_name === entry[0])
+                            {
+                                return Object.assign(entry[1], value);
+                            }
+                        }
+
+                        return new Map(Object.entries(value));
+                    }
+                    
+                    return value;
+                }
+
+                return JSON.parse(item as string, reviver);
+              }
+            },
+            stringify: false
+          });
     }
 
     /**
@@ -37,12 +117,10 @@ export class UserStore
             console.log(error);return
         }
 
-        console.log(token);
-
         let payload: jwtPayload = jwtDecode(token);
         localStorage.setItem('token', token);
-
-        this.User.Id = payload['NameIdentifier']
+        
+        this.User.Id = payload['Id'];
         this.User.update({
             Username: payload['Username'],
             Email: payload['Email'],
@@ -50,7 +128,7 @@ export class UserStore
             Logo: payload['Logo']
         } as IUser);
 
-        this.User.fetchRoleActions();
+        this.User.fetchRoleData();
     }
 
     /**
@@ -71,89 +149,20 @@ export class UserStore
         let payload: jwtPayload = jwtDecode(token);
         localStorage.setItem('token', token);
 
-        this.User.Id = payload['NameIdentifier']
+        this.User.Id = payload['Id'];
         this.User.update({
             Username: payload['Username'],
             Email: payload['Email'],
             Role: payload['Role'],
             Logo: payload['Logo']
         } as IUser);
-
         // fetch role actions?
     }
 }
 
-export class User implements IUser
-{
-    private RootStore: RootStore;
-
-    RoleActions: Map<string, IRole> = new Map<string, IRole>();
-
-    Id?: string;
-    Username?: string;
-    Email?: string;
-    Logo?: string;
-    Role: string = 'Client';
-
-    constructor (RootStore: RootStore) 
-    {
-        makeAutoObservable(this);
-        this.RootStore = RootStore;
-    }
-
-    /**
-     * Updates current user data to the database.
-     */
-    async update (data: IUser): Promise<void>
-    {
-        UserServiceInstance.updateAsync(data);
-
-        this.Username = data.Username ?? this.Username;
-        this.Email = data.Email ?? this.Email;
-        this.Logo = data.Logo ?? this.Logo;
-        this.Role = data.Role ?? this.Role;
-    }
-
-    /**
-     *  Gets the users current field values.
-     */
-    get asJson (): Object
-    {
-        return {
-            Id: this.Id,
-            Username: this.Username,
-            Email: this.Email
-        }
-    }
-
-    /**
-     * Fetches business or client data from the server. (Depends on a role of the user).
-     * And saves it as a new key value pair in the RoleActions map.
-     * Throws Error if RoleActions already has defined key value pair.
-     */
-     public async fetchRoleActions (): Promise<void>
-     {
-        if (this.RoleActions.has(this.Role)) 
-            throw new Error("RoleActions for this Role already exist.");
-
-        switch (this.Role) 
-        {
-            case 'Business':
-                let business: Business = new Business(this.RootStore);
-                business.data = await UserServiceInstance.fetchRoleData();
-    
-                this.RoleActions.set(this.Role, business);
-                break;
-        
-            default:
-                break;
-        }
-     }
-}
-
 interface jwtPayload
 {
-    NameIdentifier: string;
+    Id: string;
     Username: string;
     Email: string;
     Role: string;

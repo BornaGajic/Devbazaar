@@ -1,7 +1,8 @@
+import { toJS } from 'mobx';
 import { observer } from 'mobx-react';
 import React from 'react';
 import { useStores } from '../../hooks/useStores';
-import { Business } from '../../stores/BusinessStore';
+import { Business } from '../../models';
 
 import './login.css';
 
@@ -17,20 +18,23 @@ const Register = observer(({naslov} : IRegisterProps) =>
     function f (): void
     {
         let role = store.UserStore.User.Role;
-        let x = store.UserStore.User.RoleActions.get(role) as Business;
+        
+        let x = store.UserStore.User.RoleData.get(role) as Business;
         
         x.Description = 'WOW';
     };
+
+    console.log(store.UserStore.User.RoleData.entries);
     
     return (
         <div className="d-flex justify-content-center">
             <button onClick={() => f()}>click za WOW</button>
             <div>
-                { JSON.stringify(store.UserStore.User.RoleActions.get(store.UserStore.User.Role)) }
+                
             </div>
             <br/>
             <div>
-                { JSON.stringify(store.UserStore.User.asJson) }
+                { JSON.stringify(store.UserStore.User) }
             </div>
             <br/>
             <div>

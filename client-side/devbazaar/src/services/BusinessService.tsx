@@ -1,6 +1,7 @@
 import axios from 'axios'
+
 import { IBusinessPage } from '../common';
-import { IBusiness } from '../stores/contracts/IBusiness';
+import { IBusiness } from '../models/contracts';
 
 class BusinessService
 {

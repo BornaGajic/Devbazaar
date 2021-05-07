@@ -130,6 +130,7 @@ namespace Devbazaar.Service.UserServices
 			List<Claim> claims = new List<Claim>()
 			{
 				new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+				new Claim("Id", user.Id.ToString()),
 				new Claim("Username", user.Username),
 				new Claim("Email", user.Email),
 				new Claim("Role", role.ToString()),

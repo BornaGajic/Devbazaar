@@ -1,5 +1,6 @@
 import axios from 'axios'
-import { IUser } from '../stores/contracts';
+
+import { IUser } from '../models/contracts';
 
 class UserService
 {
