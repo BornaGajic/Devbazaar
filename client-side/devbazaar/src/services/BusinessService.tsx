@@ -29,7 +29,7 @@ export class BusinessCardService implements IBusinessCardService
             Categories: data.categories,
             City: data.city,
             Country: data.country,
-            PostalCode: data.PostalCode,
+            PostalCode: data.postalCode,
             Website: data.website,
             Description: data.description
         }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});

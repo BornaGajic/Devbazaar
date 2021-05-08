@@ -7,13 +7,11 @@ import { IBusiness } from '../models/contracts';
 
 export class BusinessCardStore
 {
-    private rootStore: RootStore;
     businessCardList: IBusiness[] = [];
 
-    constructor (rootStore: RootStore)
+    constructor ()
     {
         makeAutoObservable(this);
-        this.rootStore = rootStore;
     }
 
     /**
@@ -25,6 +23,6 @@ export class BusinessCardStore
             PageNumber: pageData.PageNumber
         } as IBusinessPage;
 
-        this.businessCardList = await this.fetchPage(p);
+        //this.businessCardList = await this.fetchPage(p);
     }
 }

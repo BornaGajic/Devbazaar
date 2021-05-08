@@ -7,41 +7,6 @@ export class UserService implements IUserService
 {
     constructor () {}
     
-    async loginAsync (email: string, password: string): Promise<string>
-    {
-        let response = await axios.post(`${axios.defaults.baseURL}/User/Login`,
-        {
-            Email : email,
-            Password : password
-        });
-
-        if (response.status == 400 || response.status == 404)
-        {
-            throw new Error("Not found");
-        }
-
-        console.log(response.data);
-
-        return response.data;
-    }
-
-    async registerAsync (data: IUser): Promise<string>
-    {
-        let response = await axios.post(`${axios.defaults.baseURL}/User/Register`,
-        {
-            Username : data.username,
-            Email : data.email,
-            Password : data.password
-        }, { params : { TypeOfUser : data.role } });
-
-        if (response.status == 409)
-        {
-            throw new Error("User already exists!");
-        }
-
-        return response.data;
-    }
-
     async updateAsync (data: IUser): Promise<void>
     {
         let response = await axios.put(`${axios.defaults.baseURL}/User/Update`,
@@ -64,7 +29,7 @@ export class UserService implements IUserService
     async fetchRoleData (): Promise<any>
     {
         let response = await axios.get(`${axios.defaults.baseURL}/Business/Data`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
-        
+
         return response.data;
     }
 }

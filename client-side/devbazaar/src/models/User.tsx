@@ -1,8 +1,5 @@
 import { makeAutoObservable } from "mobx";
 
-import { Business } from "../models";
-
-import { IRole } from "../common/IRole";
 import { IUser } from "./contracts";
 
 import { IUserService } from "../services/contracts/IUserService";
@@ -11,10 +8,7 @@ import { UserStore } from "../stores/UserStore";
 
 export class User implements IUser
 {
-    userStore: UserStore;
     userService: IUserService;
-
-    roleData: Map<string, IRole> = new Map<string, IRole>();
 
     id?: string;
     username?: string;
@@ -22,12 +16,11 @@ export class User implements IUser
     logo?: string;
     role: string = 'Client';
 
-    constructor (userStore: UserStore, userService: IUserService)
+    constructor (userStore?: UserStore, userService?: IUserService)
     {   
-        this.userStore = userStore;
-        this.userService = userService;
+        this.userService = userService as IUserService;
 
-        makeAutoObservable(this, { userStore: false, userService: false });
+        makeAutoObservable(this, { userService: false });
     }
     /**
      * Updates current user data to the database.
@@ -52,34 +45,5 @@ export class User implements IUser
             Username: this.username,
             Email: this.email
         }
-    }
-
-    /**
-     * Fetches business or client data from the server. (Depends on a role of the user).
-     * And saves it as a new key value pair in the RoleData map.
-     * Throws Error if RoleData already has defined key value pair.
-     */
-    public async fetchRoleData (): Promise<void>
-    {
-        if (this.roleData.has(this.role)) 
-            throw new Error("RoleActions for this Role already exist.");
-
-        switch (this.role) 
-        {
-            case 'Business':
-                let business: Business = new Business(); //this.RootStore
-                business.data = await this.userService.fetchRoleData();
-
-                this.roleData.set(this.role, business);
-                break;
-        
-            default:
-                break;
-        }
-    }
-
-    static get className ()
-    {
-        return 'User';
     }
 }

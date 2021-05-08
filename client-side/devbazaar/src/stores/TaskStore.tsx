@@ -1,27 +1,46 @@
 import { makeAutoObservable } from "mobx";
+import { makePersistable } from "mobx-persist-store";
 import RootStore from "./RootStore";
 
 export class TaskStore
 {
-    private RootStore: RootStore;
+    rootStore: RootStore;
     taskList: Task[] = [];
 
     constructor (rootStore: RootStore)
     {
-        makeAutoObservable(this);
-        this.RootStore = rootStore;
+        this.rootStore = rootStore;
+
+        makeAutoObservable(this, { rootStore: false });
+        
+        makePersistable(this, 
+        {
+            name: "TaskStore",
+            properties: ["taskList"],
+            storage: localStorage,
+            stringify: true
+        }, {})
     }
 
     async fetchTasks (): Promise<void>
     {
 
     }
+
+    async createTask (n: string)
+    {
+        this.taskList.push(new Task(n));
+    }
 }
 
 export class Task
 {
-    constructor ()
+    itemName: string;
+    itemNumber: number;
+
+    constructor (itemName: string)
     {
-        makeAutoObservable(this);
+        this.itemName = itemName;
+        this.itemNumber = Math.random() * 100;
     }
 }
