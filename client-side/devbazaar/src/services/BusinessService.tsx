@@ -2,8 +2,9 @@ import axios from 'axios'
 
 import { IBusinessPage } from '../common';
 import { IBusiness } from '../models/contracts';
+import { IBusinessCardService } from './contracts/IBusinessCardService';
 
-class BusinessService
+export class BusinessCardService implements IBusinessCardService
 {
     constructor ()
     {
@@ -23,14 +24,14 @@ class BusinessService
     {
         let response = await axios.put(`${axios.defaults.baseURL}/Business/Update`,
         {
-            About: data.About,
-            Available: data.Available,
-            Categories: data.Categories,
-            City: data.City,
-            Country: data.Country,
+            About: data.about,
+            Available: data.available,
+            Categories: data.categories,
+            City: data.city,
+            Country: data.country,
             PostalCode: data.PostalCode,
-            Website: data.Website,
-            Description: data.Description
+            Website: data.website,
+            Description: data.description
         }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
         
         if (response.status == 400)
@@ -39,5 +40,3 @@ class BusinessService
         }
     }
 }
-
-export const BusinessServiceInstance = new BusinessService();

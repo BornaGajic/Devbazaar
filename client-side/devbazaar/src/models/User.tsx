@@ -1,43 +1,45 @@
 import { makeAutoObservable } from "mobx";
 
-import { RootStore } from "../stores";
-
-import { UserServiceInstance } from "../services";
-
 import { Business } from "../models";
 
 import { IRole } from "../common/IRole";
 import { IUser } from "./contracts";
-import { makePersistable } from "mobx-persist-store";
+
+import { IUserService } from "../services/contracts/IUserService";
+
+import { UserStore } from "../stores/UserStore";
 
 export class User implements IUser
 {
-    //RootStore?: RootStore;
-    
-    RoleData: Map<string, IRole> = new Map<string, IRole>();
+    userStore: UserStore;
+    userService: IUserService;
 
-    Id?: string;
-    Username?: string;
-    Email?: string;
-    Logo?: string;
-    Role: string = 'Client';
+    roleData: Map<string, IRole> = new Map<string, IRole>();
 
-    constructor (RootStore?: RootStore)
+    id?: string;
+    username?: string;
+    email?: string;
+    logo?: string;
+    role: string = 'Client';
+
+    constructor (userStore: UserStore, userService: IUserService)
     {   
-        makeAutoObservable(this);
-        //this.RootStore = RootStore;
+        this.userStore = userStore;
+        this.userService = userService;
+
+        makeAutoObservable(this, { userStore: false, userService: false });
     }
     /**
      * Updates current user data to the database.
      */
     async update (data: IUser): Promise<void>
     {
-        //UserServiceInstance.updateAsync(data);
+        this.userService.updateAsync(data);
 
-        this.Username = data.Username ?? this.Username;
-        this.Email = data.Email ?? this.Email;
-        this.Logo = data.Logo ?? this.Logo;
-        this.Role = data.Role ?? this.Role;
+        this.username = data.username ?? this.username;
+        this.email = data.email ?? this.email;
+        this.logo = data.logo ?? this.logo;
+        this.role = data.role ?? this.role;
     }
 
     /**
@@ -46,9 +48,9 @@ export class User implements IUser
     get asJson (): Object
     {
         return {
-            Id: this.Id,
-            Username: this.Username,
-            Email: this.Email
+            Id: this.id,
+            Username: this.username,
+            Email: this.email
         }
     }
 
@@ -59,16 +61,16 @@ export class User implements IUser
      */
     public async fetchRoleData (): Promise<void>
     {
-        if (this.RoleData.has(this.Role)) 
+        if (this.roleData.has(this.role)) 
             throw new Error("RoleActions for this Role already exist.");
 
-        switch (this.Role) 
+        switch (this.role) 
         {
             case 'Business':
                 let business: Business = new Business(); //this.RootStore
-                business.data = await UserServiceInstance.fetchRoleData();
+                business.data = await this.userService.fetchRoleData();
 
-                this.RoleData.set(this.Role, business);
+                this.roleData.set(this.role, business);
                 break;
         
             default:

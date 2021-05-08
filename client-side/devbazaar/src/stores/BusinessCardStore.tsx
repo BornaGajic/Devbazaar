@@ -1,21 +1,19 @@
 import { makeAutoObservable } from 'mobx';
 
-import { RootStore } from '../stores';
-
-import { BusinessServiceInstance } from '../services';
+import { RootStore } from '.';
 
 import { IBusinessPage } from '../common';
 import { IBusiness } from '../models/contracts';
 
-export class BusinessStore
+export class BusinessCardStore
 {
-    private RootStore: RootStore;
-    businessList: IBusiness[] = [];
+    private rootStore: RootStore;
+    businessCardList: IBusiness[] = [];
 
     constructor (rootStore: RootStore)
     {
         makeAutoObservable(this);
-        this.RootStore = rootStore;
+        this.rootStore = rootStore;
     }
 
     /**
@@ -27,6 +25,6 @@ export class BusinessStore
             PageNumber: pageData.PageNumber
         } as IBusinessPage;
 
-        this.businessList = await BusinessServiceInstance.fetchPage(p);
+        this.businessCardList = await this.fetchPage(p);
     }
 }

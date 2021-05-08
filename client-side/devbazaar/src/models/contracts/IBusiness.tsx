@@ -1,14 +1,14 @@
 export interface IBusiness
 {
     Id?: string;
-    Description?: string;
-    About?: string;
-    Website?: string;
-    Country?: string;
-    City?: string;
+    description?: string;
+    about?: string;
+    website?: string;
+    country?: string;
+    city?: string;
     PostalCode?: number;
-    Available?: boolean;
-    Popularity?: number;
+    available?: boolean;
+    popularity?: number;
 
-    Categories?: [];
+    categories?: [];
 }

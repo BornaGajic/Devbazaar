@@ -13,41 +13,6 @@ interface ILoginProps
     naslov : string
 }
 
-function selfIterator(map: Map<string, Object>)
-{
-    return Array.from(map).reduce<Record<string, object>>(
-    (acc, [key, value]) => 
-    {
-        if (value instanceof Map)
-        {
-            acc[key] = selfIterator(value);
-        } 
-        else
-        {
-            acc[key] = value;
-        }
-
-        return acc;
-    }, {})
-}
-
-function objectifyMap (myMap: Map<string, Object>) {
-    
-    return selfIterator(myMap);
-}
-
-function replacer (item_name: string, val: Object)
-{
-    if (val && val.constructor === Map)
-    {
-        return objectifyMap(val);
-    }
-    else
-    {
-        return val;
-    }
-}
-
 const Login = observer(({naslov} : ILoginProps) =>
 {
     const store = useStores();
@@ -60,7 +25,7 @@ const Login = observer(({naslov} : ILoginProps) =>
     return (
         <div>
 
-        <form onSubmit={ (e) => { store.UserStore.loginAsync(email, password); e.preventDefault(); } }>
+        <form onSubmit={ (e) => { store.userStore.loginAsync(email, password); e.preventDefault(); } }>
 
             <label htmlFor="emailBox">Email:</label><br/>
             <input type="text" id="emailBox" onChange={ (e) => email =  e.target.value } /><br/><br/>
@@ -71,7 +36,7 @@ const Login = observer(({naslov} : ILoginProps) =>
             <input type="submit" value="Submit" />
         </form> 
 
-        <form onSubmit={ (e) => { store.UserStore.User.update({Username: username} as IUser); e.preventDefault(); } }>
+        <form onSubmit={ (e) => { store.userStore.user.update({username: username} as IUser); e.preventDefault(); } }>
 
             <label htmlFor="usernameBox">change Username:</label><br/>
             <input type="text" id="usernameBox" onChange={ (e) => username =  e.target.value } /><br/><br/>
@@ -81,13 +46,13 @@ const Login = observer(({naslov} : ILoginProps) =>
 
         <button onClick={ async () => { console.count(); }  }> Fetch Role Data </button>
         <div>
-            { JSON.stringify(store.UserStore.User, replacer) }
+            { JSON.stringify(store.userStore.user) }
         </div> 
         <div>
         </div> 
         
-        <button onClick={ () => store.BusinessStore.fetchBusinesses({ PageNumber: 1 } as IBusinessPage) }> fetch page </button>
-        <form onSubmit={ (e) => { store.UserStore.User.RoleData.get(store.UserStore.User.Role)?.update({ Description: description } as IBusiness); e.preventDefault(); } }>
+        <button onClick={ () => store.businessStore.fetchBusinesses({ PageNumber: 1 } as IBusinessPage) }> fetch page </button>
+        <form onSubmit={ (e) => { store.userStore.user.roleData.get(store.userStore.user.role)?.update({ description: description } as IBusiness); e.preventDefault(); } }>
 
             <label htmlFor="usernameBox">change Description:</label><br/>
             <input type="text" id="usernameBox" onChange={ (e) => description =  e.target.value } /><br/><br/>

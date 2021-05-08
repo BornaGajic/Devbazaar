@@ -1,30 +1,36 @@
 import jwtDecode from 'jwt-decode';
 import { makeAutoObservable} from 'mobx';
-import { hydrateStore, makePersistable, StorageAdapter } from 'mobx-persist-store';
+import { makePersistable } from 'mobx-persist-store';
 
 import { RootStore } from "../stores";
 
-import { UserServiceInstance } from '../services';
-
 import { Business, User } from '../models';
 import { IUser } from '../models/contracts';
-import { objectPrototype, stringifyKey, toJS } from 'mobx/dist/internal';
+import { UserService } from '../services';
+import { IUserService } from '../services/contracts/IUserService';
 
-const modelMap = new Map<string, Object>([[User.className, new User()], [Business.className , new Business()]]);
+const modelMap = new Map<string, Object>([
+    [User.className, new User()], 
+    [Business.className , new Business()]
+]);
 
 export class UserStore
 {
-    RootStore: RootStore;
-    User: User = new User();
+    rootStore: RootStore;
+	userService: IUserService;
+    user: User;
 
-    constructor (rootStore: RootStore)
+    constructor (rootStore: RootStore, userService: IUserService)
     {
-        makeAutoObservable(this, { RootStore: false });
-        this.RootStore = rootStore;
+		this.user = new User(this, userService);
+		this.rootStore = rootStore;
+		this.userService = userService;
+
+      	makeAutoObservable(this, { rootStore: false, userService: false });
 
         makePersistable(this, {
             name: "UserStore",
-            properties: ["User"],
+            properties: ["user"],
             storage: {
               setItem: (name: string, content: Object) => {
                   
@@ -72,30 +78,31 @@ export class UserStore
               },
               removeItem: window.localStorage.removeItem,
               getItem: (key: string) => {
-
-                let item = window.localStorage.getItem(key);
+                return new Promise((resolve) => {
+                  let item = window.localStorage.getItem(key);
                 
-                let reviver = (i_name: string, value: any) =>
-                {
-                    if (i_name.length == 0) return value;
-
-                    if (value && typeof value === 'object' && !Array.isArray(value))
-                    {
-                        for (let entry of modelMap.entries())
-                        {
-                            if (i_name === entry[0])
-                            {
-                                return Object.assign(entry[1], value);
-                            }
-                        }
-
-                        return new Map(Object.entries(value));
-                    }
-                    
-                    return value;
-                }
-
-                return JSON.parse(item as string, reviver);
+                  let reviver = (i_name: string, value: any) =>
+                  {
+                      if (i_name.length == 0) return value;
+  
+                      if (value && typeof value === 'object' && !Array.isArray(value))
+                      {
+                          for (let entry of modelMap.entries())
+                          {
+                              if (i_name.toLowerCase() === entry[0].toLowerCase())
+                              {
+                                  return Object.assign(entry[1], value);
+                              }
+                          }
+  
+                          return new Map(Object.entries(value));
+                      }
+                      
+                      return value;
+                  }
+  
+                  resolve(JSON.parse(item as string, reviver));
+                });
               }
             },
             stringify: false
@@ -110,7 +117,7 @@ export class UserStore
         let token: string;
         try
         {
-            token = await UserServiceInstance.loginAsync(username, password);
+            token = await this.userService.loginAsync(username, password);
         }
         catch (error)
         {
@@ -120,15 +127,15 @@ export class UserStore
         let payload: jwtPayload = jwtDecode(token);
         localStorage.setItem('token', token);
         
-        this.User.Id = payload['Id'];
-        this.User.update({
-            Username: payload['Username'],
-            Email: payload['Email'],
-            Role: payload['Role'],
-            Logo: payload['Logo']
+        this.user.id = payload['Id'];
+        this.user.update({
+            username: payload['Username'],
+            email: payload['Email'],
+            role: payload['Role'],
+            logo: payload['Logo']
         } as IUser);
 
-        this.User.fetchRoleData();
+        this.user.fetchRoleData();
     }
 
     /**
@@ -139,7 +146,7 @@ export class UserStore
         let token: string;
         try
         {
-            token = await UserServiceInstance.registerAsync(data);
+            token = await this.userService.registerAsync(data);
         }
         catch (error)
         {
@@ -149,14 +156,15 @@ export class UserStore
         let payload: jwtPayload = jwtDecode(token);
         localStorage.setItem('token', token);
 
-        this.User.Id = payload['Id'];
-        this.User.update({
-            Username: payload['Username'],
-            Email: payload['Email'],
-            Role: payload['Role'],
-            Logo: payload['Logo']
+        this.user.id = payload['Id'];
+        this.user.update({
+            username: payload['Username'],
+            email: payload['Email'],
+            role: payload['Role'],
+            logo: payload['Logo']
         } as IUser);
-        // fetch role actions?
+
+        this.user.fetchRoleData();
     }
 }
 

@@ -2,29 +2,23 @@ import { makeAutoObservable } from "mobx";
 
 import { RootStore } from "../stores";
 
-import { BusinessServiceInstance } from "../services";
-
 import { IRole } from "../common";
 import { IBusiness } from "./contracts";
 
 export class Business implements IBusiness, IRole
 {
-    //private RootStore: RootStore;
+    description?: string;
+    about?: string;
+    website?: string;
+    country?: string;
+    city?: string;
+    available?: boolean;
+    popularity?: number;
+    categories?: [];
 
-    Description?: string;
-    About?: string;
-    Website?: string;
-    Country?: string;
-    City?: string;
-    Available?: boolean;
-    Popularity?: number;
-    Categories?: [];
-
-    constructor () //rootStore: RootStore
+    constructor ()
     {
         makeAutoObservable(this);
-
-        //this.RootStore = rootStore;
     }
 
     /**
@@ -32,16 +26,16 @@ export class Business implements IBusiness, IRole
      */
     async update (data: IBusiness): Promise<void>
     {
-        BusinessServiceInstance.updateAsync(data);
+        BusinessService.updateAsync(data);
 
-        this.Description = data.Description ?? this.Description;
-        this.About = data.About ?? this.About;
-        this.Website = data.Website ?? this.Website;
-        this.Country = data.Country ?? this.Country;
-        this.City = data.City ?? this.City;
-        this.Available = data.Available ?? this.Available;
-        this.Categories = data.Categories ?? this.Categories;
-        this.Popularity = data.Popularity ?? this.Popularity;
+        this.description = data.description ?? this.description;
+        this.about = data.about ?? this.about;
+        this.website = data.website ?? this.website;
+        this.country = data.country ?? this.country;
+        this.city = data.city ?? this.city;
+        this.available = data.available ?? this.available;
+        this.categories = data.categories ?? this.categories;
+        this.popularity = data.popularity ?? this.popularity;
     }
 
     async pinTask (taskId: string): Promise<void>
@@ -55,14 +49,14 @@ export class Business implements IBusiness, IRole
     get asJson (): Object
     {
         return {
-            Description: this.Description,
-            About: this.About,
-            Website: this.Website,
-            Country: this.Country,
-            City: this.City,
-            Available: this.Available,
-            Popularity: this.Popularity,
-            Categories: this.Categories
+            Description: this.description,
+            About: this.about,
+            Website: this.website,
+            Country: this.country,
+            City: this.city,
+            Available: this.available,
+            Popularity: this.popularity,
+            Categories: this.categories
         }
     }
 
@@ -71,14 +65,14 @@ export class Business implements IBusiness, IRole
      */
     set data (data: IBusiness)
     {
-        this.Description = data.Description ?? this.Description;
-        this.About = data.About ?? this.About;
-        this.Website = data.Website ?? this.Website;
-        this.Country = data.Country ?? this.Country;
-        this.City = data.City ?? this.City;
-        this.Available = data.Available ?? this.Available;
-        this.Categories = data.Categories ?? this.Categories;
-        this.Popularity = data.Popularity ?? this.Popularity;
+        this.description = data.description ?? this.description;
+        this.about = data.about ?? this.about;
+        this.website = data.website ?? this.website;
+        this.country = data.country ?? this.country;
+        this.city = data.city ?? this.city;
+        this.available = data.available ?? this.available;
+        this.categories = data.categories ?? this.categories;
+        this.popularity = data.popularity ?? this.popularity;
     }
 
     static get className ()

@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-class TaskService
+export class TaskService
 {
     constructor ()
     {
@@ -11,5 +11,3 @@ class TaskService
 
     }
 }
-
-export const TaskServiceInstance = new TaskService();

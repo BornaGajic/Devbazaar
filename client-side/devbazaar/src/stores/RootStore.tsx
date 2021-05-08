@@ -1,18 +1,28 @@
 import { UserStore } from './UserStore'
-import { BusinessStore } from './BusinessStore';
+import { BusinessCardStore } from './BusinessCardStore';
 import { TaskStore } from './TaskStore';
+
+import { BusinessCardService, UserService, TaskService } from '../services'
 
 class RootStore
 {
-    UserStore: UserStore;
-    BusinessStore: BusinessStore;
-    TaskStore: TaskStore;
+    userStore: UserStore;
+    businessStore: BusinessCardStore;
+    taskStore: TaskStore;
+
+    private businessCardService: BusinessCardService;
+    private userService: UserService;
+    private taskService: TaskService;
 
     constructor ()
     {
-        this.UserStore = new UserStore(this);
-        this.BusinessStore = new BusinessStore(this);
-        this.TaskStore = new TaskStore(this);
+        this.businessCardService = new BusinessCardService();
+        this.userService = new UserService();
+        this.taskService = new TaskService();
+
+        this.userStore = new UserStore(this, this.userService);
+        this.businessStore = new BusinessCardStore(this);
+        this.taskStore = new TaskStore(this);
     }
 }
 

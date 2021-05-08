@@ -17,28 +17,23 @@ const Register = observer(({naslov} : IRegisterProps) =>
 
     function f (): void
     {
-        let role = store.UserStore.User.Role;
+        let role = store.userStore.user.role;
         
-        let x = store.UserStore.User.RoleData.get(role) as Business;
+        let x = store.userStore.user.roleData.get(role) as Business;
         
-        x.Description = 'WOW';
+        x.description = 'WOW';
     };
 
-    console.log(store.UserStore.User.RoleData.entries);
-    
     return (
         <div className="d-flex justify-content-center">
             <button onClick={() => f()}>click za WOW</button>
+            <br/>
             <div>
-                
+                { JSON.stringify(store.userStore.user) }
             </div>
             <br/>
             <div>
-                { JSON.stringify(store.UserStore.User) }
-            </div>
-            <br/>
-            <div>
-                { JSON.stringify(store.BusinessStore.businessList) }
+                { JSON.stringify(store.businessStore.businessCardList) }
             </div>
         </div>
     );

@@ -1,8 +1,9 @@
 import axios from 'axios'
 
 import { IUser } from '../models/contracts';
+import { IUserService } from './contracts/IUserService';
 
-class UserService
+export class UserService implements IUserService
 {
     constructor () {}
     
@@ -28,10 +29,10 @@ class UserService
     {
         let response = await axios.post(`${axios.defaults.baseURL}/User/Register`,
         {
-            Username : data.Username,
-            Email : data.Email,
-            Password : data.Password
-        }, { params : { TypeOfUser : data.Role } });
+            Username : data.username,
+            Email : data.email,
+            Password : data.password
+        }, { params : { TypeOfUser : data.role } });
 
         if (response.status == 409)
         {
@@ -45,10 +46,10 @@ class UserService
     {
         let response = await axios.put(`${axios.defaults.baseURL}/User/Update`,
         {
-            Username: data.Username,
-            Email: data.Email,
-            Password: data.Password,
-            Logo: data.Logo
+            Username: data.username,
+            Email: data.email,
+            Password: data.password,
+            Logo: data.logo
         }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
         
         if (response.status == 400)
@@ -63,9 +64,7 @@ class UserService
     async fetchRoleData (): Promise<any>
     {
         let response = await axios.get(`${axios.defaults.baseURL}/Business/Data`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
-
+        
         return response.data;
     }
 }
-
-export const UserServiceInstance = new UserService();
