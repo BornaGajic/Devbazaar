@@ -1,10 +1,9 @@
 import { makeAutoObservable } from "mobx";
 
 import { IUser } from "./contracts";
+import { IUserService } from "../services/contracts";
 
-import { IUserService } from "../services/contracts/IUserService";
-
-import { UserStore } from "../stores/UserStore";
+import { UserRole } from '../common';
 
 export class User implements IUser
 {
@@ -14,9 +13,9 @@ export class User implements IUser
     username?: string;
     email?: string;
     logo?: string;
-    role: string = 'Client';
+    role: UserRole = UserRole.CLIENT;
 
-    constructor (userStore?: UserStore, userService?: IUserService)
+    constructor (userService?: IUserService)
     {   
         this.userService = userService as IUserService;
 
@@ -28,11 +27,8 @@ export class User implements IUser
     async update (data: IUser): Promise<void>
     {
         this.userService.updateAsync(data);
-
-        this.username = data.username ?? this.username;
-        this.email = data.email ?? this.email;
-        this.logo = data.logo ?? this.logo;
-        this.role = data.role ?? this.role;
+        
+        this.data = data;
     }
 
     /**
@@ -45,5 +41,13 @@ export class User implements IUser
             Username: this.username,
             Email: this.email
         }
+    }
+
+    set data (data: IUser)
+    {
+        this.username = data.username ?? this.username;
+        this.email = data.email ?? this.email;
+        this.logo = data.logo ?? this.logo;
+        this.role = data.role ?? this.role;
     }
 }

@@ -1,44 +1,43 @@
 import { makeAutoObservable } from "mobx";
 
 import { IRole } from "../common";
+import { IBusinessCardService } from "../services/contracts";
 import { IBusiness } from "./contracts";
 
 export class Business implements IBusiness, IRole
 {
+    businessCardService: IBusinessCardService;
+
     description?: string;
     about?: string;
     website?: string;
     country?: string;
     city?: string;
+    postalCode?: number;
     available?: boolean;
     popularity?: number;
     categories?: [];
 
-    constructor ()
+    constructor (businessCardService: IBusinessCardService)
     {
-        makeAutoObservable(this);
+        makeAutoObservable(this, { businessCardService: false });
+
+        this.businessCardService = businessCardService;
     }
 
     /**
      * Updates Business card 
      */
-    async update (data: IBusinessPayload): Promise<void>
+    async update (data: IBusiness): Promise<void>
     {
-        //BusinessService.updateAsync(data);
+        this.businessCardService.updateAsync(data);
 
-        this.description = data.Description ?? this.description;
-        this.about = data.About ?? this.about;
-        this.website = data.Website ?? this.website;
-        this.country = data.Country ?? this.country;
-        this.city = data.City ?? this.city;
-        this.available = data.Available ?? this.available;
-        this.categories = data.Categories ?? this.categories;
-        this.popularity = data.Popularity ?? this.popularity;
+        this.data = data;
     }
 
     async pinTask (taskId: string): Promise<void>
     {
-        
+        this.businessCardService.pinTask(taskId);
     }
 
     /**
@@ -52,6 +51,7 @@ export class Business implements IBusiness, IRole
             Website: this.website,
             Country: this.country,
             City: this.city,
+            PostalCode: this.postalCode,
             Available: this.available,
             Popularity: this.popularity,
             Categories: this.categories
@@ -61,36 +61,16 @@ export class Business implements IBusiness, IRole
     /**
      * Setter for Business fields
      */
-    set data (data: IBusinessPayload)
+    set data (data: IBusiness)
     {
-        this.description = data.Description ?? this.description;
-        this.about = data.About ?? this.about;
-        this.website = data.Website ?? this.website;
-        this.country = data.Country ?? this.country;
-        this.city = data.City ?? this.city;
-        this.available = data.Available ?? this.available;
-        this.categories = data.Categories ?? this.categories;
-        this.popularity = data.Popularity ?? this.popularity;
+        this.description = data.description ?? this.description;
+        this.about = data.about ?? this.about;
+        this.website = data.website ?? this.website;
+        this.country = data.country ?? this.country;
+        this.city = data.city ?? this.city;
+        this.postalCode = data.postalCode ?? this.postalCode;
+        this.available = data.available ?? this.available;
+        this.categories = data.categories ?? this.categories;
+        this.popularity = data.popularity ?? this.popularity;
     }
-
-    static get className ()
-    {
-        return 'Business';
-    }
-}
-
-// this is temporary here
-interface IBusinessPayload
-{
-    Id?: string;
-    Description?: string;
-    About?: string;
-    Website?: string;
-    Country?: string;
-    City?: string;
-    PostalCode?: number;
-    Available?: boolean;
-    Popularity?: number;
-
-    Categories?: [];
 }

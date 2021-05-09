@@ -1,4 +1,4 @@
 export { UserService } from './UserService';
-export { BusinessCardService } from './BusinessService';
+export { BusinessCardService } from './BusinessCardService';
 export { TaskService } from './TaskService';
 export { AuthService } from './AuthService';

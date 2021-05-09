@@ -1,36 +1,53 @@
 import jwtDecode from 'jwt-decode';
 import { makeAutoObservable } from 'mobx';
 
+import { RootStore } from '.';
+
 import { Business, User } from '../models';
+
 import { IUser } from '../models/contracts';
-import { IUserService } from '../services/contracts/IUserService';
+import { IUserService } from '../services/contracts';
 import { IRole } from '../common';
+
+import { UserRole } from '../common';
 
 export class UserStore
 {
+    rootStore: RootStore;
 	userService: IUserService;
 
     user: User;
 	roleData: Map<string, IRole> = new Map<string, IRole>();
 
-    constructor (userService: IUserService)
+    constructor (rootStore: RootStore, userService: IUserService)
     {
-		this.user = new User(this, userService);
-		this.userService = userService;
+		this.user = new User(userService);
+		
+      	makeAutoObservable(this, { userService: false, rootStore: false });
 
-      	makeAutoObservable(this, { userService: false });
+        this.userService = userService;
+        this.rootStore = rootStore;
 
 		if (localStorage.getItem('token'))
 		{
-			this.loginAsync(localStorage.getItem('token') as string);
+			this.fetchUserData(localStorage.getItem('token') as string);
 		}
     }
 
     /**
      * Logs in the user and updates its fields
      */
-    async loginAsync (token: string): Promise<void>
+    async fetchUserData (token: string): Promise<void>
     {
+        interface jwtPayload
+        {
+            Id: string;
+            Username: string;
+            Email: string;
+            Role: string;
+            Logo: string;
+        }
+
 		let payload: jwtPayload = jwtDecode(token);
 
         this.user.id = payload['Id'];
@@ -56,10 +73,13 @@ export class UserStore
 
 		switch (this.user.role) 
 		{
-			case 'Business':
-				let business: Business = new Business();
-				business.data = await this.userService.fetchRoleData();
-				
+			case UserRole.BUSINESS:
+				let business: Business = new Business(this.rootStore.businessStore.businessCardService);
+				let response = await this.userService.fetchRoleData();
+
+                console.log(response.data);
+				business.data = response.data;
+
 				this.roleData.set(this.user.role, business);
 				break;
 		
@@ -67,14 +87,4 @@ export class UserStore
 				break;
 		}
 	}
-}
-
-// this is temporary here
-interface jwtPayload
-{
-    Id: string;
-    Username: string;
-    Email: string;
-    Role: string;
-    Logo: string;
 }

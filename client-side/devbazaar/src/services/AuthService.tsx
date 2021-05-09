@@ -1,7 +1,10 @@
 import axios from 'axios'
+
+import { IAuthService } from './contracts';
+
 import { IUser } from '../models/contracts';
 
-export class AuthService
+export class AuthService implements IAuthService
 {
     constructor () {}
     

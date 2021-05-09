@@ -23,7 +23,7 @@ const Login = observer(({naslov} : ILoginProps) =>
     let description: string = '';
 
     return (
-        <div>
+        <div className="container">
 
         <form onSubmit={ (e) => { store.authStore.loginAsync(email, password); e.preventDefault(); } }>
 
@@ -33,7 +33,7 @@ const Login = observer(({naslov} : ILoginProps) =>
             <label htmlFor="passwordBox">Password:</label><br/>
             <input type="text" id="passwordBox" onChange={ (e) => password = e.target.value } /><br/><br/>
 
-            <input type="submit" value="Submit" />
+            <input type="submit" value="Login" />
         </form> 
 
         <form onSubmit={ (e) => { store.userStore.user.update({username: username} as IUser); e.preventDefault(); } }>
@@ -41,7 +41,7 @@ const Login = observer(({naslov} : ILoginProps) =>
             <label htmlFor="usernameBox">change Username:</label><br/>
             <input type="text" id="usernameBox" onChange={ (e) => username =  e.target.value } /><br/><br/>
 
-            <input type="submit" value="Submit" />
+            <input type="submit" value="Change username" />
         </form> 
 
         <div>
@@ -49,12 +49,12 @@ const Login = observer(({naslov} : ILoginProps) =>
         </div> 
         
         <button onClick={ () => store.businessStore.fetchBusinesses({ PageNumber: 1 } as IBusinessPage) }> fetch page </button>
-        <form onSubmit={ (e) => { store.userStore.roleData.get(store.userStore.user.role)?.update({ Description: description } as IBusiness); e.preventDefault(); } }>
+        <form onSubmit={ (e) => { store.userStore.roleData.get(store.userStore.user.role)?.update({ description: description } as IBusiness); e.preventDefault(); } }>
 
             <label htmlFor="usernameBox">change Description:</label><br/>
-            <input type="text" id="usernameBox" onChange={ (e) => description = e.target.value } /><br/><br/>
+            <input type="text" id="usernameBox" onChange={ (e) => description = e.target.value } /><br/>
 
-            <input type="submit" value="Submit" />
+            <input type="submit" value="Change description" /><br/><br/>
         </form> 
         <Register naslov="" />
         </div>

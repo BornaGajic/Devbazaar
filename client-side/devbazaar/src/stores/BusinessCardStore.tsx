@@ -4,14 +4,21 @@ import { RootStore } from '.';
 
 import { IBusinessPage } from '../common';
 import { IBusiness } from '../models/contracts';
+import { IBusinessCardService } from '../services/contracts';
 
 export class BusinessCardStore
 {
+    rootStore: RootStore;
+    businessCardService: IBusinessCardService;
+    
     businessCardList: IBusiness[] = [];
 
-    constructor ()
+    constructor (rootStore: RootStore, businessCardService: IBusinessCardService)
     {
-        makeAutoObservable(this);
+        makeAutoObservable(this, { rootStore: false, businessCardService: false });
+
+        this.rootStore = rootStore;
+        this.businessCardService = businessCardService;
     }
 
     /**
@@ -23,6 +30,8 @@ export class BusinessCardStore
             PageNumber: pageData.PageNumber
         } as IBusinessPage;
 
-        //this.businessCardList = await this.fetchPage(p);
+        let response = await this.businessCardService.fetchPage(p);
+
+        this.businessCardList = response.data;
     }
 }

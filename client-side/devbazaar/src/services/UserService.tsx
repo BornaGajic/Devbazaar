@@ -1,13 +1,13 @@
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
 
 import { IUser } from '../models/contracts';
-import { IUserService } from './contracts/IUserService';
+import { IUserService } from './contracts';
 
 export class UserService implements IUserService
 {
     constructor () {}
     
-    async updateAsync (data: IUser): Promise<void>
+    async updateAsync (data: IUser): Promise<AxiosResponse<any>>
     {
         let response = await axios.put(`${axios.defaults.baseURL}/User/Update`,
         {
@@ -17,19 +17,21 @@ export class UserService implements IUserService
             Logo: data.logo
         }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
         
-        if (response.status == 400)
+        if (response.status === 400)
         {
             throw new Error(response.statusText);   
         }
+
+        return response
     }
 
     /** 
      * Returnes Promise of own business card data.
     */
-    async fetchRoleData (): Promise<any>
+    async fetchRoleData (): Promise<AxiosResponse<any>>
     {
         let response = await axios.get(`${axios.defaults.baseURL}/Business/Data`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
-
-        return response.data;
+        
+        return response;
     }
 }

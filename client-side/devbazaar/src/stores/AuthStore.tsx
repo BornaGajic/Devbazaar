@@ -1,17 +1,16 @@
+import { RootStore } from '.';
 
 import { IUser } from '../models/contracts';
-import { AuthService } from '../services';
-
-import RootStore from './RootStore';
+import { IAuthService } from '../services/contracts';
 
 export class AuthStore
 {
-    authService: AuthService;
     rootStore: RootStore;
+    authService: IAuthService;
 
     token: string = '';
 
-    constructor (rootStore: RootStore, authService: AuthService)
+    constructor (rootStore: RootStore, authService: IAuthService)
     {
         this.authService = authService;
         this.rootStore = rootStore;
@@ -33,7 +32,7 @@ export class AuthStore
 
         localStorage.setItem('token', this.token);
 
-        this.rootStore.userStore.loginAsync(this.token);
+        await this.rootStore.userStore.fetchUserData(this.token);
     }
 
     /**
@@ -52,7 +51,16 @@ export class AuthStore
 
         localStorage.setItem('token', this.token);
 
-        this.rootStore.userStore.loginAsync(this.token);
+        await this.rootStore.userStore.fetchUserData(this.token);
+    }
+
+    logoutAsync (): Promise<void>
+    {
+        return new Promise (() => {
+            localStorage.removeItem('token');
+
+            window.location.reload();
+        })
     }
 
 }

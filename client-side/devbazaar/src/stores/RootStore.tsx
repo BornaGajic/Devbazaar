@@ -1,9 +1,10 @@
 import { UserStore } from './UserStore'
 import { BusinessCardStore } from './BusinessCardStore';
 import { TaskStore } from './TaskStore';
+import { AuthStore } from './AuthStore';
 
 import { BusinessCardService, UserService, TaskService, AuthService } from '../services'
-import { AuthStore } from './AuthStore';
+import { IAuthService, IBusinessCardService, ITaskService, IUserService } from '../services/contracts';
 
 class RootStore
 {
@@ -12,20 +13,15 @@ class RootStore
     taskStore: TaskStore;
     authStore: AuthStore
 
-    private businessCardService: BusinessCardService;
-    private userService: UserService;
-    private taskService: TaskService;
-    private authService: AuthService;
+    private businessCardService: IBusinessCardService = new BusinessCardService();
+    private userService: IUserService = new UserService();
+    private taskService: ITaskService = new TaskService();
+    private authService: IAuthService = new AuthService();
 
     constructor ()
     {
-        this.businessCardService = new BusinessCardService();
-        this.userService = new UserService();
-        this.taskService = new TaskService();
-        this.authService = new AuthService();
-
-        this.userStore = new UserStore(this.userService);
-        this.businessStore = new BusinessCardStore();
+        this.businessStore = new BusinessCardStore(this, this.businessCardService);
+        this.userStore = new UserStore(this, this.userService);
         this.taskStore = new TaskStore(this);
         this.authStore = new AuthStore(this, this.authService);
     }
