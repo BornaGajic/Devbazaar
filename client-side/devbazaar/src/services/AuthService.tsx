@@ -6,8 +6,6 @@ import { IUser } from '../models/contracts';
 
 export class AuthService implements IAuthService
 {
-    constructor () {}
-    
     async loginAsync (email: string, password: string): Promise<string>
     {
         let response = await axios.post(`${axios.defaults.baseURL}/User/Login`,
@@ -16,7 +14,7 @@ export class AuthService implements IAuthService
             Password : password
         });
 
-        if (response.status == 400 || response.status == 404)
+        if (response.status === 400 || response.status === 404)
         {
             throw new Error("Not found");
         }
@@ -33,7 +31,7 @@ export class AuthService implements IAuthService
             Password : data.password
         }, { params : { TypeOfUser : data.role } });
 
-        if (response.status == 409)
+        if (response.status === 409)
         {
             throw new Error("User already exists!");
         }

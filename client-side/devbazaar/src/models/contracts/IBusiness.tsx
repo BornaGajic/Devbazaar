@@ -1,3 +1,5 @@
+import { ICategory } from "./ICategory";
+
 export interface IBusiness
 {
     id?: string;
@@ -10,5 +12,5 @@ export interface IBusiness
     available?: boolean;
     popularity?: number;
 
-    categories?: [];
+    categories?: ICategory[];
 }

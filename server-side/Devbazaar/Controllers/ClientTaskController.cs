@@ -91,11 +91,7 @@ namespace Devbazaar.Controllers
         [HttpGet]
         public async Task<HttpResponseMessage> PaginatedGetAsync ([FromBody] ClientTaskPage pageData)
         {
-            Guid? clientId = null;
-            if (pageData.isMyTasks == true)
-            {
-                clientId = Guid.Parse(User.Identity.GetUserId());
-            }
+            Guid clientId = Guid.Parse(User.Identity.GetUserId());
 
             object returnDto = new {
                pageResult = await ClientTaskService.PaginatedGetAsync(pageData, clientId),

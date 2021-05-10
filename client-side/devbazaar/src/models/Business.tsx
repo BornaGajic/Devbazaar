@@ -1,8 +1,11 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, runInAction, toJS } from "mobx";
 
 import { IRole } from "../common";
+import { ITaskPage } from "../common/ITaskPage";
 import { IBusinessCardService } from "../services/contracts";
 import { IBusiness } from "./contracts";
+import { ICategory } from "./contracts/ICategory";
+import { ITask } from "./contracts/ITask";
 
 export class Business implements IBusiness, IRole
 {
@@ -16,7 +19,9 @@ export class Business implements IBusiness, IRole
     postalCode?: number;
     available?: boolean;
     popularity?: number;
-    categories?: [];
+    categories?: ICategory[];
+
+    pinnedTasks?: ITask[];
 
     constructor (businessCardService: IBusinessCardService)
     {
@@ -32,12 +37,19 @@ export class Business implements IBusiness, IRole
     {
         this.businessCardService.updateAsync(data);
 
-        this.data = data;
+        runInAction(() => this.data = data); 
     }
 
     async pinTask (taskId: string): Promise<void>
     {
         this.businessCardService.pinTask(taskId);
+    }
+
+    async fetchPinnedTasks (): Promise<void>
+    {
+        let response = await this.businessCardService.fetchPinnedTasks({ PageNumber: 1 } as ITaskPage);
+
+        runInAction(() => this.pinnedTasks = response.data); 
     }
 
     /**

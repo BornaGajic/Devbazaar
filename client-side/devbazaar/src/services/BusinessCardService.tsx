@@ -1,18 +1,26 @@
 import axios, { AxiosResponse } from 'axios'
 
 import { IBusinessPage } from '../common';
+import { ITaskPage } from '../common/ITaskPage';
 import { IBusiness } from '../models/contracts';
+import { ITask } from '../models/contracts/ITask';
 import { IBusinessCardService } from './contracts';
 
 export class BusinessCardService implements IBusinessCardService
 {
-    constructor ()
-    {
-    }
-
     async fetchPage (pageData: IBusinessPage): Promise<AxiosResponse<IBusiness[]>>
     {
         let response = await axios.post(`${axios.defaults.baseURL}/Business/Businesses`,
+        {
+           pageData: pageData
+        }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
+
+        return response;
+    }
+
+    async fetchPinnedTasks (pageData: ITaskPage): Promise<AxiosResponse<ITask[]>>
+    {
+        let response = await axios.post(`${axios.defaults.baseURL}/Business/Tasks`,
         {
            pageData: pageData
         }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
@@ -40,6 +48,9 @@ export class BusinessCardService implements IBusinessCardService
         }
     }
 
+    /**
+     * "Pins" a task to the pinned tasks tab.
+     */
     async pinTask (taskId: string)
     {
         let response = await axios.put(`${axios.defaults.baseURL}/Business/Acquire`, {

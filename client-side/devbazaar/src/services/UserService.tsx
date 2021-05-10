@@ -5,8 +5,6 @@ import { IUserService } from './contracts';
 
 export class UserService implements IUserService
 {
-    constructor () {}
-    
     async updateAsync (data: IUser): Promise<AxiosResponse<any>>
     {
         let response = await axios.put(`${axios.defaults.baseURL}/User/Update`,

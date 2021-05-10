@@ -1,5 +1,5 @@
 import jwtDecode from 'jwt-decode';
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 
 import { RootStore } from '.';
 
@@ -50,13 +50,15 @@ export class UserStore
 
 		let payload: jwtPayload = jwtDecode(token);
 
-        this.user.id = payload['Id'];
-        this.user.update({
-            username: payload['Username'],
-            email: payload['Email'],
-            role: payload['Role'],
-            logo: payload['Logo']
-        } as IUser);
+        runInAction(() => {
+            this.user.id = payload['Id'];
+            this.user.update({
+                username: payload['Username'],
+                email: payload['Email'],
+                role: payload['Role'],
+                logo: payload['Logo']
+            } as IUser);
+        })
 
         await this.fetchRoleData();
     }
@@ -77,10 +79,10 @@ export class UserStore
 				let business: Business = new Business(this.rootStore.businessStore.businessCardService);
 				let response = await this.userService.fetchRoleData();
 
-                console.log(response.data);
-				business.data = response.data;
+				runInAction(() => business.data = response.data);
 
-				this.roleData.set(this.user.role, business);
+                runInAction(() => this.roleData.set(this.user.role, business));
+				
 				break;
 		
 			default:

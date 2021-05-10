@@ -1,4 +1,4 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 
 import { IUser } from "./contracts";
 import { IUserService } from "../services/contracts";
@@ -28,7 +28,7 @@ export class User implements IUser
     {
         this.userService.updateAsync(data);
         
-        this.data = data;
+        runInAction(() => this.data = data);
     }
 
     /**

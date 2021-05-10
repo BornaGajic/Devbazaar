@@ -1,6 +1,4 @@
-import { makeAutoObservable } from 'mobx';
-
-import { RootStore } from '.';
+import { makeAutoObservable, runInAction } from 'mobx';
 
 import { IBusinessPage } from '../common';
 import { IBusiness } from '../models/contracts';
@@ -8,23 +6,21 @@ import { IBusinessCardService } from '../services/contracts';
 
 export class BusinessCardStore
 {
-    rootStore: RootStore;
     businessCardService: IBusinessCardService;
     
     businessCardList: IBusiness[] = [];
 
-    constructor (rootStore: RootStore, businessCardService: IBusinessCardService)
+    constructor (businessCardService: IBusinessCardService)
     {
-        makeAutoObservable(this, { rootStore: false, businessCardService: false });
+        makeAutoObservable(this, { businessCardService: false });
 
-        this.rootStore = rootStore;
         this.businessCardService = businessCardService;
     }
 
     /**
-     * Fetches a (sorted) page of business cards with defined filters and page number.
+     * Fetches a page of business cards with applied filters.
      */
-    async fetchBusinesses (pageData: IBusinessPage): Promise<void>
+    async fetchBusinessCardPage (pageData: IBusinessPage): Promise<void>
     {
         let p = {
             PageNumber: pageData.PageNumber
@@ -32,6 +28,6 @@ export class BusinessCardStore
 
         let response = await this.businessCardService.fetchPage(p);
 
-        this.businessCardList = response.data;
+        runInAction(() => this.businessCardList = response.data);
     }
 }

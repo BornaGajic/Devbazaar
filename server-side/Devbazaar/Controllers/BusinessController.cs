@@ -102,18 +102,22 @@ namespace Devbazaar.Controllers
             return Request.CreateResponse(HttpStatusCode.InternalServerError);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("Tasks")]
         public async Task<HttpResponseMessage> AcquiredClientTasks ([FromBody] ClientTaskPage pageData)
         {
             Guid businessId = Guid.Parse(User.Identity.GetUserId());
 
+            /*
             object returnDto = new {
-               pageResult = await BusinessService.AcquiredClientTasksAsync(pageData, businessId),
+               pageResult =   
                totalItems = Utility.Utility.TotalClientTaskCount
             };
+            */
 
-            return Request.CreateResponse(HttpStatusCode.OK, returnDto);
+            var result = await BusinessService.AcquiredClientTasksAsync(pageData, businessId);
+
+            return Request.CreateResponse(HttpStatusCode.OK, result);
         }
 
 		[HttpPost]
@@ -129,13 +133,17 @@ namespace Devbazaar.Controllers
                 
                 return Request.CreateResponse(HttpStatusCode.OK, businessList);
             }
-
+            
+            /*
             object returnDto = new {
-               pageResult = await BusinessService.PaginatedGetAsync(pageData),
+               pageResult =    
                totalItems = Utility.Utility.TotalBusinessCount
             };
+            */
 
-            return Request.CreateResponse(HttpStatusCode.OK, returnDto);
+            var result = await BusinessService.PaginatedGetAsync(pageData);
+
+            return Request.CreateResponse(HttpStatusCode.OK, result);
 		}
 
         /* TO-DO:

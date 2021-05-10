@@ -62,5 +62,4 @@ export class AuthStore
             window.location.reload();
         })
     }
-
 }

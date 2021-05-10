@@ -1,5 +1,5 @@
 import { observer } from 'mobx-react';
-import { observable, stringifyKey } from 'mobx/dist/internal';
+import { action } from 'mobx'
 import React, { ChangeEvent } from 'react';
 import { Register } from '.';
 import { IBusinessPage } from '../../common';
@@ -48,8 +48,13 @@ const Login = observer(({naslov} : ILoginProps) =>
             { JSON.stringify(store.userStore.user.asJson) }
         </div> 
         
-        <button onClick={ () => store.businessStore.fetchBusinesses({ PageNumber: 1 } as IBusinessPage) }> fetch page </button>
-        <form onSubmit={ (e) => { store.userStore.roleData.get(store.userStore.user.role)?.update({ description: description } as IBusiness); e.preventDefault(); } }>
+        <button onClick={ () => store.businessStore.fetchBusinessCardPage({ PageNumber: 1 } as IBusinessPage) }> fetch page </button>
+        <form 
+            onSubmit= {
+                action(e => { 
+                    store.userStore.roleData.get(store.userStore.user.role)?.update({ description: description } as IBusiness); 
+                    e.preventDefault();
+                })}>
 
             <label htmlFor="usernameBox">change Description:</label><br/>
             <input type="text" id="usernameBox" onChange={ (e) => description = e.target.value } /><br/>
@@ -58,7 +63,6 @@ const Login = observer(({naslov} : ILoginProps) =>
         </form> 
         <Register naslov="" />
         </div>
-    
     );
 })
 

@@ -9,6 +9,12 @@ import { StoreProvider } from './contexts'
 
 import App from './components/app/App';
 
+import { configure } from "mobx"
+
+configure({
+    enforceActions: "always"
+});
+
 ReactDOM.render(
   <React.StrictMode>
     <StoreProvider>

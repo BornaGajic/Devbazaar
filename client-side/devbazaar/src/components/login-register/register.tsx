@@ -1,6 +1,8 @@
-import { toJS } from 'mobx';
-import { observer } from 'mobx-react';
 import React from 'react';
+
+import { runInAction } from 'mobx';
+import { observer } from 'mobx-react';
+
 import { useStores } from '../../hooks/useStores';
 import { Business } from '../../models';
 
@@ -15,15 +17,12 @@ const Register = observer(({naslov} : IRegisterProps) =>
 {
     const store = useStores();
 
+    let role = store.userStore.user.role;
+    let x = store.userStore.roleData.get(role) as Business;
+
     function f (): void
     {
-        console.log(store.userStore.roleData);
-
-        let role = store.userStore.user.role;
-        
-        let x = store.userStore.roleData.get(role) as Business;
-        
-        x.description = 'WOW';
+        runInAction(() => { x.description = 'WOW' }) 
     };
 
     function g ()
@@ -49,9 +48,18 @@ const Register = observer(({naslov} : IRegisterProps) =>
             </div>
 
             <div className="row">
+                <button onClick={() => x.fetchPinnedTasks()}> fetch pinned tasks </button>
+                { JSON.stringify(x ? x.pinnedTasks : null) }
+            </div>
+
+            <div className="row">
                 <button onClick={() => store.authStore.logoutAsync()}>
                     Logout
                 </button>
+            </div>
+
+            <div>
+                { JSON.stringify(store.userStore.user.asJson) }
             </div>
         </div>
     );

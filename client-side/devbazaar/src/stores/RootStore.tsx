@@ -20,7 +20,7 @@ class RootStore
 
     constructor ()
     {
-        this.businessStore = new BusinessCardStore(this, this.businessCardService);
+        this.businessStore = new BusinessCardStore(this.businessCardService);
         this.userStore = new UserStore(this, this.userService);
         this.taskStore = new TaskStore(this);
         this.authStore = new AuthStore(this, this.authService);

@@ -8,8 +8,7 @@ namespace Devbazaar.Common.PageData.ClientTask
 {
 	public class ClientTaskPage : Page
 	{
-		public bool isMyTasks { get; set; } = false;
-
+		//public bool isMyTasks { get; set; } = false;
 		// filter
 		public int LowPrice { get; set; } = 0;
 		public int HighPrice { get; set; } = int.MaxValue;
