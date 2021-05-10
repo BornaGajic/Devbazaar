@@ -6,27 +6,31 @@ import { RootStore } from '.';
 import { Business, User } from '../models';
 
 import { IUser } from '../models/contracts';
-import { IUserService } from '../services/contracts';
+import { IClientService, IUserService } from '../services/contracts';
 import { IRole } from '../common';
 
 import { UserRole } from '../common';
+import { Client } from '../models';
+import { AxiosResponse } from 'axios';
 
 export class UserStore
 {
     rootStore: RootStore;
 	userService: IUserService;
+    clientService: IClientService;
 
     user: User;
 	roleData: Map<string, IRole> = new Map<string, IRole>();
 
-    constructor (rootStore: RootStore, userService: IUserService)
+    constructor (rootStore: RootStore, userService: IUserService, clientService: IClientService)
     {
 		this.user = new User(userService);
 		
-      	makeAutoObservable(this, { userService: false, rootStore: false });
+      	makeAutoObservable(this, { rootStore: false, userService: false, clientService: false });
 
-        this.userService = userService;
         this.rootStore = rootStore;
+        this.userService = userService;
+        this.clientService = clientService; // temporary ====> todo root service - pick what ever you need
 
 		if (localStorage.getItem('token'))
 		{
@@ -73,18 +77,32 @@ export class UserStore
 		if (this.roleData.has(this.user.role)) 
 			throw new Error("RoleActions for this Role already exist.");
 
+        let response: AxiosResponse<any>;
+        try
+        {
+            response = await this.userService.fetchRoleData();
+        }
+        catch(e)
+        {
+            console.log(e)
+        }
+
 		switch (this.user.role) 
 		{
 			case UserRole.BUSINESS:
 				let business: Business = new Business(this.rootStore.businessStore.businessCardService);
-				let response = await this.userService.fetchRoleData();
 
 				runInAction(() => business.data = response.data);
-
                 runInAction(() => this.roleData.set(this.user.role, business));
 				
 				break;
-		
+            case UserRole.CLIENT:
+                let client: Client = new Client(this.rootStore.businessStore, this.clientService);
+                
+                runInAction(() => client.data = response.data);
+                runInAction(() => this.roleData.set(this.user.role, client));
+
+                break;
 			default:
 				break;
 		}

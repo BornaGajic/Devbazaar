@@ -8,7 +8,7 @@ export class BusinessCardStore
 {
     businessCardService: IBusinessCardService;
     
-    businessCardList: IBusiness[] = [];
+    businessCards: IBusiness[] = [];
 
     constructor (businessCardService: IBusinessCardService)
     {
@@ -22,12 +22,10 @@ export class BusinessCardStore
      */
     async fetchBusinessCardPage (pageData: IBusinessPage): Promise<void>
     {
-        let p = {
-            PageNumber: pageData.PageNumber
-        } as IBusinessPage;
+        let response = await this.businessCardService.fetchPage(pageData);
 
-        let response = await this.businessCardService.fetchPage(p);
-
-        runInAction(() => this.businessCardList = response.data);
+        runInAction(() => {
+            this.businessCards = this.businessCards.length !== 0 ? this.businessCards.concat(response.data) : response.data
+        });
     }
 }

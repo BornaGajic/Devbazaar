@@ -10,9 +10,10 @@ export class BusinessCardService implements IBusinessCardService
 {
     async fetchPage (pageData: IBusinessPage): Promise<AxiosResponse<IBusiness[]>>
     {
+        console.log(pageData);
         let response = await axios.post(`${axios.defaults.baseURL}/Business/Businesses`,
         {
-           pageData: pageData
+           PageNumber: pageData.PageNumber
         }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
 
         return response;
@@ -28,7 +29,7 @@ export class BusinessCardService implements IBusinessCardService
         return response;
     }
 
-    async updateAsync (data: IBusiness): Promise<void>
+    async update (data: IBusiness): Promise<void>
     {
         let response = await axios.put(`${axios.defaults.baseURL}/Business/Update`,
         {
@@ -42,7 +43,7 @@ export class BusinessCardService implements IBusinessCardService
             Description: data.description
         }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
         
-        if (response.status === 400)
+        if (response.status !== 200)
         {
             throw new Error(response.statusText);   
         }
@@ -51,7 +52,7 @@ export class BusinessCardService implements IBusinessCardService
     /**
      * "Pins" a task to the pinned tasks tab.
      */
-    async pinTask (taskId: string)
+    async pinTask (taskId: string): Promise<AxiosResponse<ITask>>
     {
         let response = await axios.put(`${axios.defaults.baseURL}/Business/Acquire`, {
             params: {
@@ -59,9 +60,11 @@ export class BusinessCardService implements IBusinessCardService
             }
         });
 
-        if (response.status === 500)
+        if (response.status !== 200)
         {
             throw new Error(response.statusText);
         }
+
+        return response;
     }
 }

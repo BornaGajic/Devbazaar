@@ -12,6 +12,6 @@ namespace Devbazaar.IRestModels.IClientTaskRest
 		int? LowPrice { get; set; }
 		int? HighPrice { get; set; }
 
-		Guid? BusinessId { get; set; }
+		Guid? BusinessId { get; set; } // wtf
 	}
 }

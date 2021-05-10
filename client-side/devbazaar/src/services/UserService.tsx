@@ -5,7 +5,7 @@ import { IUserService } from './contracts';
 
 export class UserService implements IUserService
 {
-    async updateAsync (data: IUser): Promise<AxiosResponse<any>>
+    async update (data: IUser): Promise<AxiosResponse<any>>
     {
         let response = await axios.put(`${axios.defaults.baseURL}/User/Update`,
         {
@@ -29,6 +29,9 @@ export class UserService implements IUserService
     async fetchRoleData (): Promise<AxiosResponse<any>>
     {
         let response = await axios.get(`${axios.defaults.baseURL}/Business/Data`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
+
+        if (response.status !== 200)
+            throw new Error(response.statusText);
         
         return response;
     }

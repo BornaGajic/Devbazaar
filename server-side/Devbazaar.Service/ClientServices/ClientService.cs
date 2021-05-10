@@ -8,6 +8,9 @@ using Devbazaar.Service.Common.IClientServices;
 using AutoMapper;
 using Devbazaar.DAL.EntityModels;
 using System.Data.Entity;
+using Devbazaar.Common.DTO.Business;
+using Devbazaar.Model.Common;
+using Devbazaar.Common.IPageData.Business;
 
 namespace Devbazaar.Service.ClientServices
 {
@@ -49,12 +52,25 @@ namespace Devbazaar.Service.ClientServices
 			return true;
 		}
 
-		public async Task<bool> AddToFavourites (Guid clientId, Guid businessId)
+		public async Task<IBusinessDto> AddToFavourites (Guid clientId, Guid businessId)
 		{
 			var businessEntity = await (from business in UnitOfWork.BusinessRepository.Table where business.Id == businessId select business).SingleAsync();
 			var clientEntity = await (from client in UnitOfWork.ClientRepository.Table where client.Id == clientId select client).SingleAsync();
 
 			clientEntity.Businesses.Add(businessEntity);
+
+			BusinessDto businessDto = new BusinessDto () { 
+				Id = businessEntity.Id,
+				Description = businessEntity.Description,
+				About = businessEntity.About,
+				Available = businessEntity.Available,
+				City = businessEntity.City,
+				Country = businessEntity.Country,
+				PostalCode = businessEntity.PostalCode,
+				Website = businessEntity.Website,
+				Popularity = businessEntity.Clients.Count,
+				Categories = Mapper.Map<List<ICategory>>(businessEntity.Categories)
+			};
 
 			try
 			{
@@ -63,10 +79,10 @@ namespace Devbazaar.Service.ClientServices
 			catch (Exception e)
 			{
 				Console.WriteLine(e.Message);
-				return false;
+				return null;
 			}
 			
-			return true;
+			return businessDto;
 		}
 	}
 }

@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using AutoMapper;
+using Devbazaar.Common.IPageData.Business;
 using Devbazaar.Model.Common;
 using Devbazaar.RestModels.ClientRest;
 using Devbazaar.Service.Common.IClientServices;
@@ -56,13 +57,14 @@ namespace Devbazaar.Controllers
         }
 
         [Authorize]
-        [HttpPost]
-        [Route("AddFavourite")]
+        [HttpPut]
+        [Route("AddFavourites")]
         public async Task<HttpResponseMessage> AddBusinessToFavourites ([FromUri] Guid businessId)
         {   
+            IBusinessDto result;
             try
             {
-                await ClientService.AddToFavourites(Guid.Parse(User.Identity.GetUserId()), businessId);
+                result = await ClientService.AddToFavourites(Guid.Parse(User.Identity.GetUserId()), businessId);
             }
             catch (Exception e)
             {
@@ -70,7 +72,7 @@ namespace Devbazaar.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
             
-            return Request.CreateResponse(HttpStatusCode.OK);
+            return Request.CreateResponse(HttpStatusCode.OK, result);
         }
     }
 }

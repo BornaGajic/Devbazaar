@@ -8,6 +8,6 @@ export interface IBusinessCardService
 {
     fetchPage (pageData: IBusinessPage): Promise<AxiosResponse<IBusiness[]>>;
     fetchPinnedTasks (pageData: ITaskPage): Promise<AxiosResponse<ITask[]>>
-    updateAsync (data: IBusiness): Promise<void>;
-    pinTask (taskId: string): Promise<void>;
+    update (data: IBusiness): Promise<void>;
+    pinTask (taskId: string): Promise<AxiosResponse<ITask>>;
 }

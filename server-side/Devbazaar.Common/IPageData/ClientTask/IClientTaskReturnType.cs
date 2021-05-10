@@ -15,6 +15,6 @@ namespace Devbazaar.Common.IPageData.ClientTask
 		string Username { get; set; }
 		string Email { get; set; }
 		Guid? ClientId { get; set; }
-		Guid? ClientTaskId { get; set; }
+		Guid? Id { get; set; }
 	}
 }

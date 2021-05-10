@@ -25,7 +25,7 @@ namespace Devbazaar.Service.ClientTaskServices
 			Mapper = mapper;
 		}
 
-		public async Task<bool> CreateAsync (IClientTask newTask)
+		public async Task<IClientTask> CreateAsync (IClientTask newTask)
 		{
 			newTask.Id = Guid.NewGuid();
 
@@ -36,12 +36,12 @@ namespace Devbazaar.Service.ClientTaskServices
 			catch (Exception e)
 			{
 				Console.WriteLine(e.Message);
-				return false;
+				return null;
 			}
 
 			await UnitOfWork.CommitAsync<TaskEntity>();
 			
-			return true;
+			return newTask;
 		}
 
 		public async Task<bool> UpdateAsync (Dictionary<string, object> item, Guid clientTaskId)

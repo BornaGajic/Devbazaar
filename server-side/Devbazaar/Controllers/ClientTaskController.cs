@@ -36,9 +36,10 @@ namespace Devbazaar.Controllers
             newClientTask.ClientId = Guid.Parse(User.Identity.GetUserId());
             newClientTask.DateAdded = DateTime.Now;
 
-            if (await ClientTaskService.CreateAsync(newClientTask))
+            var result = await ClientTaskService.CreateAsync(newClientTask);
+            if (result != null)
             {
-                return Request.CreateResponse(HttpStatusCode.OK); 
+                return Request.CreateResponse(HttpStatusCode.OK, result); 
             }
             else
             {
@@ -72,7 +73,7 @@ namespace Devbazaar.Controllers
             }
         }
 
-        
+
         [Route("Delete")]
         [HttpDelete]
         public async Task<HttpResponseMessage> DeleteAsync ([FromBody] DeleteClientTaskRest task)
@@ -88,17 +89,21 @@ namespace Devbazaar.Controllers
         }
 
         [Route("Tasks")]
-        [HttpGet]
+        [HttpPost]
         public async Task<HttpResponseMessage> PaginatedGetAsync ([FromBody] ClientTaskPage pageData)
         {
             Guid clientId = Guid.Parse(User.Identity.GetUserId());
-
+            
+            /*
             object returnDto = new {
-               pageResult = await ClientTaskService.PaginatedGetAsync(pageData, clientId),
+               pageResult =   
                totalItems = Utility.Utility.TotalClientTaskCount
             };
+            */
 
-            return Request.CreateResponse(HttpStatusCode.OK, returnDto);
+             var result = await ClientTaskService.PaginatedGetAsync(pageData, clientId);
+
+            return Request.CreateResponse(HttpStatusCode.OK, result);
         }
     }
 }

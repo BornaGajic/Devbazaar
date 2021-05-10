@@ -26,7 +26,7 @@ export class User implements IUser
      */
     async update (data: IUser): Promise<void>
     {
-        this.userService.updateAsync(data);
+        this.userService.update(data);
         
         runInAction(() => this.data = data);
     }

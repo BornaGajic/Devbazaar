@@ -13,6 +13,6 @@ namespace Devbazaar.RestModels.ClientTaskRest
 		public int? LowPrice { get; set; } = null;
 		public int? HighPrice { get; set; } = null;
 
-		public Guid? BusinessId { get; set; } = null;
+		public Guid? BusinessId { get; set; } = null; // wtf
 	}
 }

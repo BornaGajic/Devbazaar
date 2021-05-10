@@ -1,10 +1,9 @@
 import { observer } from 'mobx-react';
 import { action } from 'mobx'
-import React, { ChangeEvent } from 'react';
+import React from 'react';
 import { Register } from '.';
 import { IBusinessPage } from '../../common';
 import { useStores } from '../../hooks/useStores';
-import { IBusiness, IUser } from '../../models/contracts';
 
 import './login.css';
 
@@ -22,46 +21,39 @@ const Login = observer(({naslov} : ILoginProps) =>
     let password: string = '';
     let description: string = '';
 
+    const blist = store.businessStore.businessCards?.map((business) =>
+        <ul key={ business.id }>
+            <li>{ business.id }</li>
+            <li>{ business.description }</li>
+            <li>{ business.about }</li>
+            <li>{ business.available }</li>
+            <li>{ JSON.stringify(business.categories) }</li>
+            <li>{ business.city }</li>
+            <li>{ business.country }</li>
+            <li>{ business.website }</li>
+            <li>{ business.postalCode }</li>
+            <li>--------------------------</li>
+        </ul>
+    );
+
     return (
         <div className="container">
 
-        <form onSubmit={ (e) => { store.authStore.loginAsync(email, password); e.preventDefault(); } }>
+            <form onSubmit={ (e) => { store.authStore.loginAsync(email, password); e.preventDefault(); } }>
 
-            <label htmlFor="emailBox">Email:</label><br/>
-            <input type="text" id="emailBox" onChange={ (e) => email =  e.target.value } /><br/><br/>
+                <label htmlFor="emailBox">Email:</label><br/>
+                <input type="text" id="emailBox" onChange={ (e) => email =  e.target.value } /><br/><br/>
 
-            <label htmlFor="passwordBox">Password:</label><br/>
-            <input type="text" id="passwordBox" onChange={ (e) => password = e.target.value } /><br/><br/>
+                <label htmlFor="passwordBox">Password:</label><br/>
+                <input type="text" id="passwordBox" onChange={ (e) => password = e.target.value } /><br/><br/>
 
-            <input type="submit" value="Login" />
-        </form> 
+                <input type="submit" value="Login" />
+            </form> 
+            
+            <button onClick={ () => store.businessStore.fetchBusinessCardPage({ PageNumber: 1 } as IBusinessPage) }> fetch page </button>
+            <div>{blist}</div>
 
-        <form onSubmit={ (e) => { store.userStore.user.update({username: username} as IUser); e.preventDefault(); } }>
-
-            <label htmlFor="usernameBox">change Username:</label><br/>
-            <input type="text" id="usernameBox" onChange={ (e) => username =  e.target.value } /><br/><br/>
-
-            <input type="submit" value="Change username" />
-        </form> 
-
-        <div>
-            { JSON.stringify(store.userStore.user.asJson) }
-        </div> 
-        
-        <button onClick={ () => store.businessStore.fetchBusinessCardPage({ PageNumber: 1 } as IBusinessPage) }> fetch page </button>
-        <form 
-            onSubmit= {
-                action(e => { 
-                    store.userStore.roleData.get(store.userStore.user.role)?.update({ description: description } as IBusiness); 
-                    e.preventDefault();
-                })}>
-
-            <label htmlFor="usernameBox">change Description:</label><br/>
-            <input type="text" id="usernameBox" onChange={ (e) => description = e.target.value } /><br/>
-
-            <input type="submit" value="Change description" /><br/><br/>
-        </form> 
-        <Register naslov="" />
+            <Register naslov="" />
         </div>
     );
 })

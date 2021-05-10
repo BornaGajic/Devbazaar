@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Devbazaar.Common.IPageData.Business;
 using Devbazaar.Model.Common;
 
 namespace Devbazaar.Service.Common.IClientServices
@@ -10,6 +11,6 @@ namespace Devbazaar.Service.Common.IClientServices
 	public interface IClientService
 	{
 		Task<bool> UpdateAsync (Dictionary<string, object> updateClient, Guid clientId);
-		Task<bool> AddToFavourites (Guid clientId, Guid businessId);
+		Task<IBusinessDto> AddToFavourites (Guid clientId, Guid businessId);
 	}
 }

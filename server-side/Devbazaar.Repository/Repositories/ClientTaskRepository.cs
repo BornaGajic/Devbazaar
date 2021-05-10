@@ -68,7 +68,7 @@ namespace Devbazaar.Repository.Repositories
 						Email = string.Empty,
 						DateAdded = task.DateAdded,
 						ClientId = task.ClientId,
-						ClientTaskId = task.Id
+						Id = task.Id
 					}
 				);
 			}

@@ -1,4 +1,4 @@
-import { makeAutoObservable, runInAction, toJS } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 
 import { IRole } from "../common";
 import { ITaskPage } from "../common/ITaskPage";
@@ -35,14 +35,16 @@ export class Business implements IBusiness, IRole
      */
     async update (data: IBusiness): Promise<void>
     {
-        this.businessCardService.updateAsync(data);
+        this.businessCardService.update(data);
 
         runInAction(() => this.data = data); 
     }
 
     async pinTask (taskId: string): Promise<void>
     {
-        this.businessCardService.pinTask(taskId);
+        let response = await this.businessCardService.pinTask(taskId);
+
+        runInAction(() => this.pinnedTasks?.push(response.data));
     }
 
     async fetchPinnedTasks (): Promise<void>

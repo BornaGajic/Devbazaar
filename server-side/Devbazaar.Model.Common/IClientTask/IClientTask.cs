@@ -15,6 +15,6 @@ namespace Devbazaar.Model.Common
 		DateTime DateAdded { get; set; }
 
 		Guid ClientId { get; set; }
-		Guid? BusinessId { get; set; }
+		Guid? BusinessId { get; set; } // wtf
 	}
 }

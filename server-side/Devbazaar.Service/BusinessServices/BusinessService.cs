@@ -103,11 +103,12 @@ namespace Devbazaar.Service.BusinessServices
 			return await Task.FromResult(1);
 		}
 
-		public async Task<bool> AcquireClientTaskAsync (Guid businessId, Guid clientTaskId)
+		public async Task<IClientTaskReturnType> AcquireClientTaskAsync (Guid businessId, Guid clientTaskId)
 		{
+			TaskEntity entity;
 			try
 			{
-				var entity = await UnitOfWork.ClientTaskRepository.UpdateAsync(new Dictionary<string, object>(){ {"BusinessId", businessId} }, clientTaskId);
+				entity = await UnitOfWork.ClientTaskRepository.UpdateAsync(new Dictionary<string, object>(){ {"BusinessId", businessId} }, clientTaskId);
 
 				await UnitOfWork.UpdateAsync<TaskEntity>(entity);
 				await UnitOfWork.CommitAsync<TaskEntity>();
@@ -116,10 +117,22 @@ namespace Devbazaar.Service.BusinessServices
 			{
 				Console.WriteLine(e.Message);
 
-				return false;
+				return null;
 			}
 
-			return true;
+			var clientTask = new ClientTaskReturnType ()
+			{
+				Description = entity.Description,
+				LowPrice = entity.LowPrice,
+				HighPrice = entity.HighPrice,
+				Username = entity.Client.User.Username,
+				Email = entity.Client.User.Email,
+				DateAdded = entity.DateAdded,
+				ClientId = entity.ClientId,
+				Id = entity.Id
+			};
+
+			return clientTask;
 		}
 
 		public async Task<List<IClientTaskReturnType>> AcquiredClientTasksAsync (ClientTaskPage pageData, Guid businessId)

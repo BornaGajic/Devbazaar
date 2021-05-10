@@ -25,28 +25,15 @@ const Register = observer(({naslov} : IRegisterProps) =>
         runInAction(() => { x.description = 'WOW' }) 
     };
 
-    function g ()
-    {
-        store.taskStore.createTask("Task" + (Math.random() * 100).toString())
-    };
-
     return (
         <div className="w-25 col">
             
             <div className="row">
                 <button onClick={() => f()}>click za WOW</button>
                 { JSON.stringify(store.userStore.roleData.get(store.userStore.user.role)?.asJson) }<br/>
-                { JSON.stringify(store.userStore.user.asJson) }<br/>
-                { JSON.stringify(store.businessStore.businessCardList) }<br/>
+                { JSON.stringify(store.userStore.user.asJson) }<br/>               
             </div>
             
-            <div className="row">
-                <button onClick={() => g()}>
-                    Add task
-                </button>
-                { JSON.stringify(store.taskStore.taskList) }
-            </div>
-
             <div className="row">
                 <button onClick={() => x.fetchPinnedTasks()}> fetch pinned tasks </button>
                 { JSON.stringify(x ? x.pinnedTasks : null) }

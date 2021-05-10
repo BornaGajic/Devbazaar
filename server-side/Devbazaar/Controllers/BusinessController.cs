@@ -93,10 +93,11 @@ namespace Devbazaar.Controllers
         public async Task<HttpResponseMessage> AcquireClientTaskAsync ([FromUri] Guid clientTaskId)
         {
             Guid businessId = Guid.Parse(User.Identity.GetUserId());
+            var result = await BusinessService.AcquireClientTaskAsync(businessId, clientTaskId);
 
-            if (await BusinessService.AcquireClientTaskAsync(businessId, clientTaskId))
+            if (result != null)
             {
-                return Request.CreateResponse(HttpStatusCode.OK);
+                return Request.CreateResponse(HttpStatusCode.OK, result);
             }
             
             return Request.CreateResponse(HttpStatusCode.InternalServerError);
