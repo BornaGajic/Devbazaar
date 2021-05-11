@@ -1,3 +1,5 @@
+import { Task } from "../Task";
+
 export interface ITask
 {
     id?: string

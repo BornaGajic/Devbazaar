@@ -11,6 +11,7 @@ using System.Data.Entity;
 using Devbazaar.Common.DTO.Business;
 using Devbazaar.Model.Common;
 using Devbazaar.Common.IPageData.Business;
+using Devbazaar.Common.DTO.Client;
 
 namespace Devbazaar.Service.ClientServices
 {
@@ -23,6 +24,18 @@ namespace Devbazaar.Service.ClientServices
 		{
 			UnitOfWork = unitOfWork;
 			Mapper = mapper;
+		}
+
+		public async Task<ClientDto> GetClientDataById (Guid id)
+		{
+			var clientEntity = await UnitOfWork.ClientRepository.GetByIdAsync(id);
+
+			ClientDto clientDto = new ClientDto {
+				FavBusinesses = Mapper.Map<List<IBusiness>>(clientEntity.Businesses),
+				MyTasks = Mapper.Map<List<IClientTask>>(clientEntity.Tasks)
+			};
+
+			return clientDto;
 		}
 
 

@@ -1,27 +1,31 @@
 import { makeAutoObservable, runInAction } from "mobx";
 
+import { Category } from ".";
+import { Task } from ".";
+
 import { IRole } from "../common";
-import { ITaskPage } from "../common/ITaskPage";
+import { ITaskPage } from "../common";
 import { IServices } from "../services/contracts";
-import { IBusiness } from "./contracts";
-import { ICategory } from "./contracts/ICategory";
-import { ITask } from "./contracts/ITask";
+import { IBusiness, ITask } from "./contracts";
 
 export class Business implements IBusiness, IRole
 {
     service: IServices;
 
-    description?: string;
-    about?: string;
-    website?: string;
+    description: string = '';
+    about: string = '';
+    website: string = '';
     country?: string;
     city?: string;
+    
     postalCode?: number;
-    available?: boolean;
     popularity?: number;
-    categories?: ICategory[];
 
-    pinnedTasks?: ITask[];
+    available: boolean = true;
+
+    categories: Category[] = [];
+
+    pinnedTasks?: Task[];
 
     constructor (service: IServices)
     {
@@ -33,25 +37,45 @@ export class Business implements IBusiness, IRole
     /**
      * Updates Business card 
      */
-    async update (data: IBusiness): Promise<void>
+    async updateFromJson (data: IBusiness): Promise<void> // Ovo treba promijeniti kao sto je u Clientu
     {
         this.service.businessCardService.update(data);
 
         runInAction(() => this.data = data); 
     }
 
+    async updatePinnedTask (updatedTask: ITask): Promise<void>
+    {
+        this.pinnedTasks?.find(item => {
+            if (item.id === updatedTask.id)
+            {
+                item.data = updatedTask;
+            }
+        });
+    }
+
     async pinTask (taskId: string): Promise<void>
     {
         let response = await this.service.businessCardService.pinTask(taskId);
 
-        runInAction(() => this.pinnedTasks?.push(response.data));
+        let pinnedTask = new Task();
+        pinnedTask.id = taskId;
+        pinnedTask.data = response.data;
+
+        runInAction(() => this.pinnedTasks?.push(pinnedTask));
     }
 
-    async fetchPinnedTasks (): Promise<void>
+    async fetchPinnedTasks (pageData: ITaskPage): Promise<void>
     {
-        let response = await this.service.businessCardService.fetchPinnedTasks({ PageNumber: 1 } as ITaskPage);
+        let response = await this.service.businessCardService.fetchPinnedTasks(pageData);
 
-        runInAction(() => this.pinnedTasks = response.data); 
+        (response.data as ITask[]).forEach((item) => {
+            let pTask = new Task();
+            pTask.id = item.id;
+            pTask.data = item;
+
+            this.pinnedTasks?.push(pTask);
+        });
     }
 
     /**
@@ -84,7 +108,6 @@ export class Business implements IBusiness, IRole
         this.city = data.city ?? this.city;
         this.postalCode = data.postalCode ?? this.postalCode;
         this.available = data.available ?? this.available;
-        this.categories = data.categories ?? this.categories;
         this.popularity = data.popularity ?? this.popularity;
     }
 }

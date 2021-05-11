@@ -49,7 +49,7 @@ namespace Devbazaar.Controllers
 
         [Route("Update")]
         [HttpPut]
-        public async Task<HttpResponseMessage> UpdateAsync ([FromBody] UpdateClientTaskRest updatedTask)
+        public async Task<HttpResponseMessage> UpdateAsync ([FromBody] UpdateClientTaskRest updatedTask, [FromUri] Guid taskId)
         {
             var item = new Dictionary<string, object>();
             foreach (var property in typeof(UpdateClientTaskRest).GetProperties())
@@ -61,9 +61,7 @@ namespace Devbazaar.Controllers
                 }
             }
 
-            Guid clientTaskId = Guid.Parse(User.Identity.GetUserId());
-
-            if (await ClientTaskService.UpdateAsync(item, clientTaskId))
+            if (await ClientTaskService.UpdateAsync(item, taskId))
             {
                 return Request.CreateResponse(HttpStatusCode.OK);    
             }

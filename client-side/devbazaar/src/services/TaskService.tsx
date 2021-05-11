@@ -1,13 +1,14 @@
 import axios, { AxiosResponse } from 'axios'
 
+import { Task } from '../models/Task';
+
 import { ITaskPage } from '../common/ITaskPage';
-import { ITask } from '../models/contracts';
-import { TaskCrud } from '../models/crud';
 import { ITaskService } from './contracts';
+import { TaskCrud } from '../models/crud';
 
 export class TaskService implements ITaskService
 {
-    async fetchPage (pageData: ITaskPage): Promise<AxiosResponse<ITask[]>>
+    async fetchPage (pageData: ITaskPage): Promise<AxiosResponse<Task[]>>
     {
         let response = await axios.post(`${axios.defaults.baseURL}/Task/Tasks`,
         {
@@ -20,13 +21,13 @@ export class TaskService implements ITaskService
         return response;
     }
 
-    async createTask (newTask: TaskCrud): Promise<AxiosResponse<ITask>>
+    async createTask (newTask: TaskCrud): Promise<AxiosResponse<Task>>
     {
         let response = await axios.post(`${axios.defaults.baseURL}/Task/Create`,
         {
-           description: newTask.description,
-           lowPrice: newTask.lowPrice,
-           highPrice: newTask.highPrice
+           Description: newTask.description,
+           LowPrice: newTask.lowPrice,
+           HighPrice: newTask.highPrice
         }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
 
         if (response.status !== 200)
@@ -39,10 +40,18 @@ export class TaskService implements ITaskService
     {
         let response = await axios.put(`${axios.defaults.baseURL}/Task/Update`,
         {
-           description: newTask.description,
-           lowPrice: newTask.lowPrice,
-           highPrice: newTask.highPrice
-        }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
+           Description: newTask.description,
+           LowPrice: newTask.lowPrice,
+           HighPrice: newTask.highPrice
+        }, 
+        { 
+            headers: { 
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            },
+            params: {
+                taskId: newTask.id
+            }
+        });
 
         if (response.status !== 200)
             throw new Error(response.statusText);
@@ -50,10 +59,10 @@ export class TaskService implements ITaskService
 
     async deleteTask (taskId: string): Promise<void>
     {
-        let response = await axios.delete(`${axios.defaults.baseURL}/Task/Update`,
+        let response = await axios.delete(`${axios.defaults.baseURL}/Task/Delete`,
         {
            data: {
-               id: taskId
+               Id: taskId
            },
            headers: {
                Authorization: `Bearer ${localStorage.getItem('token')}`

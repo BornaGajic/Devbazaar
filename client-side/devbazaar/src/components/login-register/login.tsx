@@ -1,11 +1,14 @@
 import { observer } from 'mobx-react';
-import { action } from 'mobx'
-import React from 'react';
+import { action, runInAction } from 'mobx'
+import React, { ChangeEvent, InputHTMLAttributes } from 'react';
 import { Register } from '.';
-import { IBusinessPage } from '../../common';
+import { IBusinessPage, IPage, ITaskPage } from '../../common';
 import { useStores } from '../../hooks/useStores';
 
 import './login.css';
+import { ITask } from '../../models/contracts';
+import { Task } from '../../models/Task';
+import { TaskCrud } from '../../models/crud';
 
 interface ILoginProps
 {
@@ -20,6 +23,8 @@ const Login = observer(({naslov} : ILoginProps) =>
     let username: string = '';
     let password: string = '';
     let description: string = '';
+    let highPrice: number = Number.MAX_SAFE_INTEGER; 
+    let lowPrice: number = Number.MIN_SAFE_INTEGER;
 
     const blist = store.businessStore.businessCards?.map((business) =>
         <ul key={ business.id }>
@@ -49,11 +54,11 @@ const Login = observer(({naslov} : ILoginProps) =>
 
                 <input type="submit" value="Login" />
             </form> 
-            
-            <button onClick={ () => store.businessStore.fetchBusinessCardPage({ PageNumber: 1 } as IBusinessPage) }> fetch page </button>
-            <div>{blist}</div>
 
-            <Register naslov="" />
+
+            <button onClick={ () => store.taskStore.fetchTasksPage({ PageNumber: 1 } as ITaskPage) }> fetch page </button>
+
+            <Register/>
         </div>
     );
 })

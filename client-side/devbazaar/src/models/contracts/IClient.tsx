@@ -1,8 +1,8 @@
-import { IBusiness } from "./IBusiness";
-import { ITask } from "./ITask";
+import { Business } from "..";
+import { Task } from "../Task";
 
 export interface IClient
 {
-    myTasks?: ITask[];
-    favBusinesses?: IBusiness[];
+    myTasks?: Task[];
+    favBusinesses?: Business[];
 }

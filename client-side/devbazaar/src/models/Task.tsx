@@ -5,13 +5,16 @@ import { ITask } from "./contracts";
 export class Task implements ITask
 {
     id?: string;
+
     description?: string;
-    lowPrice?: number;
-    highPrice?: number;
-    dateAdded?: Date;
     username?: string;
     email?: string;
 
+    lowPrice?: number;
+    highPrice?: number;
+
+    dateAdded?: Date;
+    
     constructor ()
     {
         makeAutoObservable(this);
@@ -38,6 +41,7 @@ export class Task implements ITask
         this.highPrice = data.highPrice ?? this.highPrice;
         this.username = data.username ?? this.username;
         this.email = data.email ?? this.email;
+        this.dateAdded = data.dateAdded ?? this.dateAdded;
     }
     
 }

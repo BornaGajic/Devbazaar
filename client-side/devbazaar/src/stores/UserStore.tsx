@@ -9,13 +9,13 @@ import { IRole } from '../common';
 
 import { UserRole } from '../common';
 import { Client } from '../models';
-import { AxiosResponse } from 'axios';
 
 export class UserStore
 {
     service: IServices;
 
     user: User;
+
 	roleData: Map<string, IRole> = new Map<string, IRole>();
 
     constructor (service: IServices)
@@ -70,30 +70,22 @@ export class UserStore
 	{
 		if (this.roleData.has(this.user.role)) 
 			throw new Error("RoleActions for this Role already exist.");
-
-        let response: AxiosResponse<any>;
-        try
-        {
-            response = await this.service.userService.fetchRoleData();
-        }
-        catch(e)
-        {
-            console.log(e)
-        }
-
+        
+        let response = await this.service.userService.fetchRoleData(this.user.role);
+        
 		switch (this.user.role) 
 		{
 			case UserRole.BUSINESS:
 				let business: Business = new Business(this.service);
 
-				runInAction(() => business.data = response.data);
+				business.updateFromJson(response.data);
                 runInAction(() => this.roleData.set(this.user.role, business));
 				
 				break;
             case UserRole.CLIENT:
                 let client: Client = new Client(this.service);
-                
-                runInAction(() => client.data = response.data);
+
+                client.updateFromJson(response.data);
                 runInAction(() => this.roleData.set(this.user.role, client));
 
                 break;

@@ -1,10 +1,12 @@
+import userEvent from '@testing-library/user-event';
 import axios, { AxiosResponse } from 'axios'
+import { UserRole } from '../common';
 
 import { IUser } from '../models/contracts';
 import { IUserService } from './contracts';
 
 export class UserService implements IUserService
-{
+{    
     async update (data: IUser): Promise<AxiosResponse<any>>
     {
         let response = await axios.put(`${axios.defaults.baseURL}/User/Update`,
@@ -15,10 +17,8 @@ export class UserService implements IUserService
             Logo: data.logo
         }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
         
-        if (response.status === 400)
-        {
+        if (response.status !== 200)
             throw new Error(response.statusText);   
-        }
 
         return response
     }
@@ -26,9 +26,9 @@ export class UserService implements IUserService
     /** 
      * Returnes Promise of own business card data.
     */
-    async fetchRoleData (): Promise<AxiosResponse<any>>
+    async fetchRoleData (role: UserRole): Promise<AxiosResponse<any>>
     {
-        let response = await axios.get(`${axios.defaults.baseURL}/Business/Data`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
+        let response = await axios.get(`${axios.defaults.baseURL}/${role}/Data`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
 
         if (response.status !== 200)
             throw new Error(response.statusText);

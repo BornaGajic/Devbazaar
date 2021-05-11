@@ -9,7 +9,7 @@ namespace Devbazaar.Common.DTO.Client
 {
 	public class ClientDto
 	{
-		//public List<IClientTask> Tasks { get; set; }
-		//public List<IBusiness> Businesses { get; set; }
+		public List<IClientTask> MyTasks { get; set; }
+		public List<IBusiness> FavBusinesses { get; set; }
 	}
 }

@@ -14,6 +14,7 @@ using Microsoft.AspNet.Identity;
 
 namespace Devbazaar.Controllers
 {
+    [Authorize]
     [RoutePrefix("Devbazaar/Client")]
     public class ClientController : ApiController
     {
@@ -26,7 +27,13 @@ namespace Devbazaar.Controllers
             Mapper = mapper;
         }
 
-        [Authorize]
+        [HttpGet]
+        [Route("Data")]
+        public async Task<HttpResponseMessage> GetClientDataById ()
+        {
+             return Request.CreateResponse(HttpStatusCode.OK, await ClientService.GetClientDataById(Guid.Parse(User.Identity.GetUserId())));
+        }
+
         [HttpPut]
         [Route("Update")]
         public async Task<HttpResponseMessage> UpdateAsync ([FromBody] UpdateClientRest changedClient)
@@ -56,7 +63,7 @@ namespace Devbazaar.Controllers
             return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
-        [Authorize]
+        
         [HttpPut]
         [Route("AddFavourites")]
         public async Task<HttpResponseMessage> AddBusinessToFavourites ([FromUri] Guid businessId)

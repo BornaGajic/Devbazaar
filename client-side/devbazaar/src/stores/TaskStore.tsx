@@ -1,8 +1,9 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 
 import { IServices } from "../services/contracts";
 
 import { ITask } from "../models/contracts";
+import { ITaskPage } from "../common";
 
 export class TaskStore
 {
@@ -17,8 +18,10 @@ export class TaskStore
         this.service = service;
     }
 
-    async fetchTasksPage (): Promise<void>
+    async fetchTasksPage (pageData: ITaskPage): Promise<void>
     {
-        
+        let response = await this.service.taskService.fetchPage(pageData);
+
+        runInAction(() => this.tasks = this.tasks.length === 0 ? response.data : this.tasks.concat(response.data))
     }
 }

@@ -1,14 +1,22 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
+
+import { Business } from ".";
+import { Task } from ".";
+
+import { IRole } from "../common";
 import { IServices } from "../services/contracts";
+import { IClient, ITask } from "./contracts";
+import { TaskCrud } from "./crud";
 
-import { IClient, ITask, IBusiness } from "./contracts";
 
-export class Client implements IClient
+
+export class Client implements IClient, IRole
 {
     service: IServices;
 
-    myTasks?: ITask[];
-    favBusinesses?: IBusiness[];
+    myTasks: Task[] = [];
+
+    favBusinesses: Business[] = [];
 
     constructor (service: IServices)
     {
@@ -17,19 +25,72 @@ export class Client implements IClient
         this.service = service;
     }
 
-    /**
-     * @deprecated Dodati na backand stvari da ovo ima smisla
-     */
-    async update (data: IClient): Promise<void>
+    async updateFromJson (jsonData: IClient): Promise<void>
     {
-        // Smisliti koje stvari staviti na klijenta (username? itd.)
+        runInAction(() => {
+            jsonData.myTasks?.forEach((data) => {                
+                let newTask = new Task();
+                newTask.id = data.id;
+                newTask.data = data;
+
+                this.myTasks.push(newTask);
+            });
+            jsonData.favBusinesses?.forEach((data) => {
+                let newFavBusiness = new Business(this.service);
+                newFavBusiness.data = data;
+
+                this.favBusinesses.push(newFavBusiness);
+            });
+        });
+    }
+
+    async updateMyTask (newTask: TaskCrud): Promise<void>
+    {
+        await this.service.taskService.updateTask(newTask);
+
+        runInAction(() => {
+            this.myTasks.forEach( (item, idx) => {
+                if(item.id === newTask.id)
+                {
+                    item.data = newTask as ITask;
+                }
+            });
+        });
+    }
+
+    async createMyTask (newTask: TaskCrud): Promise<void>
+    {
+        let response = await this.service.taskService.createTask(newTask);
+
+        let nTask = new Task();
+        nTask.id = response.data.id;
+        nTask.data = response.data;
+
+        runInAction(() => this.myTasks?.push(nTask));
+    }
+
+    async deleteMyTask (taskId: string): Promise<void>
+    {
+        await this.service.taskService.deleteTask(taskId);
+
+        runInAction(() => {
+            this.myTasks.forEach( (item, idx) => {
+                if(item.id === taskId)
+                {
+                    this.myTasks.splice(idx, 1);
+                }
+            });
+        });
     }
 
     async addToFavourites (businessCardId: string): Promise<void>
     {
         let response = await this.service.clientService.addToFavourites(businessCardId);
 
-        this.favBusinesses?.push(response.data);
+        let nFavBusiness = new Business(this.service);
+        nFavBusiness.data = response.data;
+
+        runInAction(() => this.favBusinesses?.push(nFavBusiness));
     }
 
     get asJson (): Object

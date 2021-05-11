@@ -8,12 +8,12 @@ import { IServices } from '../services/contracts';
 
 class RootStore
 {
+    private service: IServices;
+
     userStore: UserStore;
     businessStore: BusinessCardStore;
     taskStore: TaskStore;
     authStore: AuthStore
-
-    service: IServices;
 
     constructor ()
     {
