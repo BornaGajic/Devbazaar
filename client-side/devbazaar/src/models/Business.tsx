@@ -2,14 +2,14 @@ import { makeAutoObservable, runInAction } from "mobx";
 
 import { IRole } from "../common";
 import { ITaskPage } from "../common/ITaskPage";
-import { IBusinessCardService } from "../services/contracts";
+import { IServices } from "../services/contracts";
 import { IBusiness } from "./contracts";
 import { ICategory } from "./contracts/ICategory";
 import { ITask } from "./contracts/ITask";
 
 export class Business implements IBusiness, IRole
 {
-    businessCardService: IBusinessCardService;
+    service: IServices;
 
     description?: string;
     about?: string;
@@ -23,11 +23,11 @@ export class Business implements IBusiness, IRole
 
     pinnedTasks?: ITask[];
 
-    constructor (businessCardService: IBusinessCardService)
+    constructor (service: IServices)
     {
-        makeAutoObservable(this, { businessCardService: false });
+        makeAutoObservable(this, { service: false });
 
-        this.businessCardService = businessCardService;
+        this.service = service;
     }
 
     /**
@@ -35,21 +35,21 @@ export class Business implements IBusiness, IRole
      */
     async update (data: IBusiness): Promise<void>
     {
-        this.businessCardService.update(data);
+        this.service.businessCardService.update(data);
 
         runInAction(() => this.data = data); 
     }
 
     async pinTask (taskId: string): Promise<void>
     {
-        let response = await this.businessCardService.pinTask(taskId);
+        let response = await this.service.businessCardService.pinTask(taskId);
 
         runInAction(() => this.pinnedTasks?.push(response.data));
     }
 
     async fetchPinnedTasks (): Promise<void>
     {
-        let response = await this.businessCardService.fetchPinnedTasks({ PageNumber: 1 } as ITaskPage);
+        let response = await this.service.businessCardService.fetchPinnedTasks({ PageNumber: 1 } as ITaskPage);
 
         runInAction(() => this.pinnedTasks = response.data); 
     }

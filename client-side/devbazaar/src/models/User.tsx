@@ -1,13 +1,13 @@
 import { makeAutoObservable, runInAction } from "mobx";
 
 import { IUser } from "./contracts";
-import { IUserService } from "../services/contracts";
+import { IServices } from "../services/contracts";
 
 import { UserRole } from '../common';
 
 export class User implements IUser
 {
-    userService: IUserService;
+    services: IServices;
 
     id?: string;
     username?: string;
@@ -15,18 +15,18 @@ export class User implements IUser
     logo?: string;
     role: UserRole = UserRole.CLIENT;
 
-    constructor (userService?: IUserService)
+    constructor (services: IServices)
     {   
-        this.userService = userService as IUserService;
+        makeAutoObservable(this, { services: false });
 
-        makeAutoObservable(this, { userService: false });
+        this.services = services;
     }
     /**
      * Updates current user data to the database.
      */
     async update (data: IUser): Promise<void>
     {
-        this.userService.update(data);
+        this.services.userService.update(data);
         
         runInAction(() => this.data = data);
     }

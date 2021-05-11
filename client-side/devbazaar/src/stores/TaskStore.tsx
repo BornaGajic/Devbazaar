@@ -1,22 +1,20 @@
 import { makeAutoObservable } from "mobx";
 
+import { IServices } from "../services/contracts";
+
 import { ITask } from "../models/contracts";
-import { ITaskService } from "../services/contracts";
-import RootStore from "./RootStore";
 
 export class TaskStore
 {
-    rootStore: RootStore;
-    taskService: ITaskService;
+    service: IServices;
 
     tasks: ITask[] = [];
 
-    constructor (rootStore: RootStore, taskService: ITaskService)
+    constructor (service: IServices)
     {
-        makeAutoObservable(this, { rootStore: false, taskService: false });
+        makeAutoObservable(this, { service: false });
 
-        this.rootStore = rootStore;
-        this.taskService = taskService;
+        this.service = service;
     }
 
     async fetchTasksPage (): Promise<void>

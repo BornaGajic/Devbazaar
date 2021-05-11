@@ -3,3 +3,5 @@ export type { IBusinessCardService } from './IBusinessCardService';
 export type { IUserService } from './IUserService';
 export type { ITaskService } from './ITaskService';
 export type { IClientService } from './IClientService';
+
+export type { IServices } from './IServices';

@@ -1,23 +1,20 @@
 import { makeAutoObservable } from "mobx";
-import { IClientService } from "../services/contracts";
-import { BusinessCardStore } from "../stores/BusinessCardStore";
+import { IServices } from "../services/contracts";
 
 import { IClient, ITask, IBusiness } from "./contracts";
 
 export class Client implements IClient
 {
-    businessCardStore: BusinessCardStore;
-    clientService: IClientService;
+    service: IServices;
 
     myTasks?: ITask[];
     favBusinesses?: IBusiness[];
 
-    constructor (businessStore: BusinessCardStore, clientService: IClientService)
+    constructor (service: IServices)
     {
-        makeAutoObservable(this, { businessCardStore: false, clientService: false });
+        makeAutoObservable(this, { service: false });
 
-        this.clientService = clientService;
-        this.businessCardStore = businessStore
+        this.service = service;
     }
 
     /**
@@ -30,7 +27,7 @@ export class Client implements IClient
 
     async addToFavourites (businessCardId: string): Promise<void>
     {
-        let response = await this.clientService.addToFavourites(businessCardId);
+        let response = await this.service.clientService.addToFavourites(businessCardId);
 
         this.favBusinesses?.push(response.data);
     }

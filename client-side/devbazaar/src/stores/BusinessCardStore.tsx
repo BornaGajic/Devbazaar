@@ -2,19 +2,19 @@ import { makeAutoObservable, runInAction } from 'mobx';
 
 import { IBusinessPage } from '../common';
 import { IBusiness } from '../models/contracts';
-import { IBusinessCardService } from '../services/contracts';
+import { IBusinessCardService, IServices } from '../services/contracts';
 
 export class BusinessCardStore
-{
-    businessCardService: IBusinessCardService;
+{ 
+    service: IServices;
     
     businessCards: IBusiness[] = [];
 
-    constructor (businessCardService: IBusinessCardService)
+    constructor (service: IServices)
     {
-        makeAutoObservable(this, { businessCardService: false });
+        makeAutoObservable(this, { service: false });
 
-        this.businessCardService = businessCardService;
+        this.service = service;
     }
 
     /**
@@ -22,7 +22,7 @@ export class BusinessCardStore
      */
     async fetchBusinessCardPage (pageData: IBusinessPage): Promise<void>
     {
-        let response = await this.businessCardService.fetchPage(pageData);
+        let response = await this.service.businessCardService.fetchPage(pageData);
 
         runInAction(() => {
             this.businessCards = this.businessCards.length !== 0 ? this.businessCards.concat(response.data) : response.data
