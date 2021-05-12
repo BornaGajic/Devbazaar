@@ -31,6 +31,11 @@ namespace Devbazaar.Service.ClientServices
 			var clientEntity = await UnitOfWork.ClientRepository.GetByIdAsync(id);
 
 			ClientDto clientDto = new ClientDto {
+				Country = clientEntity.Country,
+				City = clientEntity.City,
+				About = clientEntity.About,
+				PostalCode = clientEntity.PostalCode,
+				Website = clientEntity.Website,
 				FavBusinesses = Mapper.Map<List<IBusiness>>(clientEntity.Businesses),
 				MyTasks = Mapper.Map<List<IClientTask>>(clientEntity.Tasks)
 			};

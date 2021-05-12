@@ -16,6 +16,6 @@ namespace Devbazaar.Model
 		public DateTime DateAdded { get; set; }
 
 		public Guid ClientId { get; set; }
-		public Guid? BusinessId { get; set; } // wtf
+		public Guid? BusinessId { get; set; }
 	}
 }

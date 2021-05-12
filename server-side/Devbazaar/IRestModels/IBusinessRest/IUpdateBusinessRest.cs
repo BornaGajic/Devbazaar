@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Devbazaar.Model.Common;
 
 namespace Devbazaar.IRestModels.IBusinessRest
 {
@@ -15,5 +16,7 @@ namespace Devbazaar.IRestModels.IBusinessRest
 		string Country { get; set; }
 		string City { get; set; }
 		int? PostalCode { get; set; }
+
+		List<ICategory> Categories { get; set; }
 	}
 }

@@ -5,7 +5,7 @@ import { Task } from ".";
 
 import { IRole } from "../common";
 import { IServices } from "../services/contracts";
-import { IClient, ITask } from "./contracts";
+import { IBusiness, IClient, ITask } from "./contracts";
 import { TaskCrud } from "./crud";
 
 
@@ -13,6 +13,8 @@ import { TaskCrud } from "./crud";
 export class Client implements IClient, IRole
 {
     service: IServices;
+
+    id?: string;
 
     about?: string;
     website?: string;
@@ -32,23 +34,11 @@ export class Client implements IClient, IRole
         this.service = service;
     }
 
-    async updateFromJson (jsonData: IClient): Promise<void>
+    async update (data: IClient): Promise<void>
     {
-        runInAction(() => {
-            jsonData.myTasks?.forEach((data) => {                
-                let newTask = new Task();
-                newTask.id = data.id;
-                newTask.data = data;
+        this.service.clientService.update(data);
 
-                this.myTasks.push(newTask);
-            });
-            jsonData.favBusinesses?.forEach((data) => {
-                let newFavBusiness = new Business(this.service);
-                newFavBusiness.data = data;
-
-                this.favBusinesses.push(newFavBusiness);
-            });
-        });
+        runInAction(() => this.data = data); 
     }
 
     async updateMyTask (newTask: TaskCrud): Promise<void>
@@ -60,6 +50,7 @@ export class Client implements IClient, IRole
                 if(item.id === newTask.id)
                 {
                     item.data = newTask as ITask;
+                    return;
                 }
             });
         });
@@ -103,6 +94,10 @@ export class Client implements IClient, IRole
     get asJson (): Object
     {
         return {
+            About: this.about,
+            Website: this.website,
+            Country: this.country,
+            City: this.city,
             Tasks: this.myTasks,
             FavoriteBusinesses: this.favBusinesses
         };
@@ -110,7 +105,35 @@ export class Client implements IClient, IRole
 
     set data (data: IClient)
     {
-        this.myTasks = data.myTasks ?? this.myTasks;
-        this.favBusinesses = data.favBusinesses ?? this.favBusinesses;
+        let myTasksFromJson = (myTasksJson: ITask[]) => {
+            for (let taskJson of myTasksJson)
+            {
+                let nTask = new Task();
+                nTask.id = taskJson.id;
+                nTask.data = taskJson;
+    
+                runInAction(() => this.myTasks?.push(nTask));
+            }
+        };
+
+        let myFavBusinessFromJson = (myFavBusinessJson: IBusiness[]) => {
+            for (let favBusinessJson of myFavBusinessJson)
+            {
+                let nFavBusiness = new Business(this.service);
+                nFavBusiness.id = favBusinessJson.id;
+                nFavBusiness.data = favBusinessJson;
+    
+                runInAction(() => this.favBusinesses?.push(nFavBusiness));
+            }
+        };
+        
+        this.about = data.about ?? this.about;
+        this.website = data.website ?? this.website;
+        this.country = data.country ?? this.country;
+        this.city = data.city ?? this.city;
+        this.postalCode = data.postalCode ?? this.postalCode;
+
+        if (data.myTasks) myTasksFromJson(data.myTasks);
+        if (data.favBusinesses) myFavBusinessFromJson(data.favBusinesses);
     }
 }

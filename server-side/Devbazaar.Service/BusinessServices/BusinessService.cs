@@ -88,7 +88,7 @@ namespace Devbazaar.Service.BusinessServices
 		public async Task<int> UpdateAsync (Dictionary<string, object> updatedBusiness, Guid businessId)
 		{
 			var entity = await (from business in UnitOfWork.BusinessRepository.TableAsNoTracking where business.Id == businessId select business).SingleAsync();
-			// saljem cijeli array od kategorija sa promjenjenim specificnim vrijednostima
+			
 			foreach (var prop in typeof(BusinessEntity).GetProperties())
 			{
 				if (updatedBusiness.ContainsKey(prop.Name))

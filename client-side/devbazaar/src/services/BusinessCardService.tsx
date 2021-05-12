@@ -8,9 +8,28 @@ import { IBusinessCardService } from './contracts';
 
 export class BusinessCardService implements IBusinessCardService
 {
+    /**
+     * Should be used ONLY once, and that is after the register method is resolved!
+     */
+    async createBusinessCard (creationData: IBusiness): Promise<AxiosResponse<IBusiness>>
+    {
+        let response = await axios.post(`${axios.defaults.baseURL}/Business/Create`,
+        {
+            About: creationData.about,
+            Available: creationData.available,
+            Categories: creationData.categories,
+            City: creationData.city,
+            Country: creationData.country,
+            PostalCode: creationData.postalCode,
+            Website: creationData.website,
+            Description: creationData.description
+        }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
+
+        return response;
+    }
+
     async fetchPage (pageData: IBusinessPage): Promise<AxiosResponse<IBusiness[]>>
     {
-        console.log(pageData);
         let response = await axios.post(`${axios.defaults.baseURL}/Business/Businesses`,
         {
            PageNumber: pageData.PageNumber

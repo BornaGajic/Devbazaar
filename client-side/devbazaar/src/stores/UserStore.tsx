@@ -5,10 +5,11 @@ import { Business, User } from '../models';
 
 import { IUser } from '../models/contracts';
 import { IServices } from '../services/contracts';
-import { IRole } from '../common';
+import { IRole, ITaskPage } from '../common';
 
 import { UserRole } from '../common';
 import { Client } from '../models';
+import { RootStore } from '.';
 
 export class UserStore
 {
@@ -18,11 +19,11 @@ export class UserStore
 
 	roleData: Map<string, IRole> = new Map<string, IRole>();
 
-    constructor (service: IServices)
+    constructor (public rootStore: RootStore, service: IServices)
     {
 		this.user = new User(service);
 		
-      	makeAutoObservable(this, { service: false });
+      	makeAutoObservable(this, { service: false, rootStore: false });
 
         this.service = service;
 
@@ -72,20 +73,21 @@ export class UserStore
 			throw new Error("RoleActions for this Role already exist.");
         
         let response = await this.service.userService.fetchRoleData(this.user.role);
-        
+        console.log(response.data);
 		switch (this.user.role) 
 		{
 			case UserRole.BUSINESS:
 				let business: Business = new Business(this.service);
-
-				business.updateFromJson(response.data);
+                
+				business.data = response.data;
+                business.fetchPinnedTasks({ PageNumber: 1} as ITaskPage);
                 runInAction(() => this.roleData.set(this.user.role, business));
 				
 				break;
             case UserRole.CLIENT:
                 let client: Client = new Client(this.service);
 
-                client.updateFromJson(response.data);
+                client.data = response.data;
                 runInAction(() => this.roleData.set(this.user.role, client));
 
                 break;

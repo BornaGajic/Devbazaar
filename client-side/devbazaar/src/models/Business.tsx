@@ -12,6 +12,8 @@ export class Business implements IBusiness, IRole
 {
     service: IServices;
 
+    id?: string;
+
     description: string = '';
     about?: string;
     website?: string;
@@ -34,18 +36,46 @@ export class Business implements IBusiness, IRole
         this.service = service;
     }
 
-    
+    /**
+     * Should be used ONLY once, and that is after the register method is resolved!
+     * 
+     * --------------------------------Explanation------------------------------------
+     * On the backend side, while the user is creating the user, code checks if the passed TypeOfuser (UserRole) is a Client - 
+     * if not, it only creates the base user, and if yes it creates the base user and the Client.
+     * CreateBusiness is here to provide required step after user creation (if TypeOfUser is a Business).
+     */
+    async createBusinessCard (creationData: IBusiness): Promise<void>
+    {
+        this.service.businessCardService.createBusinessCard(creationData);
+
+        runInAction(() => {
+            this.data = creationData;
+            // this.updateCategories
+        });
+    }
 
     /**
      * Updates Business card 
      */
-    async updateFromJson (data: IBusiness): Promise<void> // Ovo treba promijeniti kao sto je u Clientu
+    async update (data: IBusiness): Promise<void>
     {
         this.service.businessCardService.update(data);
 
-        runInAction(() => this.data = data); 
+        runInAction(() => {
+            this.data = data;
+            // this.updateCategories
+        }); 
     }
 
+    // Will be implemented when I define how the categories will be updated on the UI 
+    async updateCategories (updatedCategories: ITask): Promise<void>
+    {
+       throw new Error("Not implemeneted!");
+    }
+
+    /**
+     * Idea: implement drag and drop pinned tasks (reordering and such - e.g. Tachiyomi)
+     */
     async updatePinnedTask (updatedTask: ITask): Promise<void>
     {
         this.pinnedTasks?.find(item => {
@@ -71,12 +101,14 @@ export class Business implements IBusiness, IRole
     {
         let response = await this.service.businessCardService.fetchPinnedTasks(pageData);
 
-        (response.data as ITask[]).forEach((item) => {
-            let pTask = new Task();
-            pTask.id = item.id;
-            pTask.data = item;
-
-            this.pinnedTasks?.push(pTask);
+        runInAction(() => {
+            response.data.forEach((item) => {
+                let pTask = new Task();
+                pTask.id = item.id;
+                pTask.data = item;
+    
+                this.pinnedTasks?.push(pTask);
+            });
         });
     }
 

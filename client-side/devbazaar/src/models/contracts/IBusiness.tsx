@@ -1,8 +1,10 @@
-import { ICategory } from "./ICategory";
+import { ICategory } from ".";
+import { Category } from "..";
 
 export interface IBusiness
 {
     id?: string;
+    
     description: string;
     about?: string;
     website?: string;

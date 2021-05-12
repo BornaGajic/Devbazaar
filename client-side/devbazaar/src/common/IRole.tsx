@@ -1,5 +1,5 @@
 export interface IRole
 {
-    updateFromJson (data: any): void;
+    update (data: any): void;
     asJson: Object;
 }
