@@ -43,6 +43,11 @@ namespace Devbazaar.DAL.Context
 			modelBuilder.Entity<CategoryEntity>().Property(p => p.Name).IsRequired().HasMaxLength(50);
 
 			modelBuilder.Entity<ClientEntity>().ToTable("Clients");
+			modelBuilder.Entity<ClientEntity>().Property(p => p.About).IsOptional().HasMaxLength(300);
+			modelBuilder.Entity<ClientEntity>().Property(p => p.Website).IsOptional().HasMaxLength(2083);
+			modelBuilder.Entity<ClientEntity>().Property(p => p.City).IsOptional().HasMaxLength(50);
+			modelBuilder.Entity<ClientEntity>().Property(p => p.Country).IsOptional().HasMaxLength(50);
+			modelBuilder.Entity<ClientEntity>().Property(p => p.PostalCode).IsOptional();
 			modelBuilder.Entity<ClientEntity>().HasKey(p => p.Id).Property(p => p.Id).IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 			modelBuilder.Entity<ClientEntity>().HasMany<BusinessEntity>(p => p.Businesses).WithMany(b => b.Clients).Map(fav => {
 				fav.MapLeftKey("FavClientRefId");

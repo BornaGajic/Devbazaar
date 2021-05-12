@@ -3,13 +3,13 @@ import { ICategory } from "./ICategory";
 export interface IBusiness
 {
     id?: string;
-    description?: string;
+    description: string;
     about?: string;
     website?: string;
-    country?: string;
-    city?: string;
-    postalCode?: number;
-    available?: boolean;
+    country: string;
+    city: string;
+    postalCode: number;
+    available: boolean;
     popularity?: number;
 
     categories?: ICategory[];

@@ -14,6 +14,13 @@ export class Client implements IClient, IRole
 {
     service: IServices;
 
+    about?: string;
+    website?: string;
+    country?: string;
+    city?: string;
+    
+    postalCode?: number;
+    
     myTasks: Task[] = [];
 
     favBusinesses: Business[] = [];

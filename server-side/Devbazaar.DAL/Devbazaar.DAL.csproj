@@ -148,6 +148,10 @@
     <Compile Include="Migrations\202103261504098_Client-FnameLname-Removed.designer.cs">
       <DependentUpon>202103261504098_Client-FnameLname-Removed.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202105120918485_ChangesToClient.cs" />
+    <Compile Include="Migrations\202105120918485_ChangesToClient.designer.cs">
+      <DependentUpon>202105120918485_ChangesToClient.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -197,6 +201,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202103261504098_Client-FnameLname-Removed.resx">
       <DependentUpon>202103261504098_Client-FnameLname-Removed.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202105120918485_ChangesToClient.resx">
+      <DependentUpon>202105120918485_ChangesToClient.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

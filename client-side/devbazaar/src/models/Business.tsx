@@ -13,12 +13,12 @@ export class Business implements IBusiness, IRole
     service: IServices;
 
     description: string = '';
-    about: string = '';
-    website: string = '';
-    country?: string;
-    city?: string;
+    about?: string;
+    website?: string;
+    country: string = '';
+    city: string = '';
     
-    postalCode?: number;
+    postalCode: number = 0;
     popularity?: number;
 
     available: boolean = true;
@@ -33,6 +33,8 @@ export class Business implements IBusiness, IRole
 
         this.service = service;
     }
+
+    
 
     /**
      * Updates Business card 

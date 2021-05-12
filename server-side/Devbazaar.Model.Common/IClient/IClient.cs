@@ -8,6 +8,12 @@ namespace Devbazaar.Model.Common
 {
 	public interface IClient
 	{
+		string About { get; set; }
+		string Website { get; set; }
+		string Country { get; set; }
+		string City { get; set; }
+		int PostalCode { get; set; }
+
 		List<IClientTask> Tasks { get; set; }
 		List<IBusiness> Businesses { get; set; }
 	}

@@ -8,7 +8,10 @@ namespace Devbazaar.RestModels.ClientRest
 {
 	public class UpdateClientRest : IUpdateClientRest
 	{
-		public string FirstName { get; set; }
-		public string LastName { get; set; }
+		public string About { get; set; }
+		public string Website { get; set; }
+		public string Country { get; set; }
+		public string City { get; set; }
+		public int PostalCode { get; set; }
 	}
 }

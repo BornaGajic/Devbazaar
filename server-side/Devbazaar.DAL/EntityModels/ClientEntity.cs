@@ -14,6 +14,12 @@ namespace Devbazaar.DAL.EntityModels
 			this.Businesses = new HashSet<BusinessEntity>();
 		}
 
+		public string About { get; set; }
+		public string Website { get; set; }
+		public string Country { get; set; }
+		public string City { get; set; }
+		public int PostalCode { get; set; }
+
 		public virtual UserEntity User { get; set; }
 		public ICollection<TaskEntity> Tasks { get; set; }
 		public virtual ICollection<BusinessEntity> Businesses { get; set; }
