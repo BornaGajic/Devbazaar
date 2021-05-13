@@ -1,26 +1,27 @@
 import axios, { AxiosResponse } from "axios";
 
-import { IBusiness, IClient } from "../models/contracts";
+import { IBusiness, IClient, ITask } from "../models/contracts";
 import { IClientService } from "./contracts";
 
 export class ClientService implements IClientService
 {
-    /**
-     * @deprecated Dodati na backand šta treba da ovo ima smisla
-     */    
-    async update (data: IClient): Promise<AxiosResponse<any>>
+    async update (data: IClient): Promise<AxiosResponse>
     {
         let response = await axios.put(`${axios.defaults.baseURL}/Client/Update`,
         {
-            // dodati data
+            data: {
+                About: data.about,
+                Website: data.website,
+                Country: data.country,
+                City: data.city,
+                PostalCode: data.postalCode
+            }
         }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
         
-        if (response.status === 400)
-        {
-            throw new Error(response.statusText);   
-        }
+        if (response.status !== 200)
+            throw new Error(response.statusText);
 
-        return response
+        return response;
     }
 
     async addToFavourites (businessCardId: string): Promise<AxiosResponse<IBusiness>>
@@ -32,10 +33,56 @@ export class ClientService implements IClientService
         });
 
         if (response.status !== 200)
-        {
             throw new Error(response.statusText);
-        }
 
+        return response;
+    }
+
+    async removeFromFavourites (businessCardId: string): Promise<AxiosResponse>
+    {
+        let response = await axios.put(`${axios.defaults.baseURL}/Client/RemoveFavourite`, 
+        { 
+            headers: { 
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            },
+            params: {
+                businessId: businessCardId
+            }
+        });
+
+        if (response.status !== 200)
+            throw new Error(response.statusText);
+        
+        return response;
+    }
+
+    async fetchTasks (): Promise<AxiosResponse<ITask[]>>
+    {
+        let response = await axios.get(`${axios.defaults.baseURL}/Client/Tasks`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
+
+        if (response.status !== 200)
+            throw new Error(response.statusText);
+        
+        return response;
+    }
+
+    async fetchFavouriteBusinesses (): Promise<AxiosResponse<IBusiness[]>>
+    {
+        let response = await axios.get(`${axios.defaults.baseURL}/Client/Favourites`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
+
+        if (response.status !== 200)
+            throw new Error(response.statusText);
+        
+        return response;
+    }
+
+    async fetchClientData (): Promise<AxiosResponse<IClient>>
+    {
+        let response = await axios.get(`${axios.defaults.baseURL}/Client/Data`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
+
+        if (response.status !== 200)
+            throw new Error(response.statusText);
+        
         return response;
     }
 }

@@ -25,8 +25,8 @@ const Login = observer(({naslov} : ILoginProps) =>
     let description: string = '';
     let highPrice: number = Number.MAX_SAFE_INTEGER; 
     let lowPrice: number = Number.MIN_SAFE_INTEGER;
-
-    const blist = store.businessStore.businessCards?.map((business) =>
+    
+    const blist = store.businessPageStore.businessCards?.map((business) =>
         <ul key={ business.id }>
             <li>{ business.id }</li>
             <li>{ business.description }</li>
@@ -56,7 +56,7 @@ const Login = observer(({naslov} : ILoginProps) =>
             </form> 
 
 
-            <button onClick={ () => store.taskStore.fetchTasksPage({ PageNumber: 1 } as ITaskPage) }> fetch page </button>
+            <button onClick={ () => store.taskPageStore.fetchTasksPage({ PageNumber: 1 } as ITaskPage) }> fetch page </button>
 
             <Register/>
         </div>

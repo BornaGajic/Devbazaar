@@ -26,23 +26,49 @@ namespace Devbazaar.Service.ClientServices
 			Mapper = mapper;
 		}
 
-		public async Task<ClientDto> GetClientDataById (Guid id)
+		public async Task<ClientDto> GetClientDataById (Guid clientId)
 		{
-			var clientEntity = await UnitOfWork.ClientRepository.GetByIdAsync(id);
+			var clientEntity = await UnitOfWork.ClientRepository.GetByIdAsync(clientId);
+
+			var userEntity = await (from user in UnitOfWork.UserRepository.Table where clientId == user.Id select user).SingleAsync();
 
 			ClientDto clientDto = new ClientDto {
+				Id = userEntity.Id,
+				Username = userEntity.Username,
+				Email = userEntity.Email,
 				Country = clientEntity.Country,
 				City = clientEntity.City,
 				About = clientEntity.About,
 				PostalCode = clientEntity.PostalCode,
-				Website = clientEntity.Website,
-				FavBusinesses = Mapper.Map<List<IBusiness>>(clientEntity.Businesses),
-				MyTasks = Mapper.Map<List<IClientTask>>(clientEntity.Tasks)
+				Website = clientEntity.Website
 			};
 
 			return clientDto;
 		}
 
+		public async Task<List<IBusiness>> GetFavouriteBusinesses (Guid clientId)
+		{
+			var clientEntity = await UnitOfWork.ClientRepository.GetByIdAsync(clientId);
+
+			return Mapper.Map<List<IBusiness>>(clientEntity.Businesses);
+		}
+
+		public async Task RemoveFromFavourites (Guid clientId, Guid businessId)
+		{
+			var clientEntity = await UnitOfWork.ClientRepository.GetByIdAsync(clientId);
+
+			var business = clientEntity.Businesses.First(b => b.Id == businessId);
+			clientEntity.Businesses.Remove(business);
+
+			await UnitOfWork.CommitAsync<ClientEntity>();
+		}
+
+		public async Task<List<IClientTask>> GetTasks (Guid clientId)
+		{
+			var clientEntity = await UnitOfWork.ClientRepository.GetByIdAsync(clientId);
+
+			return Mapper.Map<List<IClientTask>>(clientEntity.Tasks);
+		}
 
 		public async Task<bool> UpdateAsync (Dictionary<string, object> updateClient, Guid clientId)
 		{

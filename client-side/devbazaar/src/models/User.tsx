@@ -13,6 +13,7 @@ export class User implements IUser
     username?: string;
     email?: string;
     logo?: string;
+    
     role: UserRole = UserRole.CLIENT;
 
     constructor (services: IServices)

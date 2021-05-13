@@ -63,9 +63,7 @@ export class BusinessCardService implements IBusinessCardService
         }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
         
         if (response.status !== 200)
-        {
-            throw new Error(response.statusText);   
-        }
+            throw new Error(response.statusText); 
     }
 
     /**
@@ -80,9 +78,7 @@ export class BusinessCardService implements IBusinessCardService
         });
 
         if (response.status !== 200)
-        {
             throw new Error(response.statusText);
-        }
 
         return response;
     }

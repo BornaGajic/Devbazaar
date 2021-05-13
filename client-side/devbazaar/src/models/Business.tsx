@@ -73,19 +73,6 @@ export class Business implements IBusiness, IRole
        throw new Error("Not implemeneted!");
     }
 
-    /**
-     * Idea: implement drag and drop pinned tasks (reordering and such - e.g. Tachiyomi)
-     */
-    async updatePinnedTask (updatedTask: ITask): Promise<void>
-    {
-        this.pinnedTasks?.find(item => {
-            if (item.id === updatedTask.id)
-            {
-                item.data = updatedTask;
-            }
-        });
-    }
-
     async pinTask (taskId: string): Promise<void>
     {
         let response = await this.service.businessCardService.pinTask(taskId);

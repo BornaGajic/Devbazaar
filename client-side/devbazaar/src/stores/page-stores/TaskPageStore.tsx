@@ -1,10 +1,10 @@
 import { makeAutoObservable, runInAction } from "mobx";
 
-import { IServices } from "../services/contracts";
+import { IServices } from "../../services/contracts";
 
-import { ITaskPage } from "../common";
-import { Task } from "../models";
-import RootStore from "./RootStore";
+import { ITaskPage } from "../../common";
+import { Task } from "../../models";
+import RootStore from "../RootStore";
 
 export class TaskPageStore
 {

@@ -1,5 +1,4 @@
 import { ICategory } from ".";
-import { Category } from "..";
 
 export interface IBusiness
 {
@@ -10,9 +9,11 @@ export interface IBusiness
     website?: string;
     country: string;
     city: string;
+
     postalCode: number;
-    available: boolean;
     popularity?: number;
+
+    available: boolean;
 
     categories?: ICategory[];
 }

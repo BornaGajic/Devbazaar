@@ -1,11 +1,12 @@
-import { RootStore } from '.';
+import { RootStore } from '..';
 
-import { IUser } from '../models/contracts';
-import { IAuthService } from '../services/contracts';
+import { IUser } from '../../models/contracts';
+import { IAuthService } from '../../services/contracts';
 
 export class AuthStore
 {
     rootStore: RootStore;
+    
     authService: IAuthService;
 
     token: string = '';
@@ -17,7 +18,8 @@ export class AuthStore
     }
 
     /**
-     * Logs in the user and updates its fields
+     * Logs in the user if the credentials are ok, else an error is thrown.
+     * Updates users fields and initializes its role data.
      */
     async loginAsync (username: string, password: string): Promise<void>
     {
@@ -27,7 +29,7 @@ export class AuthStore
         }
         catch (error)
         {
-            console.log(error);return
+            console.log(error);return // wrong credentials
         }
 
         localStorage.setItem('token', this.token);
@@ -36,7 +38,8 @@ export class AuthStore
     }
 
     /**
-     * Registers the user and updates its fields, then pushes the field values to the database.
+     * Registers the user and updates its fields, if the provided credentials are unique, else error is thrown.
+     * Updates users fields and initializes its role data.
      */
     async registerAsync (data: IUser): Promise<void>
     {
@@ -54,6 +57,9 @@ export class AuthStore
         await this.rootStore.userStore.fetchUserData(this.token);
     }
 
+    /**
+     * Clears the storage of the token and reloads the application.
+     */
     logoutAsync (): Promise<void>
     {
         return new Promise (() => {

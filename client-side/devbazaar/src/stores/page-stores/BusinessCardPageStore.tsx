@@ -1,9 +1,9 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import { RootStore } from '.';
+import { RootStore } from '..';
 
-import { IBusinessPage } from '../common';
-import { Business } from '../models';
-import { IServices } from '../services/contracts';
+import { IBusinessPage } from '../../common';
+import { Business } from '../../models';
+import { IServices } from '../../services/contracts';
 
 export class BusinessCardPageStore
 { 

@@ -12,6 +12,6 @@ namespace Devbazaar.IRestModels.IClientRest
 		string Website { get; set; }
 		string Country { get; set; }
 		string City { get; set; }
-		int PostalCode { get; set; }
+		int? PostalCode { get; set; }
 	}
 }

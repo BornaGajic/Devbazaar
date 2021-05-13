@@ -1,7 +1,7 @@
-import { UserStore } from './UserStore'
-import { BusinessCardPageStore } from './BusinessCardPageStore';
-import { TaskPageStore } from './TaskPageStore';
-import { AuthStore } from './AuthStore';
+import { UserStore } from './user-stores/UserStore'
+import { BusinessCardPageStore } from './page-stores/BusinessCardPageStore';
+import { TaskPageStore } from './page-stores/TaskPageStore';
+import { AuthStore } from './auth-stores/AuthStore';
 import { CategoryStore } from './CategoryStore';
 
 import { Services } from '../services';
@@ -13,8 +13,8 @@ class RootStore
     private service: IServices;
 
     userStore: UserStore;
-    businessStore: BusinessCardPageStore;
-    taskStore: TaskPageStore;
+    businessPageStore: BusinessCardPageStore;
+    taskPageStore: TaskPageStore;
     categoryStore: CategoryStore;
     authStore: AuthStore
 
@@ -22,9 +22,9 @@ class RootStore
     {
         this.service = new Services();
 
-        this.businessStore = new BusinessCardPageStore(this, this.service);
+        this.businessPageStore = new BusinessCardPageStore(this, this.service);
         this.userStore = new UserStore(this, this.service);
-        this.taskStore = new TaskPageStore(this, this.service);
+        this.taskPageStore = new TaskPageStore(this, this.service);
         this.categoryStore = new CategoryStore(this.service);
         this.authStore = new AuthStore(this, this.service.authService);
     }

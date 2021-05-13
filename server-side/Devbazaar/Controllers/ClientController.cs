@@ -34,6 +34,28 @@ namespace Devbazaar.Controllers
              return Request.CreateResponse(HttpStatusCode.OK, await ClientService.GetClientDataById(Guid.Parse(User.Identity.GetUserId())));
         }
 
+        [HttpGet]
+        [Route("Favourites")]
+        public async Task<HttpResponseMessage> GetFavouriteBusinesses ()
+        {
+            Guid id = Guid.Parse(User.Identity.GetUserId());
+
+            var favouriteBusinesses = await ClientService.GetFavouriteBusinesses(id);
+
+            return Request.CreateResponse(HttpStatusCode.OK, favouriteBusinesses);
+        }
+
+        [HttpGet]
+        [Route("Tasks")]
+        public async Task<HttpResponseMessage> GetTasks ()
+        {
+            Guid id = Guid.Parse(User.Identity.GetUserId());
+
+            var tasks = await ClientService.GetTasks(id);
+
+            return Request.CreateResponse(HttpStatusCode.OK, tasks);
+        }
+
         [HttpPut]
         [Route("Update")]
         public async Task<HttpResponseMessage> UpdateAsync ([FromBody] UpdateClientRest changedClient)
@@ -80,6 +102,24 @@ namespace Devbazaar.Controllers
             }
             
             return Request.CreateResponse(HttpStatusCode.OK, result);
+        }
+
+        [HttpPut]
+        [Route("RemoveFavourite")]
+        public async Task<HttpResponseMessage> RemoveBusinessFromFavourites ([FromUri] Guid businessId)
+        {
+            Guid clientId = Guid.Parse(User.Identity.GetUserId());
+
+            try
+            {
+                await ClientService.RemoveFromFavourites(clientId, businessId);
+
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, e.Message);
+            }
         }
     }
 }

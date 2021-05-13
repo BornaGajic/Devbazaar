@@ -1,29 +1,42 @@
+/**
+ * ---------------
+ * Base user store
+ * ---------------
+ */
+
 import jwtDecode from 'jwt-decode';
 import { makeAutoObservable, runInAction } from 'mobx';
 
-import { Business, User } from '../models';
+import { RootStore } from '..';
+import { ClientStore } from './client-stores';
 
-import { IUser } from '../models/contracts';
-import { IServices } from '../services/contracts';
-import { IRole, ITaskPage } from '../common';
+import { Business, User } from '../../models';
+import { UserRole } from '../../common';
+import { Client } from '../../models';
 
-import { UserRole } from '../common';
-import { Client } from '../models';
-import { RootStore } from '.';
+import { IUser } from '../../models/contracts';
+import { IServices } from '../../services/contracts';
+import { IRole, ITaskPage } from '../../common';
 
 export class UserStore
 {
+    rootStore: RootStore;
+    clientStore: ClientStore;
+
     service: IServices;
 
     user: User;
 
 	roleData: Map<string, IRole> = new Map<string, IRole>();
 
-    constructor (public rootStore: RootStore, service: IServices)
+    constructor (rootStore: RootStore, service: IServices)
     {
 		this.user = new User(service);
 		
-      	makeAutoObservable(this, { service: false, rootStore: false });
+      	makeAutoObservable(this, { rootStore: false, service: false });
+
+        this.rootStore = rootStore;
+        this.clientStore = new ClientStore(this, service);
 
         this.service = service;
 
@@ -34,7 +47,8 @@ export class UserStore
     }
 
     /**
-     * Logs in the user and updates its fields
+     * Updates objects fields with the data from the token and initializes users role
+     * @param token jwt-token
      */
     async fetchUserData (token: string): Promise<void>
     {
@@ -72,24 +86,20 @@ export class UserStore
 		if (this.roleData.has(this.user.role)) 
 			throw new Error("RoleActions for this Role already exist.");
         
-        let response = await this.service.userService.fetchRoleData(this.user.role);
-        console.log(response.data);
 		switch (this.user.role) 
 		{
 			case UserRole.BUSINESS:
 				let business: Business = new Business(this.service);
                 
-				business.data = response.data;
+				//business.data = response.data;
                 business.fetchPinnedTasks({ PageNumber: 1} as ITaskPage);
                 runInAction(() => this.roleData.set(this.user.role, business));
 				
 				break;
             case UserRole.CLIENT:
-                let client: Client = new Client(this.service);
-
-                client.data = response.data;
+                let client: Client = await this.clientStore.initClient();
+                
                 runInAction(() => this.roleData.set(this.user.role, client));
-
                 break;
 			default:
 				break;

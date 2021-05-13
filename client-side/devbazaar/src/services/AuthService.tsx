@@ -14,10 +14,8 @@ export class AuthService implements IAuthService
             Password : password
         });
 
-        if (response.status === 400 || response.status === 404)
-        {
+        if (response.status !== 200)
             throw new Error("Not found");
-        }
 
         return response.data;
     }
@@ -31,10 +29,8 @@ export class AuthService implements IAuthService
             Password : data.password
         }, { params : { TypeOfUser : data.role } });
 
-        if (response.status === 409)
-        {
+        if (response.status !== 200)
             throw new Error("User already exists!");
-        }
 
         return response.data;
     }
