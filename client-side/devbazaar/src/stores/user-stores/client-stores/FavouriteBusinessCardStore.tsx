@@ -51,7 +51,7 @@ export class FavouriteBusinessCardStore
     {
         let idx = this.businesses.findIndex(business => business.id === businessCardId);
 
-        this.businesses.splice(idx, 1);
+        runInAction(() => this.businesses.splice(idx, 1));
 
         this.service.clientService.removeFromFavourites(businessCardId);
     }
@@ -61,6 +61,11 @@ export class FavouriteBusinessCardStore
         let response = await this.service.clientService.addToFavourites(businessCardId);
 
         let nFavBusiness = new Business(this.service);
-        nFavBusiness.data = response.data;
+        runInAction(() => {
+            nFavBusiness.data = response.data;
+            nFavBusiness.id = businessCardId;
+
+            this.businesses.push(nFavBusiness);
+        });
     }
 }

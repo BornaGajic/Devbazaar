@@ -22,17 +22,4 @@ export class UserService implements IUserService
 
         return response
     }
-
-    /** 
-     * Returnes Promise of own business card data.
-    */
-    async fetchRoleData (role: UserRole): Promise<AxiosResponse<any>>
-    {
-        let response = await axios.get(`${axios.defaults.baseURL}/${role}/Data`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
-
-        if (response.status !== 200)
-            throw new Error(response.statusText);
-        
-        return response;
-    }
 }

@@ -7,18 +7,19 @@
 import { makeAutoObservable, runInAction } from "mobx";
 
 import { UserStore } from "../UserStore";
-import { ClientTaskStore } from "./C_TaskStore";
-import { FavouriteBusinessCardStore } from "./C_BusinessCardStore";
+import { ClientTaskStore } from "./ClientTaskStore";
+import { FavouriteBusinessCardStore } from "./FavouriteBusinessCardStore";
 
 import { Client } from "../../../models";
 
 import { IServices } from "../../../services/contracts";
+import { IClient } from "../../../models/contracts";
 
 export class ClientStore
 {
     userStore: UserStore;
-    taskStore: ClientTaskStore;
-    businessStore: FavouriteBusinessCardStore;
+    clienTaskStore: ClientTaskStore;
+    favouriteBusinessStore: FavouriteBusinessCardStore;
 
     service: IServices;
 
@@ -26,11 +27,11 @@ export class ClientStore
 
     constructor (userStore: UserStore, service: IServices)
     {
-        makeAutoObservable(this, { userStore: false, taskStore: false, service: false })
+        makeAutoObservable(this, { userStore: false, clienTaskStore: false, favouriteBusinessStore: false,  service: false })
 
         this.userStore = userStore;
-        this.taskStore = new ClientTaskStore(this, service);
-        this.businessStore = new FavouriteBusinessCardStore(this, service);
+        this.clienTaskStore = new ClientTaskStore(this, service);
+        this.favouriteBusinessStore = new FavouriteBusinessCardStore(this, service);
 
         this.service = service;
 
@@ -46,13 +47,21 @@ export class ClientStore
     {
         let response = await this.service.clientService.fetchClientData();
 
-        this.taskStore.loadTasks()
-        this.businessStore.loadFavouriteBusinesses();
+        this.clienTaskStore.loadTasks()
+        this.favouriteBusinessStore.loadFavouriteBusinesses();
 
         runInAction(() => {
             this.client.data = response.data;
+            this.client.id = this.userStore.user.id;
         });
 
-        return this.client as Client;
+        return this.client;
+    }
+
+    async updateClient (data: IClient): Promise<void>
+    {
+        runInAction(() => this.client.data = data);
+
+        this.service.clientService.update(data);
     }
 }

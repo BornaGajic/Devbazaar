@@ -17,7 +17,7 @@ const Register = observer(() =>
     
     console.log("register");
 
-    let clist = store.userStore.clientStore.taskStore.tasks.map((task: Task) =>
+    let clist = store.userStore.clientStore.clienTaskStore.tasks.map((task: Task) =>
     <ul key={ task.id }>
         <li>{ task.id }</li>
         <li>{ task.description }</li>
@@ -31,7 +31,7 @@ const Register = observer(() =>
     return (
         <div className="w-25 col">
 
-            <TaskView taskStore={store.userStore.clientStore.taskStore} />
+            <TaskView taskStore={store.userStore.clientStore.clienTaskStore} />
 
             <div className="row">
                 <button onClick={() => store.authStore.logoutAsync()}>

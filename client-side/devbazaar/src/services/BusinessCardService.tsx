@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios'
 
 import { IBusinessPage } from '../common';
 import { ITaskPage } from '../common/ITaskPage';
-import { IBusiness } from '../models/contracts';
+import { IBusiness, ICategory } from '../models/contracts';
 import { ITask } from '../models/contracts/ITask';
 import { IBusinessCardService } from './contracts';
 
@@ -38,12 +38,13 @@ export class BusinessCardService implements IBusinessCardService
         return response;
     }
 
-    async fetchPinnedTasks (pageData: ITaskPage): Promise<AxiosResponse<ITask[]>>
+    /**
+     * Fetches pinned tasks from the DB. If pageData is null it returns all pinned tasks.
+     * @param pageData page number, filets, etc.
+     */
+    async fetchPinnedTasks (pageData?: ITaskPage): Promise<AxiosResponse<ITask[]>>
     {
-        let response = await axios.post(`${axios.defaults.baseURL}/Business/Tasks`,
-        {
-           pageData: pageData
-        }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
+        let response = await axios.post(`${axios.defaults.baseURL}/Business/Tasks`, pageData, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
 
         return response;
     }
@@ -66,8 +67,35 @@ export class BusinessCardService implements IBusinessCardService
             throw new Error(response.statusText); 
     }
 
+    async addCategory (categoryId: string)
+    {
+        let response = await axios.put(`${axios.defaults.baseURL}/Business/AddCategory`, {
+            params: {
+                categoryId: categoryId
+            }
+        });
+
+        if (response.status !== 200)
+            throw new Error(response.statusText);
+
+        return response;
+    }
+
+    async removeCategory (categoryId: string)
+    {
+        let response = await axios.put(`${axios.defaults.baseURL}/Business/AddCategory`, {
+            params: {
+                categoryId: categoryId
+            }
+        });
+
+        if (response.status !== 200)
+            throw new Error(response.statusText);
+
+        return response;
+    }
     /**
-     * "Pins" a task to the pinned tasks tab.
+     * Pins a task to the pinned tasks tab.
      */
     async pinTask (taskId: string): Promise<AxiosResponse<ITask>>
     {
@@ -80,6 +108,40 @@ export class BusinessCardService implements IBusinessCardService
         if (response.status !== 200)
             throw new Error(response.statusText);
 
+        return response;
+    }
+
+    async removePinnedTask (taskId: string): Promise<AxiosResponse>
+    {
+        let response = await axios.put(`${axios.defaults.baseURL}/Business/RemovePinnedTask`, {
+            params: {
+                clientTaskid: taskId
+            }
+        });
+
+        if (response.status !== 200)
+            throw new Error(response.statusText);
+
+        return response;
+    }
+
+    async fetchBusinessCardData (): Promise<AxiosResponse<IBusiness>>
+    {
+        let response = await axios.get(`${axios.defaults.baseURL}/Business/Data`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
+
+        if (response.status !== 200)
+            throw new Error(response.statusText);
+        
+        return response;
+    }
+
+    async fetchCategories (): Promise<AxiosResponse<ICategory[]>>
+    {
+        let response = await axios.get(`${axios.defaults.baseURL}/Business/Categories`, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
+
+        if (response.status !== 200)
+            throw new Error(response.statusText);
+        
         return response;
     }
 }

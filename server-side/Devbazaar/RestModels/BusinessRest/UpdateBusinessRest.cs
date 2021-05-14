@@ -16,8 +16,5 @@ namespace Devbazaar.RestModels.BusinessRest
 		public string Country { get; set; } = null;
 		public string City { get; set; } = null;
 		public int? PostalCode { get; set; } = null;
-
-		public List<ICategory> Categories { get; set; } = null;
-
 	}
 }

@@ -103,6 +103,20 @@ namespace Devbazaar.Service.BusinessServices
 			return await Task.FromResult(1);
 		}
 
+		public async Task AddCategoryAsync (Guid businessId, Guid categoryId)
+		{
+			var businessEntity = await UnitOfWork.BusinessRepository.GetByIdAsync(businessId);
+
+			businessEntity.Categories.Add(await UnitOfWork.CategoryRepository.GetByIdAsync(categoryId));
+		}
+
+		public async Task RemoveCategoryAsync (Guid businessId, Guid categoryId)
+		{
+			var businessEntity = await UnitOfWork.BusinessRepository.GetByIdAsync(businessId);
+
+			businessEntity.Categories.Remove(await UnitOfWork.CategoryRepository.GetByIdAsync(categoryId));
+		}
+
 		public async Task<IClientTaskReturnType> AcquireClientTaskAsync (Guid businessId, Guid clientTaskId)
 		{
 			TaskEntity entity;
@@ -135,7 +149,36 @@ namespace Devbazaar.Service.BusinessServices
 			return clientTask;
 		}
 
-		public async Task<List<IClientTaskReturnType>> AcquiredClientTasksAsync (ClientTaskPage pageData, Guid businessId)
+		public async Task RemovePinnedTaskAsync (Guid businessId, Guid clientTaskId)
+		{
+			var business = await UnitOfWork.BusinessRepository.GetByIdAsync(businessId);
+			var clientTask = await UnitOfWork.ClientTaskRepository.GetByIdAsync(clientTaskId);
+
+			business.Tasks.Remove(clientTask);
+
+			await UnitOfWork.UpdateAsync(business);
+			await UnitOfWork.CommitAsync<BusinessEntity>();
+		}
+
+		public async Task<List<IClientTaskReturnType>> PinnedClientTasksAsync (Guid businessId)
+		{
+			var taskEnList = await UnitOfWork.ClientTaskRepository.GetPinnedTasksAsync(businessId);
+			var pinnedTasks = Mapper.Map<List<IClientTaskReturnType>>(taskEnList);
+
+			var userTable = UnitOfWork.UserRepository.Table;
+
+			foreach (var clientTask in pinnedTasks)
+			{
+				var userEntity = await (from user in userTable where clientTask.ClientId == user.Id select user).SingleAsync();
+
+				clientTask.Email = userEntity.Email;
+				clientTask.Username = userEntity.Username;
+			}
+
+			return pinnedTasks;
+		}
+
+		public async Task<List<IClientTaskReturnType>> PaginatedAcquiredClientTasksAsync (ClientTaskPage pageData, Guid businessId)
 		{
 			var clientTaskReturnTypes = await UnitOfWork.ClientTaskRepository.PaginatedGetAsync(pageData, null, businessId);
 
@@ -221,7 +264,7 @@ namespace Devbazaar.Service.BusinessServices
 							Popularity = business.Clients.Count
 						});
 
-			Utility.Utility.TotalBusinessCount = await query.CountAsync();
+			//Utility.Utility.TotalBusinessCount = await query.CountAsync();
 
 			if (pageData.FavouriteCount == true)
 			{
@@ -235,6 +278,13 @@ namespace Devbazaar.Service.BusinessServices
 			var pageResult = await query.Skip((pageData.PageNumber - 1) * pageItemCount).Take(pageItemCount).ToListAsync();			
 			
 			return pageResult;
+		}
+
+		public async Task<List<ICategory>> GetCategories ()
+		{
+			var categoriesEntity = await UnitOfWork.CategoryRepository.GetCategories();
+
+			return Mapper.Map<List<ICategory>>(categoriesEntity);
 		}
 	}
 }

@@ -50,6 +50,13 @@ namespace Devbazaar.Repository.Repositories
 			return entity;
 		}
 
+		public async Task<List<TaskEntity>> GetPinnedTasksAsync (Guid businessId)
+		{
+			var query = from ct in Table where ct.BusinessId == businessId select ct;
+
+			return await query.ToListAsync();
+		}
+
 		public async Task<List<IClientTaskReturnType>> PaginatedGetAsync (ClientTaskPage pageData, Guid? clientId = null, Guid? businessId = null)
 		{
 			var clientTaskEntityList = await ApplyPageSeasoning(pageData, clientId, businessId);

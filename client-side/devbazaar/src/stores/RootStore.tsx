@@ -22,11 +22,12 @@ class RootStore
     {
         this.service = new Services();
 
-        this.businessPageStore = new BusinessCardPageStore(this, this.service);
-        this.userStore = new UserStore(this, this.service);
-        this.taskPageStore = new TaskPageStore(this, this.service);
-        this.categoryStore = new CategoryStore(this.service);
         this.authStore = new AuthStore(this, this.service.authService);
+        this.categoryStore = new CategoryStore(this, this.service);
+        this.userStore = new UserStore(this, this.service);
+        
+        this.businessPageStore = new BusinessCardPageStore(this, this.service);
+        this.taskPageStore = new TaskPageStore(this, this.service);
     }
 }
 

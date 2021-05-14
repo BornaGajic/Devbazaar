@@ -32,7 +32,6 @@ const Login = observer(({naslov} : ILoginProps) =>
             <li>{ business.description }</li>
             <li>{ business.about }</li>
             <li>{ business.available }</li>
-            <li>{ JSON.stringify(business.categories) }</li>
             <li>{ business.city }</li>
             <li>{ business.country }</li>
             <li>{ business.website }</li>

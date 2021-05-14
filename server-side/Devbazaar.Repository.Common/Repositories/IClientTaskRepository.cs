@@ -14,6 +14,7 @@ namespace Devbazaar.Repository.Common.Repositories
 		Task<TaskEntity> GetByIdAsync (Guid id);
 
 		Task<TaskEntity> UpdateAsync (Dictionary<string, object> item, Guid clientTaskId);
+		Task<List<TaskEntity>> GetPinnedTasksAsync (Guid businessId);
 
 		// clientId != null -> get self posted tasks | businessId != null -> get acquired tasks | both null -> classic get with pagination
 		Task<List<IClientTaskReturnType>> PaginatedGetAsync (ClientTaskPage pageData, Guid? clientId = null, Guid? businessId = null);

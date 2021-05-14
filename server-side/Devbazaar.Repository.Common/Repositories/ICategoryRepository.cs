@@ -11,5 +11,7 @@ namespace Devbazaar.Repository.Common.Repositories
 	{
 		Task<Guid> GetIdByName (string name);
 		Task AttachAsync (CategoryEntity categoryEntity);
+		Task<List<CategoryEntity>> GetCategories ();
+		Task<CategoryEntity> GetByIdAsync (Guid categoryId);
 	}
 }

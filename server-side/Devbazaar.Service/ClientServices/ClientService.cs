@@ -60,6 +60,7 @@ namespace Devbazaar.Service.ClientServices
 			var business = clientEntity.Businesses.First(b => b.Id == businessId);
 			clientEntity.Businesses.Remove(business);
 
+			await UnitOfWork.UpdateAsync(clientEntity);
 			await UnitOfWork.CommitAsync<ClientEntity>();
 		}
 
@@ -118,6 +119,7 @@ namespace Devbazaar.Service.ClientServices
 
 			try
 			{
+				await UnitOfWork.UpdateAsync(clientEntity);
 				await UnitOfWork.CommitAsync<ClientEntity>();
 			}
 			catch (Exception e)

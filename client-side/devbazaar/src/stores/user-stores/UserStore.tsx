@@ -16,12 +16,14 @@ import { Client } from '../../models';
 
 import { IUser } from '../../models/contracts';
 import { IServices } from '../../services/contracts';
-import { IRole, ITaskPage } from '../../common';
+import { IRole } from '../../common';
+import { BusinessStore } from './business-stores/BusinessStore';
 
 export class UserStore
 {
     rootStore: RootStore;
     clientStore: ClientStore;
+    businessStore: BusinessStore;
 
     service: IServices;
 
@@ -33,10 +35,16 @@ export class UserStore
     {
 		this.user = new User(service);
 		
-      	makeAutoObservable(this, { rootStore: false, service: false });
+      	makeAutoObservable(this, {
+            rootStore: false, 
+            clientStore: false,
+            businessStore: false,
+            service: false
+        });
 
         this.rootStore = rootStore;
         this.clientStore = new ClientStore(this, service);
+        this.businessStore = new BusinessStore(this, service);
 
         this.service = service;
 
@@ -89,12 +97,9 @@ export class UserStore
 		switch (this.user.role) 
 		{
 			case UserRole.BUSINESS:
-				let business: Business = new Business(this.service);
+				let business: Business = await this.businessStore.initBusiness();
                 
-				//business.data = response.data;
-                business.fetchPinnedTasks({ PageNumber: 1} as ITaskPage);
                 runInAction(() => this.roleData.set(this.user.role, business));
-				
 				break;
             case UserRole.CLIENT:
                 let client: Client = await this.clientStore.initClient();

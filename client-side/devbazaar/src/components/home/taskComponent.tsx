@@ -1,6 +1,6 @@
 import React from 'react';
 import { observer } from "mobx-react";
-import { ClientTaskStore } from '../../stores/user-stores/client-stores/C_TaskStore';
+import { ClientTaskStore } from '../../stores/user-stores/client-stores/ClientTaskStore';
 import { Client } from '../../models';
 import { ITask } from '../../models/contracts';
 

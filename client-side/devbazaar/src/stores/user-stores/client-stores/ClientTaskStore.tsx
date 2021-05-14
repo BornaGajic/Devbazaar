@@ -68,22 +68,19 @@ export class ClientTaskStore
         let response = await this.service.taskService.createTask(newTask);
 
         let nTask = new Task();
-        nTask.id = response.data.id;
-        nTask.data = response.data;
-
-        runInAction(() => this.tasks?.push(nTask));
+        
+        runInAction(() => {
+            nTask.id = response.data.id;
+            nTask.data = response.data;
+            this.tasks.push(nTask);
+        });
     }
 
     async removeTask (taskId: string): Promise<void>
     {
-        runInAction(() =>
-            this.tasks.forEach( (item, idx) => {
-                if(item.id === taskId)
-                {
-                    this.tasks.splice(idx, 1);
-                }
-            })
-        );
+        let idx = this.tasks.findIndex(task => task.id === taskId);
+
+        runInAction(() => this.tasks.splice(idx, 1));
 
         this.service.taskService.deleteTask(taskId);
     }

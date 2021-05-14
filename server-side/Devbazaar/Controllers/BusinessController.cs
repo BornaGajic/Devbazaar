@@ -89,6 +89,42 @@ namespace Devbazaar.Controllers
         }
 
         [HttpPut]
+        [Route("AddCategory")]
+        public async Task<HttpResponseMessage> AddCategoryAsync ([FromUri] Guid categoryId)
+        {
+            Guid businessId = Guid.Parse(User.Identity.GetUserId());
+
+            try
+            {
+                await BusinessService.AddCategoryAsync(businessId, categoryId);
+
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, e);
+            }
+        }
+
+        [HttpPut]
+        [Route("RemoveCategory")]
+        public async Task<HttpResponseMessage> RemoveCategoryAsync ([FromUri] Guid categoryId)
+        {
+            Guid businessId = Guid.Parse(User.Identity.GetUserId());
+
+            try
+            {
+                await BusinessService.RemoveCategoryAsync(businessId, categoryId);
+
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, e);
+            }
+        }
+
+        [HttpPut]
         [Route("Acquire")]
         public async Task<HttpResponseMessage> AcquireClientTaskAsync ([FromUri] Guid clientTaskId)
         {
@@ -103,22 +139,48 @@ namespace Devbazaar.Controllers
             return Request.CreateResponse(HttpStatusCode.InternalServerError);
         }
 
-        [HttpPost]
-        [Route("Tasks")]
-        public async Task<HttpResponseMessage> AcquiredClientTasks ([FromBody] ClientTaskPage pageData)
+        [HttpPut]
+        [Route("RemovePinnedTask")]
+        public async Task<HttpResponseMessage> RemovePinnedTaskAsync ([FromUri] Guid clientTaskId)
         {
             Guid businessId = Guid.Parse(User.Identity.GetUserId());
 
-            /*
-            object returnDto = new {
-               pageResult =   
-               totalItems = Utility.Utility.TotalClientTaskCount
-            };
-            */
+            try
+            {
+                await BusinessService.RemovePinnedTaskAsync(businessId, clientTaskId);
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, e);
+            }
+        }
 
-            var result = await BusinessService.AcquiredClientTasksAsync(pageData, businessId);
+        [HttpPost]
+        [Route("Tasks")]
+        public async Task<HttpResponseMessage> AcquiredClientTasks ([FromBody] ClientTaskPage pageData = null)
+        {
+            Guid businessId = Guid.Parse(User.Identity.GetUserId());
 
-            return Request.CreateResponse(HttpStatusCode.OK, result);
+            try
+            {
+                if (pageData == null)
+                {
+                    var pinnedTasks = await BusinessService.PinnedClientTasksAsync(businessId);
+
+                    return Request.CreateResponse(HttpStatusCode.OK, pinnedTasks);
+                }
+                else
+                {
+                    var result = await BusinessService.PaginatedAcquiredClientTasksAsync(pageData, businessId);
+
+                    return Request.CreateResponse(HttpStatusCode.OK, result);
+                }
+            }
+            catch (Exception e)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, e);
+            }  
         }
 
 		[HttpPost]
@@ -135,20 +197,18 @@ namespace Devbazaar.Controllers
                 return Request.CreateResponse(HttpStatusCode.OK, businessList);
             }
             
-            /*
-            object returnDto = new {
-               pageResult =    
-               totalItems = Utility.Utility.TotalBusinessCount
-            };
-            */
-
             var result = await BusinessService.PaginatedGetAsync(pageData);
 
             return Request.CreateResponse(HttpStatusCode.OK, result);
 		}
 
-        /* TO-DO:
-         * Add option to update business categories.
-         */
+        [HttpGet]
+        [Route("Categories")]
+        public async Task<HttpResponseMessage> GetCategories ()
+        {
+            var categories = await BusinessService.GetCategories();
+
+            return Request.CreateResponse(HttpStatusCode.OK, categories);
+        }
 	}
 }

@@ -1,15 +1,15 @@
 import { makeAutoObservable, runInAction } from "mobx";
 
-import { Category } from ".";
-import { Task } from ".";
-
 import { IRole } from "../common";
-import { ITaskPage } from "../common";
 import { IServices } from "../services/contracts";
-import { IBusiness, ITask } from "./contracts";
+import { BusinessStore } from "../stores/user-stores/business-stores/BusinessStore";
+import { Category } from "./Category";
+import { IBusiness, ICategory } from "./contracts";
 
 export class Business implements IBusiness, IRole
 {
+    businessStore?: BusinessStore;
+
     service: IServices;
 
     id?: string;
@@ -27,11 +27,11 @@ export class Business implements IBusiness, IRole
 
     categories: Category[] = [];
 
-    pinnedTasks?: Task[];
-
-    constructor (service: IServices)
+    constructor (service: IServices, businessStore?: BusinessStore)
     {
-        makeAutoObservable(this, { service: false });
+        makeAutoObservable(this, { service: false, businessStore: false });
+
+        this.businessStore = businessStore;
 
         this.service = service;
     }
@@ -47,10 +47,16 @@ export class Business implements IBusiness, IRole
     async createBusinessCard (creationData: IBusiness): Promise<void>
     {
         this.service.businessCardService.createBusinessCard(creationData);
+        let categoryStore = this.businessStore?.userStore.rootStore.categoryStore;
 
         runInAction(() => {
             this.data = creationData;
-            // this.updateCategories
+
+            creationData.categories?.forEach(category => {
+                let existingCategory = categoryStore?.categories.find(item => item.id === category.id) as Category;
+
+                this.categories.push(existingCategory);
+            });
         });
     }
 
@@ -63,40 +69,33 @@ export class Business implements IBusiness, IRole
 
         runInAction(() => {
             this.data = data;
-            // this.updateCategories
         }); 
     }
 
-    // Will be implemented when I define how the categories will be updated on the UI 
-    async updateCategories (updatedCategories: ITask): Promise<void>
+    async addCategory (categoryId: string)
     {
-       throw new Error("Not implemeneted!");
-    }
+        this.service.businessCardService.addCategory(categoryId);
 
-    async pinTask (taskId: string): Promise<void>
-    {
-        let response = await this.service.businessCardService.pinTask(taskId);
-
-        let pinnedTask = new Task();
-        pinnedTask.id = taskId;
-        pinnedTask.data = response.data;
-
-        runInAction(() => this.pinnedTasks?.push(pinnedTask));
-    }
-
-    async fetchPinnedTasks (pageData: ITaskPage): Promise<void>
-    {
-        let response = await this.service.businessCardService.fetchPinnedTasks(pageData);
+        let categoryStore = this.businessStore?.userStore.rootStore.categoryStore;
 
         runInAction(() => {
-            response.data.forEach((item) => {
-                let pTask = new Task();
-                pTask.id = item.id;
-                pTask.data = item;
-    
-                this.pinnedTasks?.push(pTask);
-            });
-        });
+            let existingCategory = categoryStore?.categories.find(item => item.id === categoryId) as Category;
+
+            this.categories.push(existingCategory);
+        }); 
+    }
+
+    async removeCategory (categoryId: string)
+    {
+        this.service.businessCardService.removeCategory(categoryId);
+
+        let categoryStore = this.businessStore?.userStore.rootStore.categoryStore;
+
+        runInAction(() => {
+            let idx = categoryStore?.categories.findIndex(item => item.id === categoryId) as number;
+
+            this.categories.splice(idx, 1);
+        }); 
     }
 
     /**
@@ -112,8 +111,7 @@ export class Business implements IBusiness, IRole
             City: this.city,
             PostalCode: this.postalCode,
             Available: this.available,
-            Popularity: this.popularity,
-            Categories: this.categories
+            Popularity: this.popularity
         }
     }
 

@@ -1,18 +1,14 @@
 import { makeAutoObservable } from "mobx";
-import { IServices } from "../services/contracts";
-import { ICategory } from "./contracts/ICategory";
+import { ICategory } from "./contracts";
 
 export class Category implements ICategory
 {
-    service: IServices;
-
     id?: string;
+
     name?: string;
 
-    constructor (service: IServices)
+    constructor ()
     {
-        makeAutoObservable(this, { service: false });
-
-        this.service = service;
+        makeAutoObservable(this);
     }
 }
