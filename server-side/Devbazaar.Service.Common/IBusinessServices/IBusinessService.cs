@@ -26,6 +26,6 @@ namespace Devbazaar.Service.Common.IBusinessServices
 		Task<List<IClientTaskReturnType>> PaginatedAcquiredClientTasksAsync (ClientTaskPage pageData, Guid businessId);
 		Task<List<ICategory>> GetCategories ();
 		Task AddCategoryAsync (Guid businessId, Guid categoryId);
-		Task RemoveCategoryAsync (Guid businessId, Guid categoryId)
+		Task RemoveCategoryAsync (Guid businessId, Guid categoryId);
 	}
 }

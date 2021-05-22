@@ -152,6 +152,10 @@
     <Compile Include="Migrations\202105120918485_ChangesToClient.designer.cs">
       <DependentUpon>202105120918485_ChangesToClient.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202105211722277_removed-maxlen.cs" />
+    <Compile Include="Migrations\202105211722277_removed-maxlen.designer.cs">
+      <DependentUpon>202105211722277_removed-maxlen.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -204,6 +208,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202105120918485_ChangesToClient.resx">
       <DependentUpon>202105120918485_ChangesToClient.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202105211722277_removed-maxlen.resx">
+      <DependentUpon>202105211722277_removed-maxlen.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -15,8 +15,8 @@ export class PinnedTaskStore
     {
         makeAutoObservable(this, { businessStore: false, service: false });
 
-        this.businessStore = businessStore,
-        this.service = service
+        this.businessStore = businessStore;
+        this.service = service;
     }
 
     async loadPinnedTasks (): Promise<void>

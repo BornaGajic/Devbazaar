@@ -1,0 +1,14 @@
+.footer
+{
+    overflow: hidden;
+    margin-top: 10vw;
+    background: #262626;
+    color: #627482 !important;
+    position: sticky;
+}
+
+.list-group-item-dark
+{
+  background: #262626 !important;
+  color: white;
+}

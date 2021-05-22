@@ -25,7 +25,7 @@ namespace Devbazaar.DAL.Context
 			base.OnModelCreating(modelBuilder);
 
 			modelBuilder.Entity<BusinessEntity>().ToTable("Businesses").HasKey(b => b.Id).Property(p => p.Id).IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
-			modelBuilder.Entity<BusinessEntity>().Property(p => p.About).IsOptional().HasMaxLength(300);
+			modelBuilder.Entity<BusinessEntity>().Property(p => p.About).IsOptional();
 			modelBuilder.Entity<BusinessEntity>().Property(p => p.Website).IsOptional().HasMaxLength(2083);
 			modelBuilder.Entity<BusinessEntity>().Property(p => p.Description).IsRequired();
 			modelBuilder.Entity<BusinessEntity>().Property(p => p.Available).IsRequired();
@@ -43,7 +43,7 @@ namespace Devbazaar.DAL.Context
 			modelBuilder.Entity<CategoryEntity>().Property(p => p.Name).IsRequired().HasMaxLength(50);
 
 			modelBuilder.Entity<ClientEntity>().ToTable("Clients");
-			modelBuilder.Entity<ClientEntity>().Property(p => p.About).IsOptional().HasMaxLength(300);
+			modelBuilder.Entity<ClientEntity>().Property(p => p.About).IsOptional();
 			modelBuilder.Entity<ClientEntity>().Property(p => p.Website).IsOptional().HasMaxLength(2083);
 			modelBuilder.Entity<ClientEntity>().Property(p => p.City).IsOptional().HasMaxLength(50);
 			modelBuilder.Entity<ClientEntity>().Property(p => p.Country).IsOptional().HasMaxLength(50);

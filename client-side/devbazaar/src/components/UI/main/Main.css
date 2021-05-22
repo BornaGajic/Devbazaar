@@ -1,0 +1,15 @@
+@media (min-width: 1200px)
+{
+  #main .card
+  {
+    width: 18vw;
+  }
+}
+
+@media (max-width: 1000px)
+{
+  #main
+  {
+    margin-right: -0.2% !important;
+  }
+}

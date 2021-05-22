@@ -1,0 +1,50 @@
+
+@media (max-width: 1200px)
+{
+  #bigCard 
+  {
+    max-width: 50%;
+  }
+}
+
+@media (max-width: 767.98px) {
+  #bigCard 
+  {
+    max-width: 60%;
+  }
+}
+
+@media (max-width: 575px)
+{
+  #bigCard 
+  {
+    max-width: 70%;
+    margin-left: 10vh;
+  }
+
+}
+
+@media (max-width: 400px)
+{
+  #bigCard 
+  {
+    max-width: 70%;
+  }
+}
+
+@media (max-width: 470px)
+{
+  #bigCard 
+  {
+    max-width: 100%;
+    margin-left: 2vw;
+  }
+}
+
+@media (min-width: 1200px)
+{
+  #bigCard 
+  {
+    max-width: 35%;
+  }
+}

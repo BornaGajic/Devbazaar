@@ -19,9 +19,8 @@ export const TopBar = observer(({}) => {
 					</button>
 				</div>
 					
-				
 				<Searchbox />
-				
+
 				<div className="col-2">
 					<UserDropdown />
 				</div>
