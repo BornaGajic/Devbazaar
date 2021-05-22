@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import Main from "../main/Main";
-import Sidebar from "../sidebar/SideBar";
+import Sidebar from "../main/sidebar/SideBar";
 import { TopBar } from "../top-bar";
 
 const Body = observer(() => {

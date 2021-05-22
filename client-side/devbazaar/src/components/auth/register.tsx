@@ -9,7 +9,6 @@ import { Business, Client } from '../../models';
 import './login.css';
 import { TaskCrud } from '../../models/crud';
 import { Task } from '../../models/Task';
-import TaskView from '../home/taskComponent';
 
 const Register = observer(() =>
 {
@@ -31,8 +30,7 @@ const Register = observer(() =>
     return (
         <div className="w-25 col">
 
-            <TaskView taskStore={store.userStore.clientStore.clienTaskStore} />
-
+           
             <div className="row">
                 <button onClick={() => store.authStore.logoutAsync()}>
                     Logout

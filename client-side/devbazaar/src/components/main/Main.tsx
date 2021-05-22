@@ -1,10 +1,10 @@
 import { observer } from "mobx-react";
 import React from "react";
-import BigCard from "../big-card/BigCard";
+import BigCard from "./big-card/BigCard";
 
-import CardList from "../card-list/CardList";
-import Footer from "../footer/Footer";
-import Sidebar from "../sidebar/SideBar";
+import CardList from "./card-list/CardList";
+import Footer from "./footer/Footer";
+import Sidebar from "./sidebar/SideBar";
 
 import './Main.css';
 
@@ -16,7 +16,7 @@ const Main = observer(() => {
 			<div className="row"> 
 
 				<Sidebar />
-				
+
 				<div className="col m-0 p-0">
 					<div className="row m-0 p-0">
 						<main id="main" className="container-fluid min-vh-100 m-0 p-0">
