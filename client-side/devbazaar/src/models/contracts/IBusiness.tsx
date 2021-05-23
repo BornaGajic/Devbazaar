@@ -3,6 +3,9 @@ import { ICategory } from ".";
 export interface IBusiness
 {
     id?: string;
+
+    username?: string;
+    email?: string;
     
     description: string;
     about?: string;

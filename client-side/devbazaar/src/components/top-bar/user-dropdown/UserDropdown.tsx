@@ -1,6 +1,10 @@
 import { observer } from "mobx-react";
+import React from "react";
+import { AuthStore } from "../../../stores/auth-stores";
 
-const UserDropdown = observer(() => {
+const UserDropdown = observer(({ authStore }: { authStore: AuthStore }) => {
+
+    let handleLoguout = (e: React.SyntheticEvent) => authStore.logoutAsync();
 
     return (
         <ul className="navbar-nav flex-nowrap ms-auto p-2 h-100">
@@ -21,7 +25,7 @@ const UserDropdown = observer(() => {
                         </li>
                         <hr className="dropdown-divider"/>
                         <li>
-                            <a className="dropdown-item" href="#"><i className="bi bi-box-arrow-in-left me-2 text-gray-400"></i> Logout</a>
+                            <a className="dropdown-item" href="#" onClick={(e) => handleLoguout(e)}><i className="bi bi-box-arrow-in-left me-2 text-gray-400"></i> Logout</a>
                         </li>
                     </ul>
                 </div>

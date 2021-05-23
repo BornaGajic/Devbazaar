@@ -1,65 +1,53 @@
-import { observer } from 'mobx-react';
-import { action, runInAction } from 'mobx'
-import React, { ChangeEvent, InputHTMLAttributes } from 'react';
-import { Register } from '.';
-import { IBusinessPage, IPage, ITaskPage } from '../../common';
-import { useStores } from '../../hooks/useStores';
+import { observer } from "mobx-react";
+import React, { ChangeEvent, useState } from "react";
+import { AuthStore } from "../../stores/auth-stores";
+import { UserStore } from "../../stores/user-stores/UserStore";
 
-import './login.css';
-import { ITask } from '../../models/contracts';
-import { Task } from '../../models/Task';
-import { TaskCrud } from '../../models/crud';
+import './Login.css';
 
-interface ILoginProps
-{
-    naslov : string
-}
+const Login = observer(({ authStore, userStore } : { authStore: AuthStore, userStore: UserStore }) => {
 
-const Login = observer(({naslov} : ILoginProps) =>
-{
-    const store = useStores();
+    let [password, setPassword] = useState('');
 
-    let email: string = '';
-    let username: string = '';
-    let password: string = '';
-    let description: string = '';
-    let highPrice: number = Number.MAX_SAFE_INTEGER; 
-    let lowPrice: number = Number.MIN_SAFE_INTEGER;
-    
-    const blist = store.businessPageStore.businessCards?.map((business) =>
-        <ul key={ business.id }>
-            <li>{ business.id }</li>
-            <li>{ business.description }</li>
-            <li>{ business.about }</li>
-            <li>{ business.available }</li>
-            <li>{ business.city }</li>
-            <li>{ business.country }</li>
-            <li>{ business.website }</li>
-            <li>{ business.postalCode }</li>
-            <li>--------------------------</li>
-        </ul>
-    );
+    let handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
+        userStore.user.data = { email: e.target.value };
+
+        console.log(userStore.user.email);
+    }
+
+    let handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setPassword(e.target.value); 
+
+        console.log(password);
+    }
+
+    function handleLogin (e: React.SyntheticEvent)
+    {
+        e.preventDefault();
+
+        authStore.loginAsync(userStore.user.email as string, password);
+    }
 
     return (
-        <div className="container">
-
-            <form onSubmit={ (e) => { store.authStore.loginAsync(email, password); e.preventDefault(); } }>
-
-                <label htmlFor="emailBox">Email:</label><br/>
-                <input type="text" id="emailBox" onChange={ (e) => email =  e.target.value } /><br/><br/>
-
-                <label htmlFor="passwordBox">Password:</label><br/>
-                <input type="text" id="passwordBox" onChange={ (e) => password = e.target.value } /><br/><br/>
-
-                <input type="submit" value="Login" />
-            </form> 
-
-
-            <button onClick={ () => store.taskPageStore.fetchTasksPage({ PageNumber: 1 } as ITaskPage) }> fetch page </button>
-
-            <Register/>
-        </div>
+        <div className="text-center container d-flex justify-content-center">
+            <div className="d-flex justify-content-center bg-light w-50 shadow rounded">
+                <form className="w-50" onSubmit={(e) => handleLogin(e)}>
+                    <i className="bi bi-code-slash fs-1"></i>
+                    <h1 className="h3 mb-3 fw-normal">Welcome to Devbazaar</h1>
+                    <div className="form-floating mb-3">
+                        <input type="email" className="form-control shadow-none" id="floatingInput" placeholder="name@example.com" required onChange={(e) => handleEmailChange(e)} />
+                        <label htmlFor="floatingInput" className="text-muted">Email address</label>
+                    </div>
+                    <div className="form-floating">
+                        <input type="password" className="form-control shadow-none mb-3" id="floatingPassword" placeholder="Password" required onChange={(e) => handlePasswordChange(e)} />
+                        <label htmlFor="floatingPassword" className="text-muted">Password</label>
+                    </div>
+                    <button className="w-100 btn btn-lg btn-primary mb-3" type="submit">Sign in</button>
+                    <p className="mt-5 mb-3 text-muted pb-3">Don't have an account? <a className="link" href="#">Register</a></p>
+                </form>
+            </div>
+	    </div>
     );
-})
+});
 
 export default Login;

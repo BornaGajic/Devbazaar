@@ -6,6 +6,7 @@ import { CategoryStore } from './CategoryStore';
 
 import { Services } from '../services';
 import { IServices } from '../services/contracts';
+import { UiState } from './ui-store/UiState';
 
 
 class RootStore
@@ -18,8 +19,12 @@ class RootStore
     categoryStore: CategoryStore;
     authStore: AuthStore
 
+    UiState: UiState;
+
     constructor ()
     {
+        this.UiState = new UiState(this);
+
         this.service = new Services();
 
         this.authStore = new AuthStore(this, this.service.authService);
@@ -27,6 +32,7 @@ class RootStore
         this.userStore = new UserStore(this, this.service);
         
         this.businessPageStore = new BusinessCardPageStore(this, this.service);
+        
         this.taskPageStore = new TaskPageStore(this, this.service);
     }
 }

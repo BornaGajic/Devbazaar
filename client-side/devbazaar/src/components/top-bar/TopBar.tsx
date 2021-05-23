@@ -4,8 +4,9 @@ import Searchbox from './search-box/SearchBox';
 import UserDropdown from './user-dropdown/UserDropdown';
 
 import './TopBar.css';
+import { RootStore } from '../../stores';
 
-export const TopBar = observer(({}) => {
+export const TopBar = observer(({ rootStore }: { rootStore: RootStore }) => {
     
 	return (
 		<header className="container-fluid m-0 p-0">
@@ -22,7 +23,7 @@ export const TopBar = observer(({}) => {
 				<Searchbox />
 
 				<div className="col-2">
-					<UserDropdown />
+					<UserDropdown authStore={rootStore.authStore} />
 				</div>
 
 			</nav>

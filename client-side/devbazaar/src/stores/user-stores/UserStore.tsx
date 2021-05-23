@@ -50,6 +50,7 @@ export class UserStore
 
 		if (localStorage.getItem('token'))
 		{
+            this.rootStore.UiState.isLoggedIn = true;
 			this.fetchUserData(localStorage.getItem('token') as string);
 		}
     }

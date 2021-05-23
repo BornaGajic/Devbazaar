@@ -1,4 +1,6 @@
+import { runInAction } from 'mobx';
 import { RootStore } from '..';
+import { IBusinessPage } from '../../common';
 
 import { IUser } from '../../models/contracts';
 import { IAuthService } from '../../services/contracts';
@@ -34,7 +36,11 @@ export class AuthStore
 
         localStorage.setItem('token', this.token);
 
-        await this.rootStore.userStore.fetchUserData(this.token);
+        this.rootStore.businessPageStore.loadNextBatch();
+
+        runInAction(() => this.rootStore.UiState.isLoggedIn = true);
+
+        await this.rootStore.userStore.fetchUserData(this.token);        
     }
 
     /**
@@ -64,6 +70,7 @@ export class AuthStore
     {
         return new Promise (() => {
             localStorage.removeItem('token');
+            this.rootStore.UiState.isLoggedIn = false;
 
             window.location.reload();
         })

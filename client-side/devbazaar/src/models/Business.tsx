@@ -14,6 +14,9 @@ export class Business implements IBusiness, IRole
 
     id?: string;
 
+    username?: string;
+    email?: string;
+
     description: string = '';
     about?: string;
     website?: string;
@@ -128,5 +131,7 @@ export class Business implements IBusiness, IRole
         this.postalCode = data.postalCode ?? this.postalCode;
         this.available = data.available ?? this.available;
         this.popularity = data.popularity ?? this.popularity;
+        this.username = data.username ?? this.username;
+        this.email = data.email ?? this.email;
     }
 }

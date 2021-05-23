@@ -1,15 +1,25 @@
 import { observer } from "mobx-react";
+import { useStores } from "../../hooks/useStores";
+
+import Login from '../auth/Login';
+
 import Main from "../main/Main";
-import Sidebar from "../main/sidebar/SideBar";
+import Sidebar from "../sidebar/SideBar";
 import { TopBar } from "../top-bar";
 
 const Body = observer(() => {
 
-    return (
+    let store = useStores();
+
+    let firstPage = store.UiState.isLoggedIn ? (
         <div id="wrapper">
-            <TopBar />
-            <Main />
+            <TopBar rootStore={store} />
+            <Main rootStore={store} />
         </div>
+    ) : <Login authStore={store.authStore} userStore={store.userStore} />;
+
+    return (
+        firstPage
     );
 });
 

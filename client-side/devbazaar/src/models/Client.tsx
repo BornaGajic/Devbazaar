@@ -18,6 +18,7 @@ export class Client implements IClient, IRole
 
     username?: string;
     email?: string;
+    
     about?: string;
     website?: string;
     country?: string;
