@@ -1,6 +1,6 @@
 @media (min-width: 1200px)
 {
-  #main .card
+  #main #browseCardsPage .card
   {
     width: 18vw;
   }

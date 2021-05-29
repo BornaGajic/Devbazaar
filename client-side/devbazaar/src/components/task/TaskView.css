@@ -1,0 +1,124 @@
+
+button:hover,
+button:focus {
+	text-decoration: none!important;
+	outline: none!important;
+	-webkit-box-shadow: none!important;
+	box-shadow: none!important
+}
+
+
+.ftco-section {
+	padding: 7em 0
+}
+
+.ftco-no-pt {
+	padding-top: 0
+}
+
+.ftco-no-pb {
+	padding-bottom: 0
+}
+
+.heading-section {
+	font-size: 28px;
+	color: #000
+}
+
+.img {
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: center center
+}
+
+.myaccordion {
+	margin: 0 auto;
+	-webkit-box-shadow: 0 10px 29px -16px rgba(0, 0, 0, .12);
+	-moz-box-shadow: 0 10px 29px -16px rgba(0, 0, 0, .12);
+	box-shadow: 0 10px 29px -16px rgba(0, 0, 0, .12);
+	background: #fff;
+	border-radius: 5px
+}
+
+.myaccordion .card,
+.myaccordion .card:last-child .card-header {
+	border: none;
+	background: transparent
+}
+
+.myaccordion .card-header {
+	border-bottom-color: #e6e6e6;
+	background: transparent;
+	text-align: left
+}
+
+.myaccordion .bi {
+	font-size: 24px
+}
+
+.myaccordion .btn {
+	width: 100%;
+	font-weight: normal;
+	color: #000;
+	padding: 0;
+	text-transform: capitalize;
+	letter-spacing: 0;
+	font-size: 20px
+}
+
+.myaccordion .btn-link:hover,
+.myaccordion .btn-link:focus {
+	text-decoration: none
+}
+
+.card-body {
+	background: rgba(0, 0, 0, .02);	
+}
+
+@media (min-width: 576px) {
+	#accordionContainer
+	{
+		margin-left: 15%;
+	}
+}
+
+.card-footer button:hover
+{
+	color: white !important;
+}
+
+
+
+.btn-circle.btn-xl {
+    width: 60px;
+    height: 60px;
+    padding: 10px 16px;
+    border-radius: 35px;
+    font-size: 24px;
+    line-height: 1.33;
+}
+
+.btn-circle {
+    width: 30px;
+    height: 30px;
+    padding: 6px 0px;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.42857;
+}
+
+.dropdown-item
+{
+	cursor: pointer;
+}
+
+.dropdown-toggle::after {
+    display:none !important;
+}
+
+.update-task:hover
+{
+	cursor: pointer;
+	color: green;
+}

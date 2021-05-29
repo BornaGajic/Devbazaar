@@ -10,6 +10,7 @@ export class BusinessCardPageStore
 { 
     service: IServices;
     
+    // page_number : page_content
     businessCards_: Map<number, Business[]> = new Map<number, Business[]>()
 
     constructor (public rootStore: RootStore, service: IServices)
