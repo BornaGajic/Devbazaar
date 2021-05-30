@@ -10,8 +10,6 @@ export class TaskPageStore
 {
     service: IServices;
 
-    tasks: Task[] = [];
-
     tasks_: Map<number, Task[]> = new Map<number, Task[]>();
 
     constructor (public rootStore: RootStore, service: IServices)
@@ -29,8 +27,8 @@ export class TaskPageStore
     async loadNextBatch (): Promise<void>
     {
         Promise.all([
-            this.fetchTasksPage({ PageNumber: 1 }),
-            this.fetchTasksPage({ PageNumber: 2 }),
+            await this.fetchTasksPage({ PageNumber: 1 }),
+            await this.fetchTasksPage({ PageNumber: 2 }),
         ]);
     }
 
@@ -49,7 +47,7 @@ export class TaskPageStore
                 nTask.id = item.id;
                 nTask.data = item;
 
-                this.tasks_.get(pageData.PageNumber)?.push(nTask);
+                this.tasks_.get(pageData.PageNumber)!.push(nTask);
             });
         });
     }

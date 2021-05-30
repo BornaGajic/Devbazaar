@@ -9,6 +9,8 @@ const BrowseCardsPage = observer(({ rootStore } : { rootStore: RootStore }) => {
 
     let [clickedCardId, setClickedCardId] = useState('');
 
+    let maxPages = rootStore.businessPageStore.businessCards_.size;
+
     return (
         <div id="browseCardsPage">
             <CardList 
@@ -24,7 +26,7 @@ const BrowseCardsPage = observer(({ rootStore } : { rootStore: RootStore }) => {
             />
 
             <div className="" style={{marginRight: "5%"}}>
-				<PageNavigation UiState={rootStore.UiState} />
+				<PageNavigation maxPages={maxPages} />
 			</div>
         </div>
     );

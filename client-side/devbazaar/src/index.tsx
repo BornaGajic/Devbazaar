@@ -1,5 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
+
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 
@@ -16,11 +18,18 @@ configure({
 });
 
 ReactDOM.render(
-  <React.StrictMode>
-    <StoreProvider>
-      <App />
-    </StoreProvider>
-  </React.StrictMode>,
+  <BrowserRouter
+    basename='/Devbazaar'
+    forceRefresh={false}
+
+  >
+    <React.StrictMode>
+      <StoreProvider>
+        <App />
+      </StoreProvider>
+    </React.StrictMode>
+  </BrowserRouter>,
+
   document.getElementById('root')
 );
 

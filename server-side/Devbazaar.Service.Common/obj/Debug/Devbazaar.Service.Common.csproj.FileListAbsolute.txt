@@ -73,8 +73,8 @@ D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Service.Common\bin\Debug\Sys
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Service.Common\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Service.Common\bin\Debug\System.Threading.Tasks.Extensions.xml
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Service.Common\bin\Debug\EntityFramework.xml
-D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Service.Common\obj\Debug\Devbazaar.Service.Common.csprojAssemblyReference.cache
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Service.Common\obj\Debug\Devbazaar.Service.Common.csproj.CoreCompileInputs.cache
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Service.Common\obj\Debug\Devbazaar.Service.Common.csproj.CopyComplete
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Service.Common\obj\Debug\Devbazaar.Service.Common.dll
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Service.Common\obj\Debug\Devbazaar.Service.Common.pdb
+D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Service.Common\obj\Debug\Devbazaar.Service.Common.csproj.AssemblyReference.cache

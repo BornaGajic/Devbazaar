@@ -115,8 +115,8 @@ D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Service\bin\Debug\System.Mem
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Service\bin\Debug\System.Numerics.Vectors.xml
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Service\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Service\bin\Debug\System.Threading.Tasks.Extensions.xml
-D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Service\obj\Debug\Devbazaar.Service.csprojAssemblyReference.cache
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Service\obj\Debug\Devbazaar.Service.csproj.CoreCompileInputs.cache
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Service\obj\Debug\Devbazaar.Service.csproj.CopyComplete
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Service\obj\Debug\Devbazaar.Service.dll
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Service\obj\Debug\Devbazaar.Service.pdb
+D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Service\obj\Debug\Devbazaar.Service.csproj.AssemblyReference.cache

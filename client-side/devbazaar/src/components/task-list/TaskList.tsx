@@ -1,5 +1,7 @@
+import { toJS } from "mobx";
 import { observer } from "mobx-react";
 import React, { useState } from "react";
+import { Task } from "../../models";
 
 import { RootStore } from "../../stores";
 import { TaskPageStore } from "../../stores/page-stores";
@@ -20,6 +22,9 @@ const TaskList = observer(({ taskPageStore, UiState } : TaskListProps) => {
 
     // local observable (ili state?) currentPageNumber
     //let tasks = taskPageStore.tasks_.get()
+    let tasks = taskPageStore?.tasks_.get(1) as Task[];
+
+    console.log(toJS(tasks));
 
     return (
         <div id="accordionContainer" className="row w-100 justify-content-start">
@@ -30,7 +35,7 @@ const TaskList = observer(({ taskPageStore, UiState } : TaskListProps) => {
                         <p className="lead">Far far away, behind the word mountains, far from the countries Vokalia</p>
                     </div>
                     {
-                        //[...Array(UiState.itemsPerPage)].map(idx => <TaskView />)
+                        [...Array(tasks.length).keys()].map(idx => <TaskView task={tasks[idx]} />)
                     }
                 </div>
             </div>

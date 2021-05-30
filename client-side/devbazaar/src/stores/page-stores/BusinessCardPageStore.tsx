@@ -58,10 +58,8 @@ export class BusinessCardPageStore
                 bCard.id = item.id;
                 bCard.data = item;
 
-                this.businessCards_.get(pageData.PageNumber)?.push(bCard);
+                this.businessCards_.get(pageData.PageNumber)!.push(bCard);
             });
-            
-            this.rootStore.UiState.maxBusinessCardPages++;
         });
     }
 }

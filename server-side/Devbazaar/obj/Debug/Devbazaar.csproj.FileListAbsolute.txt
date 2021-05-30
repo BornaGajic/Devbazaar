@@ -323,8 +323,8 @@ D:\GitHubRepository\Devbazaar\server-side\Devbazaar\bin\System.Web.WebPages.Depl
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar\bin\System.Web.WebPages.Razor.xml
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar\bin\Antlr3.Runtime.pdb
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
-D:\GitHubRepository\Devbazaar\server-side\Devbazaar\obj\Debug\Devbazaar.csprojAssemblyReference.cache
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar\obj\Debug\Devbazaar.csproj.CoreCompileInputs.cache
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar\obj\Debug\Devbazaar.csproj.CopyComplete
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar\obj\Debug\Devbazaar.dll
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar\obj\Debug\Devbazaar.pdb
+D:\GitHubRepository\Devbazaar\server-side\Devbazaar\obj\Debug\Devbazaar.csproj.AssemblyReference.cache

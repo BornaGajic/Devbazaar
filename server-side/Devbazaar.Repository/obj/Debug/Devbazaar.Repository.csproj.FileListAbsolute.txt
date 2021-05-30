@@ -83,8 +83,8 @@ D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Repository\bin\Debug\System.
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Repository\bin\Debug\System.Threading.Tasks.Extensions.xml
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Repository\bin\Debug\Devbazaar.Model.Common.pdb
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Repository\bin\Debug\Devbazaar.Model.Common.dll.config
-D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Repository\obj\Debug\Devbazaar.Repository.csprojAssemblyReference.cache
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Repository\obj\Debug\Devbazaar.Repository.csproj.CoreCompileInputs.cache
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Repository\obj\Debug\Devbazaar.Repository.csproj.CopyComplete
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Repository\obj\Debug\Devbazaar.Repository.dll
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Repository\obj\Debug\Devbazaar.Repository.pdb
+D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Repository\obj\Debug\Devbazaar.Repository.csproj.AssemblyReference.cache

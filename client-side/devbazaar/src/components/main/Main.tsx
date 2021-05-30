@@ -12,6 +12,7 @@ import { RootStore } from "../../stores";
 import { Business } from "../../models";
 import BrowseCardsPage from "../../pages/BrowseCardsPage";
 import BrowseTaskPage from "../../pages/BrowseTaskPage";
+import { Route, Switch } from "react-router";
 
 const Main = observer(({ rootStore }: {rootStore: RootStore}) => {
 
@@ -29,7 +30,20 @@ const Main = observer(({ rootStore }: {rootStore: RootStore}) => {
 	(
 		<div>
 			<div id="mainSection">
-				<BrowseCardsPage  rootStore={rootStore} />
+				<Switch>
+					<Route exact path="/">
+						<BrowseCardsPage rootStore={rootStore} />
+					</Route>
+					<Route exact path="/Home">
+						<BrowseCardsPage rootStore={rootStore} />
+					</Route>
+					<Route exact path="/Businesses">
+						<BrowseCardsPage rootStore={rootStore} />
+					</Route>
+					<Route exact path="/Tasks">
+						<BrowseTaskPage rootStore={rootStore} />
+					</Route>
+				</Switch>
 			</div>
 		</div>
 	);

@@ -37,6 +37,7 @@ export class AuthStore
         localStorage.setItem('token', this.token);
 
         this.rootStore.businessPageStore.loadNextBatch();
+        this.rootStore.taskPageStore.loadNextBatch();
 
         runInAction(() => this.rootStore.UiState.isLoggedIn = true);
 

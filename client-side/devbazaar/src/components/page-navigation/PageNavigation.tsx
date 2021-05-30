@@ -1,7 +1,13 @@
 import { observer } from "mobx-react";
+import { Link, NavLink } from "react-router-dom";
 import { UiState } from "../../stores/ui-store/UiState";
 
-const PageNavigation = observer(({ UiState }: { UiState: UiState }) => {
+interface PageNavigationProps
+{
+    maxPages: number;
+}
+
+const PageNavigation = observer(({ maxPages }: PageNavigationProps) => {
 
     return (
         <nav className="d-flex justify-content-center" aria-label="Page navigation" style={{marginLeft: "5%"}}>
@@ -10,9 +16,13 @@ const PageNavigation = observer(({ UiState }: { UiState: UiState }) => {
                     <a className="page-link" href="#" tabIndex={-1} aria-disabled="true">Previous</a>
                 </li>
                 {
-                    [...Array(UiState.maxBusinessCardPages).keys()].map(pageNumber => {
+                    [...Array(maxPages).keys()].map(pageNumber => {
                         return (
-                            <li className="page-item"><a className="page-link" href="#">{pageNumber + 1}</a></li>            
+                            <li className="page-item">
+                                <NavLink to="/" className="page-link">
+                                    {pageNumber + 1}
+                                </NavLink>
+                            </li>            
                         );
                     })
                 }

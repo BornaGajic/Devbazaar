@@ -10,9 +10,9 @@ D:\GitHubRepository\Bits-and-pieces\Web\Devbazaar\Devbazaar.Utility\obj\Debug\ne
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Utility\bin\Debug\netstandard2.0\Devbazaar.Utility.deps.json
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Utility\bin\Debug\netstandard2.0\Devbazaar.Utility.dll
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Utility\bin\Debug\netstandard2.0\Devbazaar.Utility.pdb
-D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Utility\obj\Debug\netstandard2.0\Devbazaar.Utility.csprojAssemblyReference.cache
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Utility\obj\Debug\netstandard2.0\Devbazaar.Utility.AssemblyInfoInputs.cache
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Utility\obj\Debug\netstandard2.0\Devbazaar.Utility.AssemblyInfo.cs
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Utility\obj\Debug\netstandard2.0\Devbazaar.Utility.csproj.CoreCompileInputs.cache
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Utility\obj\Debug\netstandard2.0\Devbazaar.Utility.dll
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Utility\obj\Debug\netstandard2.0\Devbazaar.Utility.pdb
+D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Utility\obj\Debug\netstandard2.0\Devbazaar.Utility.csproj.AssemblyReference.cache
