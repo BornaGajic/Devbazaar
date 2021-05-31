@@ -54,23 +54,24 @@ namespace Devbazaar.Service.UserServices
 
 				await UnitOfWork.CommitAsync<UserEntity>();
 
-				return await Task.Run(() => { return GenerateToken(user, typeOfUser); });
+				return GenerateToken(user, typeOfUser);
 			}
 			else
 			{
-				return "User already exists";
+				throw new Exception("User already exists");
 			}
 		}
 
 		// returns token if User exists, else returns empty string
 		public async Task<string> LoginAsync (IUser user)
 		{
+			
 			UserEntity thisUser = await UnitOfWork.UserRepository.CheckExistence(user.Email, EncodePassword(user.Password));
 			TypeOfUser role = TypeOfUser.Business;
 
 			if (thisUser == null)
 			{
-				return null;
+				throw new Exception("Invalid credentials");
 			}
 			else if (await UnitOfWork.BusinessRepository.GetByIdAsync(thisUser.Id) == null)
 			{
@@ -84,17 +85,11 @@ namespace Devbazaar.Service.UserServices
 			return GenerateToken(user, role);
 		}
 
-		public async Task<bool> UpdateAsync (Dictionary<string, object> changedValues, Guid userId)
+		public async Task UpdateAsync (Dictionary<string, object> changedValues, Guid userId)
 		{
-			var userEntity = await (from u in UnitOfWork.UserRepository.TableAsNoTracking where u.Id == userId select u).SingleAsync();	
+			var userEntity = await (from u in UnitOfWork.UserRepository.Table where u.Id == userId select u).SingleAsync();	
 
-			foreach (var prop in typeof(UserEntity).GetProperties())
-			{
-				if (changedValues.ContainsKey(prop.Name))
-				{
-					prop.SetValue(userEntity, changedValues[prop.Name]);
-				}
-			}
+			UpdateEntityFromDict(userEntity, changedValues);
 			
 			try
 			{
@@ -103,23 +98,24 @@ namespace Devbazaar.Service.UserServices
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine(e.Message);
-
-				return false;
+				throw e;
 			}
-			
-			return true;
 		}
 
-		public async Task<bool> DeleteAsync (IUser user)
+		public async Task DeleteAsync (IUser user)
 		{
 			var userEntity = Mapper.Map<UserEntity>(user);
 
-			await UnitOfWork.DeleteAsync(userEntity);
+			try
+			{
+				await UnitOfWork.DeleteAsync(userEntity);
 
-			await UnitOfWork.CommitAsync<UserEntity>();
-
-			return true;
+				await UnitOfWork.CommitAsync<UserEntity>();
+			}
+			catch (Exception e)
+			{
+				throw e;
+			}
 		}
 
 		private static string GenerateToken (IUser user, TypeOfUser role, int expireMinutes = 30)

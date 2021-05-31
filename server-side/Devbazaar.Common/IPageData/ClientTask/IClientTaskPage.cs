@@ -6,15 +6,13 @@ using System.Threading.Tasks;
 
 namespace Devbazaar.Common.IPageData.ClientTask
 {
-	public interface IClientTaskReturnType
+	interface IClientTaskPage
 	{
-		string Description { get; set; }
+		// filter
 		int LowPrice { get; set; }
 		int HighPrice { get; set; }
-		DateTime DateAdded { get; set; }
-		string Username { get; set; }
-		string Email { get; set; }
-		Guid? ClientId { get; set; }
-		Guid? Id { get; set; }
+
+		// sort
+		bool? OldestDate { get; set; }
 	}
 }

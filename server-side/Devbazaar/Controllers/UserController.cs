@@ -17,114 +17,98 @@ using IUser = Devbazaar.Model.Common.IUser.IUser;
 namespace Devbazaar.Controllers
 {
 	[RoutePrefix("Devbazaar/User")]
-    public class UserController : ApiController
-    {
-        protected IUserService UserService { get; set; }
-        protected IMapper Mapper { get; set; }
+	public class UserController : ApiController
+	{
+		protected IUserService UserService { get; set; }
+		protected IMapper Mapper { get; set; }
 
-        public UserController (IUserService userService, IMapper mapper)
-        {
-             UserService = userService;
-             Mapper = mapper;
-        }
+		public UserController (IUserService userService, IMapper mapper)
+		{
+			 UserService = userService;
+			 Mapper = mapper;
+		}
 
-        [AllowAnonymous]
-        [HttpPost]
-        [Route("Register")]
-        public async Task<HttpResponseMessage> CreateAsync ([FromBody] CreateUserRest newUser, [FromUri] TypeOfUser tou)
-        {
-            var user = Mapper.Map<IUser>(newUser);
+		[AllowAnonymous]
+		[HttpPost]
+		[Route("Register")]
+		public async Task<HttpResponseMessage> CreateAsync ([FromBody] CreateUserRest newUser, [FromUri] TypeOfUser tou)
+		{
+			var user = Mapper.Map<IUser>(newUser);
 
-            string token;
-            try
-            {
-                token = await UserService.CreateAsync(user, tou);
+			try
+			{
+				string token = await UserService.CreateAsync(user, tou);
 
-                if (token == "User already exists")
-                {
-                    return Request.CreateResponse(HttpStatusCode.Conflict, token);
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
+				return Request.CreateResponse(HttpStatusCode.OK, token);
+			}
+			catch (Exception e)
+			{
+				if (e.Message == "User already exists")
+				{
+					return Request.CreateErrorResponse(HttpStatusCode.Conflict, e);	
+				}
 
-                return new HttpResponseMessage(HttpStatusCode.BadRequest);
-            } 
+				return Request.CreateErrorResponse(HttpStatusCode.BadRequest, e);
+			} 
+		}
 
-            return Request.CreateResponse(HttpStatusCode.OK, token);
-        }
+		[AllowAnonymous]
+		[HttpPost]
+		[Route("Login")]
+		public async Task<HttpResponseMessage> LoginAsync ([FromBody] LoginRest loginData)
+		{
+			var user = Mapper.Map<IUser>(loginData);
 
-        [AllowAnonymous]
-        [HttpPost]
-        [Route("Login")]
-        public async Task<HttpResponseMessage> LoginAsync ([FromBody] LoginRest loginData)
-        {
-            var user = Mapper.Map<IUser>(loginData);
+			try
+			{
+				var token = await UserService.LoginAsync(user);
 
-            try
-            {
-                var token = await UserService.LoginAsync(user);
+				return Request.CreateResponse(HttpStatusCode.OK, token);
+													
+			}
+			catch (Exception e)
+			{
+				return Request.CreateErrorResponse(HttpStatusCode.BadRequest, e);
+			}
+		}
 
-                return string.IsNullOrEmpty(token)? Request.CreateResponse(HttpStatusCode.NotFound) : 
-                                                    Request.CreateResponse(HttpStatusCode.OK, token);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                
-                return Request.CreateResponse(HttpStatusCode.BadRequest, e.Message);
-            }
-        }
+		[Authorize]
+		[HttpPut]
+		[Route("Update")]
+		public async Task<HttpResponseMessage> UpdateAsync ([FromBody] UpdateUserRest updateData)
+		{
+			var updateUser = GenerateUpdateDict(updateData);
+			var userId = Guid.Parse(User.Identity.GetUserId());
 
-        [Authorize]
-        [HttpPut]
-        [Route("Update")]
-        public async Task<HttpResponseMessage> UpdateAsync ([FromBody] UpdateUserRest updateData)
-        {
-            var changedValues = new Dictionary<string, object>();
-            foreach (var property in typeof(UpdateUserRest).GetProperties())
-            {
-                var value = property.GetValue(updateData);
-                if (value != null)
-                {
-                    changedValues[property.Name] = property.GetValue(updateData);
-                }
-            }
-            var X = User.Identity.GetUserId();
-            var userId = Guid.Parse(X);
+			try
+			{
+				await UserService.UpdateAsync(updateUser, userId);
 
-            var result = await UserService.UpdateAsync(changedValues, userId);
+				return Request.CreateResponse(HttpStatusCode.OK);
+			}
+			catch (Exception e)
+			{
+				return Request.CreateErrorResponse(HttpStatusCode.BadRequest, e);
+			}
+		}
 
-            if (result != false)
-            {
-                return Request.CreateResponse(HttpStatusCode.OK);
-            }
-            else
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest);
-            }
-        }
+		[Authorize]
+		[HttpDelete]
+		[Route("Delete")]
+		public async Task<HttpResponseMessage> DeleteAsync ([FromBody] DeleteUserRest deleteUser)
+		{
+			var user = Mapper.Map<IUser>(deleteUser);
 
-        [Authorize]
-        [HttpDelete]
-        [Route("Delete")]
-        public async Task<HttpResponseMessage> DeleteAsync ([FromBody] DeleteUserRest deleteUser)
-        {
-            var user = Mapper.Map<IUser>(deleteUser);
+			try
+			{
+				await UserService.DeleteAsync(user);
 
-            try
-            {
-                await UserService.DeleteAsync(user);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-
-                return Request.CreateResponse(HttpStatusCode.BadRequest, e.Message);
-            }
-
-            return new HttpResponseMessage(HttpStatusCode.OK);
-        }
-    }
+				return Request.CreateResponse(HttpStatusCode.OK);
+			}
+			catch (Exception e)
+			{
+				return Request.CreateErrorResponse(HttpStatusCode.BadRequest, e);
+			}
+		}
+	}
 }

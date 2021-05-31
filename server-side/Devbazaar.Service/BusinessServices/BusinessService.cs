@@ -10,12 +10,13 @@ using AutoMapper;
 using Devbazaar.DAL.EntityModels;
 using System.Data.Entity;
 using Devbazaar.Common.PageData.Business;
-using Devbazaar.Common.IPageData.Business;
-using Devbazaar.Common.IPageData.ClientTask;
+using Devbazaar.Common.IDTO.ClientTask;
 using Devbazaar.Common.PageData;
 using Devbazaar.Common.PageData.ClientTask;
 using Devbazaar.Common.DTO.Business;
 using static Devbazaar.Utility.Utility;
+using Devbazaar.Common.IDTO.Business;
+using Devbazaar.Common.DTO.ClientTask;
 
 namespace Devbazaar.Service.BusinessServices
 {
@@ -34,7 +35,7 @@ namespace Devbazaar.Service.BusinessServices
 		{
 			var businessEntity = await UnitOfWork.BusinessRepository.GetByIdAsync(id);	
 
-			BusinessDto businessDto = new BusinessDto () { 
+			IBusinessDto businessDto = new BusinessDto () { 
 				Id = businessEntity.Id,
 				Description = businessEntity.Description,
 				About = businessEntity.About,
@@ -50,7 +51,7 @@ namespace Devbazaar.Service.BusinessServices
 			return businessDto;
 		}
 
-		public async Task<int> CreateAsync (IBusiness newBusiness, List<ICategory> categories, Guid userId)
+		public async Task CreateAsync (IBusiness newBusiness, List<ICategory> categories, Guid userId)
 		{
 			var businessEntity = Mapper.Map<BusinessEntity>(newBusiness);
 			businessEntity.Id = userId;
@@ -72,35 +73,29 @@ namespace Devbazaar.Service.BusinessServices
 			try
 			{
 				await UnitOfWork.AddAsync<BusinessEntity>(businessEntity);
-
 				await UnitOfWork.CommitAsync<BusinessEntity>();
-
-				return await Task.FromResult(1); 
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine(e.Message);
-
-				return await Task.FromResult(0);
+				throw e;
 			}
 		}
 
-		public async Task<int> UpdateAsync (Dictionary<string, object> updatedBusiness, Guid businessId)
+		public async Task UpdateAsync (Dictionary<string, object> updatedBusiness, Guid businessId)
 		{
 			var entity = await (from business in UnitOfWork.BusinessRepository.TableAsNoTracking where business.Id == businessId select business).SingleAsync();
 			
-			foreach (var prop in typeof(BusinessEntity).GetProperties())
-			{
-				if (updatedBusiness.ContainsKey(prop.Name))
-				{
-					prop.SetValue(entity, updatedBusiness[prop.Name]);
-				}
-			}
+			UpdateEntityFromDict(entity, updatedBusiness);
 			
-			await UnitOfWork.UpdateAsync<BusinessEntity>(entity);
-			await UnitOfWork.CommitAsync<BusinessEntity>();
-
-			return await Task.FromResult(1);
+			try
+			{
+				await UnitOfWork.UpdateAsync<BusinessEntity>(entity);
+				await UnitOfWork.CommitAsync<BusinessEntity>();
+			}
+			catch (Exception e)
+			{
+				throw e;
+			}
 		}
 
 		public async Task AddCategoryAsync (Guid businessId, Guid categoryId)
@@ -117,33 +112,33 @@ namespace Devbazaar.Service.BusinessServices
 			businessEntity.Categories.Remove(await UnitOfWork.CategoryRepository.GetByIdAsync(categoryId));
 		}
 
-		public async Task<IClientTaskReturnType> AcquireClientTaskAsync (Guid businessId, Guid clientTaskId)
+		public async Task<IClientTaskDto> AcquireClientTaskAsync (Guid businessId, Guid clientTaskId)
 		{
-			TaskEntity entity;
+			var businessEntity = await UnitOfWork.BusinessRepository.GetByIdAsync(businessId);
+			var clientTaskEntity = await UnitOfWork.ClientTaskRepository.GetByIdAsync(clientTaskId);
+
 			try
 			{
-				entity = await UnitOfWork.ClientTaskRepository.UpdateAsync(new Dictionary<string, object>(){ {"BusinessId", businessId} }, clientTaskId);
+				businessEntity.Tasks.Add(clientTaskEntity);
 
-				await UnitOfWork.UpdateAsync<TaskEntity>(entity);
-				await UnitOfWork.CommitAsync<TaskEntity>();
+				await UnitOfWork.UpdateAsync(businessEntity);
+				await UnitOfWork.CommitAsync<BusinessEntity>();
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine(e.Message);
-
-				return null;
+				throw e;
 			}
 
-			var clientTask = new ClientTaskReturnType ()
+			IClientTaskDto clientTask = new ClientTaskDto ()
 			{
-				Description = entity.Description,
-				LowPrice = entity.LowPrice,
-				HighPrice = entity.HighPrice,
-				Username = entity.Client.User.Username,
-				Email = entity.Client.User.Email,
-				DateAdded = entity.DateAdded,
-				ClientId = entity.ClientId,
-				Id = entity.Id
+				Description = clientTaskEntity.Description,
+				LowPrice = clientTaskEntity.LowPrice,
+				HighPrice = clientTaskEntity.HighPrice,
+				Username = clientTaskEntity.Client.User.Username,
+				Email = clientTaskEntity.Client.User.Email,
+				DateAdded = clientTaskEntity.DateAdded,
+				ClientId = clientTaskEntity.ClientId,
+				Id = clientTaskEntity.Id
 			};
 
 			return clientTask;
@@ -156,16 +151,30 @@ namespace Devbazaar.Service.BusinessServices
 
 			business.Tasks.Remove(clientTask);
 
-			await UnitOfWork.UpdateAsync(business);
-			await UnitOfWork.CommitAsync<BusinessEntity>();
+			try
+			{
+				await UnitOfWork.UpdateAsync(business);
+				await UnitOfWork.CommitAsync<BusinessEntity>();
+			}
+			catch (Exception e)
+			{
+				throw e;
+			}
 		}
 
-		public async Task<List<IClientTaskReturnType>> PinnedClientTasksAsync (Guid businessId)
+		public async Task<List<ICategory>> GetCategories ()
 		{
-			var taskEnList = await UnitOfWork.ClientTaskRepository.GetPinnedTasksAsync(businessId);
-			var pinnedTasks = Mapper.Map<List<IClientTaskReturnType>>(taskEnList);
+			var categoriesEntity = await UnitOfWork.CategoryRepository.GetCategories();
 
-			var userTable = UnitOfWork.UserRepository.Table;
+			return Mapper.Map<List<ICategory>>(categoriesEntity);
+		}
+
+		public async Task<List<IClientTaskDto>> PinnedClientTasksAsync (Guid businessId)
+		{
+			var businessEntity = await UnitOfWork.BusinessRepository.GetByIdAsync(businessId);
+			var pinnedTasks = Mapper.Map<List<IClientTaskDto>>(businessEntity.Tasks);
+
+			var userTable = UnitOfWork.UserRepository.TableAsNoTracking;
 
 			foreach (var clientTask in pinnedTasks)
 			{
@@ -178,11 +187,11 @@ namespace Devbazaar.Service.BusinessServices
 			return pinnedTasks;
 		}
 
-		public async Task<List<IClientTaskReturnType>> PaginatedAcquiredClientTasksAsync (ClientTaskPage pageData, Guid businessId)
+		public async Task<List<IClientTaskDto>> PaginatedAcquiredClientTasksAsync (ClientTaskPage pageData, Guid businessId)
 		{
 			var clientTaskReturnTypes = await UnitOfWork.ClientTaskRepository.PaginatedGetAsync(pageData, null, businessId);
 
-			var userTable = UnitOfWork.UserRepository.Table;
+			var userTable = UnitOfWork.UserRepository.TableAsNoTracking;
 
 			foreach (var clientTaskReturnType in clientTaskReturnTypes)
 			{
@@ -197,13 +206,13 @@ namespace Devbazaar.Service.BusinessServices
 
 		public async Task<List<IBusinessDto>> PaginatedGetAsync (BusinessPage pageData, Guid? clientId = null)
 		{
-			var businessTable = UnitOfWork.BusinessRepository.Table;
+			var businessTable = UnitOfWork.BusinessRepository.TableAsNoTracking;
 
 			var businessList = await ApplyPageSeasoningAsync(pageData);
 
 			List<BusinessEntity> clientFavourites = null;
 
-			// users favourite businesses
+			// users favorite businesses
 			if (clientId != null)
 			{
 				var clientEntity = await (from client in UnitOfWork.ClientRepository.Table where client.Id == clientId select client).SingleAsync();
@@ -232,10 +241,14 @@ namespace Devbazaar.Service.BusinessServices
 			return Mapper.Map<List<IBusinessDto>>(businessList);
 		}
 
+		/// <summary>
+		/// Applies filtering and sorting
+		/// </summary>
+		/// <returns>Maybe filtered and surely sorted</returns>
 		private async Task<List<BusinessDto>> ApplyPageSeasoningAsync (BusinessPage pageData)
 		{
-			var userTable = UnitOfWork.UserRepository.Table;
-			var businessTable = UnitOfWork.BusinessRepository.Table;
+			var userTable = UnitOfWork.UserRepository.TableAsNoTracking;
+			var businessTable = UnitOfWork.BusinessRepository.TableAsNoTracking;
 
 			int pageItemCount = Utility.Utility.PageItemLimit;
 			
@@ -249,7 +262,8 @@ namespace Devbazaar.Service.BusinessServices
 						where 
 							DbFunctions.Like(user.Username, likeUsername) &&
 							DbFunctions.Like(business.Country, likeCountry) &&
-							DbFunctions.Like(business.City, likeCity)
+							DbFunctions.Like(business.City, likeCity) &&
+							business.Available == true
 						select new BusinessDto {
 							Id = business.Id,
 							Description = business.Description,
@@ -264,8 +278,6 @@ namespace Devbazaar.Service.BusinessServices
 							Popularity = business.Clients.Count
 						});
 
-			//Utility.Utility.TotalBusinessCount = await query.CountAsync();
-
 			if (pageData.FavouriteCount == true)
 			{
 				query = query.OrderByDescending(bDto => bDto.Popularity).ThenByDescending(bDto => bDto.Username);
@@ -278,13 +290,6 @@ namespace Devbazaar.Service.BusinessServices
 			var pageResult = await query.Skip((pageData.PageNumber - 1) * pageItemCount).Take(pageItemCount).ToListAsync();			
 			
 			return pageResult;
-		}
-
-		public async Task<List<ICategory>> GetCategories ()
-		{
-			var categoriesEntity = await UnitOfWork.CategoryRepository.GetCategories();
-
-			return Mapper.Map<List<ICategory>>(categoriesEntity);
 		}
 	}
 }

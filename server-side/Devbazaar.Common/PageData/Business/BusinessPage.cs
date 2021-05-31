@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Devbazaar.Common.IPageData.Business;
 
 namespace Devbazaar.Common.PageData.Business
 {
-	public class BusinessPage : Page
+	public class BusinessPage : Page, IBusinessPage
 	{
 		// filter
 		public bool? Availability { get; set; } = null;

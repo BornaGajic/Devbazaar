@@ -156,6 +156,10 @@
     <Compile Include="Migrations\202105211722277_removed-maxlen.designer.cs">
       <DependentUpon>202105211722277_removed-maxlen.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202105310956594_TitleToTask.cs" />
+    <Compile Include="Migrations\202105310956594_TitleToTask.designer.cs">
+      <DependentUpon>202105310956594_TitleToTask.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -211,6 +215,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202105211722277_removed-maxlen.resx">
       <DependentUpon>202105211722277_removed-maxlen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202105310956594_TitleToTask.resx">
+      <DependentUpon>202105310956594_TitleToTask.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

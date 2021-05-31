@@ -10,6 +10,7 @@ namespace Devbazaar.DAL.EntityModels
 	public class TaskEntity : BaseEntity, ITaskEntity
 	{
 		public string Description { get; set; }
+		public string Title { get; set; }
 		public int LowPrice { get; set; }
 		public int HighPrice { get; set; }
 		public DateTime DateAdded { get; set; }

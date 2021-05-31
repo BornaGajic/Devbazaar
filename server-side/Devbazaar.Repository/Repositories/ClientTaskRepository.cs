@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 using Devbazaar.DAL.EntityModels;
 using Devbazaar.Repository.Common.Repositories;
 using Devbazaar.DAL.Context;
-using Devbazaar.Common.IPageData.ClientTask;
+using Devbazaar.Common.IDTO.ClientTask;
+using Devbazaar.Common.DTO.ClientTask;
 using Devbazaar.Common.PageData.ClientTask;
 
 namespace Devbazaar.Repository.Repositories
@@ -57,16 +58,16 @@ namespace Devbazaar.Repository.Repositories
 			return await query.ToListAsync();
 		}
 
-		public async Task<List<IClientTaskReturnType>> PaginatedGetAsync (ClientTaskPage pageData, Guid? clientId = null, Guid? businessId = null)
+		public async Task<List<IClientTaskDto>> PaginatedGetAsync (ClientTaskPage pageData, Guid? clientId = null, Guid? businessId = null)
 		{
 			var clientTaskEntityList = await ApplyPageSeasoning(pageData, clientId, businessId);
 
-			var clientTaskReturnTypes = new List<IClientTaskReturnType>();
+			var clientTaskReturnTypes = new List<IClientTaskDto>();
 
 			foreach (var task in clientTaskEntityList)
 			{
 				clientTaskReturnTypes.Add(
-					new ClientTaskReturnType ()
+					new ClientTaskDto ()
 					{
 						Description = task.Description,
 						LowPrice = task.LowPrice,
@@ -82,9 +83,16 @@ namespace Devbazaar.Repository.Repositories
 
 			return clientTaskReturnTypes;
 		}
+
+		/// <summary>
+		/// If both <c>cliendId</c> and <c>businessId</c> are not <c>null</c>, gets all client tasks that are favorited by some business 
+		/// </summary>
+		/// <param name="clientId">Searches for all the tasks owned by a certain client</param>
+		/// <param name="businessId">Searches for all the tasks favorited by a ceratin business</param>
+		/// <returns>Paginated filtered and sorted list</returns>
 		private async Task<List<TaskEntity>> ApplyPageSeasoning (ClientTaskPage pageData, Guid? clientId = null, Guid? businessId = null)
 		{
-			var clientTasksTable = Table;
+			var clientTasksTable = TableAsNoTracking;
 
 			var pageItemCount = Utility.Utility.PageItemLimit;
 
@@ -96,9 +104,6 @@ namespace Devbazaar.Repository.Repositories
 							  (clientId != null ? ct.ClientId == clientId : true) &&
 							  (businessId != null ? ct.BusinessId == businessId : true)
 						select ct;
-
-
-			Utility.Utility.TotalClientTaskCount = await query.CountAsync();
 
 			// sort
 			if (pageData.OldestDate.HasValue)

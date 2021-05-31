@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Devbazaar.Repository.Common;
 using Devbazaar.Service.Common.IClientServices;
@@ -10,8 +9,10 @@ using Devbazaar.DAL.EntityModels;
 using System.Data.Entity;
 using Devbazaar.Common.DTO.Business;
 using Devbazaar.Model.Common;
-using Devbazaar.Common.IPageData.Business;
 using Devbazaar.Common.DTO.Client;
+
+using static Devbazaar.Utility.Utility;
+using Devbazaar.Common.IDTO.Business;
 
 namespace Devbazaar.Service.ClientServices
 {
@@ -71,17 +72,11 @@ namespace Devbazaar.Service.ClientServices
 			return Mapper.Map<List<IClientTask>>(clientEntity.Tasks);
 		}
 
-		public async Task<bool> UpdateAsync (Dictionary<string, object> updateClient, Guid clientId)
+		public async Task UpdateAsync (Dictionary<string, object> updateClient, Guid clientId)
 		{
 			var clientEntity = await (from c in UnitOfWork.ClientRepository.TableAsNoTracking where c.Id == clientId select c).SingleAsync();
 
-			foreach (var prop in typeof(ClientEntity).GetProperties())
-			{
-				if (updateClient.ContainsKey(prop.Name))
-				{
-					prop.SetValue(clientEntity, updateClient[prop.Name]);
-				}
-			}
+			UpdateEntityFromDict(clientEntity, updateClient);
 			
 			try
 			{
@@ -90,11 +85,8 @@ namespace Devbazaar.Service.ClientServices
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine(e.Message);
-				return false;
+				throw e;
 			}
-			
-			return true;
 		}
 
 		public async Task<IBusinessDto> AddToFavourites (Guid clientId, Guid businessId)
@@ -104,7 +96,7 @@ namespace Devbazaar.Service.ClientServices
 
 			clientEntity.Businesses.Add(businessEntity);
 
-			BusinessDto businessDto = new BusinessDto () { 
+			IBusinessDto businessDto = new BusinessDto () { 
 				Id = businessEntity.Id,
 				Description = businessEntity.Description,
 				About = businessEntity.About,
@@ -121,14 +113,13 @@ namespace Devbazaar.Service.ClientServices
 			{
 				await UnitOfWork.UpdateAsync(clientEntity);
 				await UnitOfWork.CommitAsync<ClientEntity>();
+
+				return businessDto;
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine(e.Message);
-				return null;
+				throw e;
 			}
-			
-			return businessDto;
 		}
 	}
 }

@@ -142,6 +142,15 @@
             "rid": "win"
           }
         }
+      },
+      "Devbazaar.DAL/1.0.0": {
+        "type": "project",
+        "compile": {
+          "bin/placeholder/Devbazaar.DAL.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Devbazaar.DAL.dll": {}
+        }
       }
     }
   },
@@ -618,10 +627,16 @@
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
+    },
+    "Devbazaar.DAL/1.0.0": {
+      "type": "project",
+      "path": "../Devbazaar.DAL/Devbazaar.DAL.csproj",
+      "msbuildProject": "../Devbazaar.DAL/Devbazaar.DAL.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETStandard,Version=v2.0": [
+      "Devbazaar.DAL >= 1.0.0",
       "NETStandard.Library >= 2.0.3",
       "System.Configuration.ConfigurationManager >= 5.0.0"
     ]
@@ -659,7 +674,11 @@
       "frameworks": {
         "netstandard2.0": {
           "targetAlias": "netstandard2.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "D:\\GitHubRepository\\Devbazaar\\server-side\\Devbazaar.DAL\\Devbazaar.DAL.csproj": {
+              "projectPath": "D:\\GitHubRepository\\Devbazaar\\server-side\\Devbazaar.DAL\\Devbazaar.DAL.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

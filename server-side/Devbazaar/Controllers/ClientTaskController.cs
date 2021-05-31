@@ -12,96 +12,100 @@ using Devbazaar.RestModels.ClientTaskRest;
 using Devbazaar.Service.Common.IClientTaskServices;
 using Microsoft.AspNet.Identity;
 
+using static  Devbazaar.Utility.Utility;
+
 namespace Devbazaar.Controllers
 {
-    [Authorize]
+	[Authorize]
 	[RoutePrefix("Devbazaar/Task")]
-    public class ClientTaskController : ApiController
-    {
-        private IClientTaskService ClientTaskService { get; set; }
-        private IMapper Mapper { get; set; }
+	public class ClientTaskController : ApiController
+	{
+		private IClientTaskService ClientTaskService { get; set; }
+		private IMapper Mapper { get; set; }
 
-        public ClientTaskController (IMapper mapper, IClientTaskService clientTaskService)
-        {
-            Mapper = mapper;
-            ClientTaskService = clientTaskService;
-        }
+		public ClientTaskController (IMapper mapper, IClientTaskService clientTaskService)
+		{
+			Mapper = mapper;
+			ClientTaskService = clientTaskService;
+		}
 
-        [Route("Create")]
-        [HttpPost]
-        public async Task<HttpResponseMessage> CreateAsync ([FromBody] CreateClientTaskRest newTask)
-        {
-            var newClientTask = Mapper.Map<IClientTask>(newTask);
+		[Route("Create")]
+		[HttpPost]
+		public async Task<HttpResponseMessage> CreateAsync ([FromBody] CreateClientTaskRest newTask)
+		{
+			var newClientTask = Mapper.Map<IClientTask>(newTask);
 
-            newClientTask.ClientId = Guid.Parse(User.Identity.GetUserId());
-            newClientTask.DateAdded = DateTime.Now;
+			newClientTask.ClientId = Guid.Parse(User.Identity.GetUserId());
+			newClientTask.DateAdded = DateTime.Now;
 
-            var result = await ClientTaskService.CreateAsync(newClientTask);
-            if (result != null)
-            {
-                return Request.CreateResponse(HttpStatusCode.OK, result); 
-            }
-            else
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest);
-            }
-        }
+			try
+			{
+				var result = await ClientTaskService.CreateAsync(newClientTask);
 
-        [Route("Update")]
-        [HttpPut]
-        public async Task<HttpResponseMessage> UpdateAsync ([FromBody] UpdateClientTaskRest updatedTask, [FromUri] Guid taskId)
-        {
-            var item = new Dictionary<string, object>();
-            foreach (var property in typeof(UpdateClientTaskRest).GetProperties())
-            {
-                var value = property.GetValue(updatedTask);
-                if (value != null)
-                {
-                    item[property.Name] = property.GetValue(updatedTask);
-                }
-            }
+				return Request.CreateResponse(HttpStatusCode.OK, result); 
+			}
+			catch (Exception e)
+			{
+				return Request.CreateErrorResponse(HttpStatusCode.BadRequest, e);
+			}
+		}
 
-            if (await ClientTaskService.UpdateAsync(item, taskId))
-            {
-                return Request.CreateResponse(HttpStatusCode.OK);    
-            }
-            else
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest);
-            }
-        }
+		[Route("Update")]
+		[HttpPut]
+		public async Task<HttpResponseMessage> UpdateAsync ([FromBody] UpdateClientTaskRest updatedTask, [FromUri] Guid taskId)
+		{
+			var updateClientTask = GenerateUpdateDict(updatedTask);
+
+			try
+			{
+				await ClientTaskService.UpdateAsync(updateClientTask, taskId);
+
+				return Request.CreateResponse(HttpStatusCode.OK);
+			}
+			catch (Exception e)
+			{
+				return Request.CreateErrorResponse(HttpStatusCode.BadRequest, e);
+			}
+		}
 
 
-        [Route("Delete")]
-        [HttpDelete]
-        public async Task<HttpResponseMessage> DeleteAsync ([FromBody] DeleteClientTaskRest task)
-        {
-            if (await ClientTaskService.DeleteAsync(task.Id))
-            {
-                return Request.CreateResponse(HttpStatusCode.OK);    
-            }
-            else
-            {
-                return Request.CreateResponse(HttpStatusCode.BadRequest);
-            }
-        }
+		[Route("Delete")]
+		[HttpDelete]
+		public async Task<HttpResponseMessage> DeleteAsync ([FromBody] DeleteClientTaskRest task)
+		{
+			try
+			{
+				await ClientTaskService.DeleteAsync(task.Id);
 
-        [Route("Tasks")]
-        [HttpPost]
-        public async Task<HttpResponseMessage> PaginatedGetAsync ([FromBody] ClientTaskPage pageData)
-        {
-            Guid clientId = Guid.Parse(User.Identity.GetUserId());
-            
-            /*
-            object returnDto = new {
-               pageResult =   
-               totalItems = Utility.Utility.TotalClientTaskCount
-            };
-            */
+				return Request.CreateResponse(HttpStatusCode.OK);    
+			}
+			catch (Exception e)
+			{
+				return Request.CreateErrorResponse(HttpStatusCode.BadRequest, e);   
+			}
+		}
 
-             var result = await ClientTaskService.PaginatedGetAsync(pageData, clientId);
+		[Route("Tasks")]
+		[HttpPost]
+		public async Task<HttpResponseMessage> PaginatedGetAsync ([FromBody] ClientTaskPage pageData)
+		{
+			try
+			{
+				Guid? businessId = null;
 
-            return Request.CreateResponse(HttpStatusCode.OK, result);
-        }
-    }
+				if (User.IsInRole("Business"))
+				{
+					businessId = Guid.Parse(User.Identity.GetUserId());
+				}
+
+				var result = await ClientTaskService.PaginatedGetAsync(pageData, businessId);
+
+				return Request.CreateResponse(HttpStatusCode.OK, result);
+			}
+			catch (Exception e)
+			{
+				return Request.CreateErrorResponse(HttpStatusCode.BadRequest, e);
+			}
+		}
+	}
 }

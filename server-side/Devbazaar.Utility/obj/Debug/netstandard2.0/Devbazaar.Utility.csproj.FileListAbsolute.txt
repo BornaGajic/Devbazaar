@@ -16,3 +16,9 @@ D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Utility\obj\Debug\netstandar
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Utility\obj\Debug\netstandard2.0\Devbazaar.Utility.dll
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Utility\obj\Debug\netstandard2.0\Devbazaar.Utility.pdb
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Utility\obj\Debug\netstandard2.0\Devbazaar.Utility.csproj.AssemblyReference.cache
+D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Utility\bin\Debug\netstandard2.0\Devbazaar.DAL.dll
+D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Utility\bin\Debug\netstandard2.0\EntityFramework.dll
+D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Utility\bin\Debug\netstandard2.0\Devbazaar.DAL.pdb
+D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Utility\bin\Debug\netstandard2.0\Devbazaar.DAL.dll.config
+D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Utility\bin\Debug\netstandard2.0\EntityFramework.xml
+D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Utility\obj\Debug\netstandard2.0\Devbazaar.Utility.csproj.CopyComplete

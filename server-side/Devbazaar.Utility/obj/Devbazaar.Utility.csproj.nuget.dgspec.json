@@ -4,6 +4,16 @@
     "D:\\GitHubRepository\\Devbazaar\\server-side\\Devbazaar.Utility\\Devbazaar.Utility.csproj": {}
   },
   "projects": {
+    "D:\\GitHubRepository\\Devbazaar\\server-side\\Devbazaar.DAL\\Devbazaar.DAL.csproj": {
+      "restore": {
+        "projectUniqueName": "D:\\GitHubRepository\\Devbazaar\\server-side\\Devbazaar.DAL\\Devbazaar.DAL.csproj",
+        "projectName": "Devbazaar.DAL",
+        "projectPath": "D:\\GitHubRepository\\Devbazaar\\server-side\\Devbazaar.DAL\\Devbazaar.DAL.csproj"
+      },
+      "frameworks": {
+        "net472": {}
+      }
+    },
     "D:\\GitHubRepository\\Devbazaar\\server-side\\Devbazaar.Utility\\Devbazaar.Utility.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -32,7 +42,11 @@
         "frameworks": {
           "netstandard2.0": {
             "targetAlias": "netstandard2.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "D:\\GitHubRepository\\Devbazaar\\server-side\\Devbazaar.DAL\\Devbazaar.DAL.csproj": {
+                "projectPath": "D:\\GitHubRepository\\Devbazaar\\server-side\\Devbazaar.DAL\\Devbazaar.DAL.csproj"
+              }
+            }
           }
         },
         "warningProperties": {

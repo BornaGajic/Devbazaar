@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using AutoMapper;
 using Devbazaar.Common.DTO.Business;
-using Devbazaar.Common.IPageData.Business;
+using Devbazaar.Common.IDTO.Business;
 using Devbazaar.Common.PageData.Business;
 using Devbazaar.DAL.EntityModels;
 using Devbazaar.Model;

@@ -72,11 +72,13 @@
     <Compile Include="DTO\Business\BusinessDto.cs" />
     <Compile Include="DTO\Client\ClientDto.cs" />
     <Compile Include="DTO\User\UserDto.cs" />
-    <Compile Include="IPageData\Business\IBusinessDto.cs" />
-    <Compile Include="IPageData\ClientTask\IClientTaskReturnType.cs" />
+    <Compile Include="IDTO\Business\IBusinessDto.cs" />
+    <Compile Include="IDTO\ClientTask\IClientTaskDto.cs" />
+    <Compile Include="IPageData\Business\IBusinessPage.cs" />
+    <Compile Include="IPageData\ClientTask\IClientTaskPage.cs" />
     <Compile Include="PageData\Business\BusinessPage.cs" />
     <Compile Include="PageData\ClientTask\ClientTaskPage.cs" />
-    <Compile Include="PageData\ClientTask\ClientTaskReturnType.cs" />
+    <Compile Include="DTO\ClientTask\ClientTaskDto.cs" />
     <Compile Include="PageData\Page.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

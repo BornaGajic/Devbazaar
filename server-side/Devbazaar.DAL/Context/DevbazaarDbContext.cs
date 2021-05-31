@@ -58,6 +58,7 @@ namespace Devbazaar.DAL.Context
 			modelBuilder.Entity<TaskEntity>().ToTable("Tasks");
 			modelBuilder.Entity<TaskEntity>().HasKey(p => p.Id).Property(p => p.Id).IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.None);
 			modelBuilder.Entity<TaskEntity>().Property(p => p.Description).IsRequired();
+			modelBuilder.Entity<TaskEntity>().Property(p => p.Title).IsRequired().HasMaxLength(100);
 			modelBuilder.Entity<TaskEntity>().Property(p => p.LowPrice).IsOptional();
 			modelBuilder.Entity<TaskEntity>().Property(p => p.HighPrice).IsOptional();
 			modelBuilder.Entity<TaskEntity>().Property(p => p.DateAdded).IsRequired();

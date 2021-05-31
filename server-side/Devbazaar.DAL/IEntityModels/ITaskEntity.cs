@@ -10,6 +10,7 @@ namespace Devbazaar.DAL.IEntityModels
 	public interface ITaskEntity : IBaseEntity
 	{
 		string Description { get; set; }
+		string Title { get; set; }
 		int LowPrice { get; set; }
 		int HighPrice { get; set; }
 		DateTime DateAdded { get; set; }

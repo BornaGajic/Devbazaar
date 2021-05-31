@@ -47,7 +47,6 @@ D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Model.Common\bin\Debug\Syste
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Model.Common\bin\Debug\System.Numerics.Vectors.xml
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Model.Common\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Model.Common\bin\Debug\System.Threading.Tasks.Extensions.xml
-D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Model.Common\obj\Debug\Devbazaar.Model.Common.csprojAssemblyReference.cache
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Model.Common\obj\Debug\Devbazaar.Model.Common.csproj.CoreCompileInputs.cache
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Model.Common\obj\Debug\Devbazaar.Model.Common.csproj.CopyComplete
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Model.Common\obj\Debug\Devbazaar.Model.Common.dll

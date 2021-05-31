@@ -11,6 +11,7 @@ using Devbazaar.DAL.EntityModels;
 using System.Data.Entity;
 using Devbazaar.Common.PageData.ClientTask;
 using Devbazaar.Common.IPageData.ClientTask;
+using Devbazaar.Common.IDTO.ClientTask;
 
 namespace Devbazaar.Service.ClientTaskServices
 {
@@ -31,20 +32,19 @@ namespace Devbazaar.Service.ClientTaskServices
 
 			try
 			{
-				await UnitOfWork.AddAsync<TaskEntity>(Mapper.Map<TaskEntity>(newTask));
+				await UnitOfWork.AddAsync(Mapper.Map<TaskEntity>(newTask));
+			
+				await UnitOfWork.CommitAsync<TaskEntity>();
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine(e.Message);
-				return null;
+				throw e;
 			}
-
-			await UnitOfWork.CommitAsync<TaskEntity>();
 			
 			return newTask;
 		}
 
-		public async Task<bool> UpdateAsync (Dictionary<string, object> item, Guid clientTaskId)
+		public async Task UpdateAsync (Dictionary<string, object> item, Guid clientTaskId)
 		{
 			try
 			{
@@ -55,49 +55,50 @@ namespace Devbazaar.Service.ClientTaskServices
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine(e.Message);
-
-				return false;
+				throw e;
 			}
-			
-			return true;
 		}
 
-		public async Task<bool> DeleteAsync (Guid taskId)
+		public async Task DeleteAsync (Guid taskId)
 		{
 			try
 			{
 				var clientTaskEntity = await UnitOfWork.ClientTaskRepository.GetByIdAsync(taskId);
 
 				await UnitOfWork.DeleteAsync<TaskEntity>(Mapper.Map<TaskEntity>(clientTaskEntity));
+				await UnitOfWork.CommitAsync<TaskEntity>();
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine(e.Message);
-
-				return false;
+				throw e;
 			}
-
-			await UnitOfWork.CommitAsync<TaskEntity>();
-
-			return true;
 		}
 
-		public async Task<List<IClientTaskReturnType>> PaginatedGetAsync (ClientTaskPage pageData, Guid? clientId = null)
+
+		/// <summary>
+		/// If curent users role is business, check if a task is pinned by that business
+		/// </summary>
+		public async Task<List<IClientTaskDto>> PaginatedGetAsync (ClientTaskPage pageData, Guid? businessId = null)
 		{
-			var clientTaskReturnTypes = await UnitOfWork.ClientTaskRepository.PaginatedGetAsync(pageData, clientId);	
+			var clientTaskDto = await UnitOfWork.ClientTaskRepository.PaginatedGetAsync(pageData, null);	
+			var businessEntity = businessId != null ? await UnitOfWork.BusinessRepository.GetByIdAsync(businessId.Value) : null;
 
-			var userTable = UnitOfWork.UserRepository.Table;
+			var userTable = UnitOfWork.UserRepository.TableAsNoTracking;
 
-			foreach (var clientTaskReturnType in clientTaskReturnTypes)
+			foreach (var clientTask in clientTaskDto)
 			{
-				var userEntity = await (from user in userTable where clientTaskReturnType.ClientId == user.Id select user).SingleAsync();
+				var userEntity = await (from user in userTable where clientTask.ClientId == user.Id select user).SingleAsync();
 
-				clientTaskReturnType.Email = userEntity.Email;
-				clientTaskReturnType.Username = userEntity.Username;
+				clientTask.Email = userEntity.Email;
+				clientTask.Username = userEntity.Username;
+
+				if (businessEntity != null)
+				{
+					clientTask.IsPinned = businessEntity?.Tasks.FirstOrDefault(ct => ct.Id == clientTask.Id) != default;
+				}
 			}
 
-			return clientTaskReturnTypes;
+			return clientTaskDto;
 		}
 	}
 }

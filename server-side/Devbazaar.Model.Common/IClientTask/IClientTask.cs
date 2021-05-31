@@ -9,12 +9,14 @@ namespace Devbazaar.Model.Common
 	public interface IClientTask
 	{
 		Guid Id { get; set; }
+		Guid ClientId { get; set; }
+
 		string Description { get; set; }
+		string Title { get; set; }
+
 		int LowPrice { get; set; }
 		int HighPrice { get; set; }
-		DateTime DateAdded { get; set; }
 
-		Guid ClientId { get; set; }
-		Guid? BusinessId { get; set; }
+		DateTime DateAdded { get; set; }
 	}
 }

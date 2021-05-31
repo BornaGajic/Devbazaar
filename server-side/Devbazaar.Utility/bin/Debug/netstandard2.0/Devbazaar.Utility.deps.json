@@ -9,6 +9,7 @@
     ".NETStandard,Version=v2.0/": {
       "Devbazaar.Utility/1.0.0": {
         "dependencies": {
+          "Devbazaar.DAL": "1.0.0",
           "NETStandard.Library": "2.0.3",
           "System.Configuration.ConfigurationManager": "5.0.0"
         },
@@ -111,6 +112,19 @@
             "fileVersion": "5.0.20.51904"
           }
         }
+      },
+      "Devbazaar.DAL/1.0.0": {
+        "runtime": {
+          "Devbazaar.DAL.dll": {}
+        }
+      },
+      "EntityFramework/6.0.0.0": {
+        "runtime": {
+          "EntityFramework.dll": {
+            "assemblyVersion": "6.0.0.0",
+            "fileVersion": "6.400.420.21404"
+          }
+        }
       }
     }
   },
@@ -196,6 +210,16 @@
       "sha512": "sha512-t0MGLukB5WAVU9bO3MGzvlGnyJPgUlcwerXn1kzBRjwLKixT96XV0Uza41W49gVd8zEMFu9vQEFlv0IOrytICA==",
       "path": "system.security.principal.windows/5.0.0",
       "hashPath": "system.security.principal.windows.5.0.0.nupkg.sha512"
+    },
+    "Devbazaar.DAL/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "EntityFramework/6.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
     }
   }
 }

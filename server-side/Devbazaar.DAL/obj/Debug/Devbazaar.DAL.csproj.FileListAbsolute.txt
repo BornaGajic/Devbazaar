@@ -69,7 +69,6 @@ D:\GitHubRepository\Devbazaar\server-side\Devbazaar.DAL\bin\Debug\System.Memory.
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.DAL\bin\Debug\System.Numerics.Vectors.xml
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.DAL\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.DAL\bin\Debug\System.Threading.Tasks.Extensions.xml
-D:\GitHubRepository\Devbazaar\server-side\Devbazaar.DAL\obj\Debug\Devbazaar.DAL.csprojAssemblyReference.cache
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.DAL\obj\Debug\Devbazaar.DAL.Migrations.User.resources
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.DAL\obj\Debug\Devbazaar.DAL.Migrations.UserFIX.resources
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.DAL\obj\Debug\Devbazaar.DAL.Migrations.FKBusinessCardFix.resources
@@ -91,3 +90,5 @@ D:\GitHubRepository\Devbazaar\server-side\Devbazaar.DAL\obj\Debug\Devbazaar.DAL.
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.DAL\obj\Debug\Devbazaar.DAL.Migrations.ClientFnameLnameRemoved.resources
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.DAL\obj\Debug\Devbazaar.DAL.Migrations.ChangesToClient.resources
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.DAL\obj\Debug\Devbazaar.DAL.Migrations.removedmaxlen.resources
+D:\GitHubRepository\Devbazaar\server-side\Devbazaar.DAL\obj\Debug\Devbazaar.DAL.csproj.AssemblyReference.cache
+D:\GitHubRepository\Devbazaar\server-side\Devbazaar.DAL\obj\Debug\Devbazaar.DAL.Migrations.TitleToTask.resources
