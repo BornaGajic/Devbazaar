@@ -11,6 +11,9 @@ using Devbazaar.Repository.Common.Repositories;
 
 namespace Devbazaar.Repository
 {
+	/*
+	 * Ove metode ne moraju biti async ali mi se ne da sada svuda mjenjati u kodu to
+	*/
 	public class UnitOfWork : IUnitOfWork
 	{
 		public DevbazaarDbContext DbContext { get; set; }
@@ -69,9 +72,25 @@ namespace Devbazaar.Repository
 			return Task.FromResult(1);
 		}
 
-		public void Dispose ()
-		{
-			DbContext.Dispose();
-		}
+		private bool disposed = false;
+		protected virtual void Dispose (bool disposing)
+        {
+            if (!disposed)
+            {
+                if (disposing)
+                {
+                    DbContext.Dispose();
+                }
+            }
+
+            disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+
+            GC.SuppressFinalize(this);
+        }
 	}
 }

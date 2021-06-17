@@ -6,9 +6,9 @@ import './SideBar.css';
 
 const Sidebar = observer(({ role }: { role: string }) => {
 
-    let navArray = role === UserRole.CLIENT ? ['Home', 'Businesses', 'Tasks','My Tasks', 'Favorites'] : ['Home', 'Businesses', 'Tasks', 'Pinned Tasks'];
+    const navArray = role === UserRole.CLIENT ? ['Home', 'Businesses', 'Tasks','My Tasks', 'Favorites'] : ['Home', 'Businesses', 'Tasks', 'Pinned Tasks'];
 
-    let navArrayIcons = role === UserRole.CLIENT ? 
+    const navArrayIcons = role === UserRole.CLIENT ? 
     [
         'bi bi-house', 
         'bi bi-briefcase', 

@@ -8,7 +8,7 @@ using Devbazaar.Repository.Common.Repositories;
 
 namespace Devbazaar.Repository.Common
 {
-	public interface IUnitOfWork
+	public interface IUnitOfWork : IDisposable
 	{
 		IUserRepository UserRepository { get; set; }
 		ICategoryRepository CategoryRepository { get; set; }
@@ -21,6 +21,5 @@ namespace Devbazaar.Repository.Common
 		Task<int> DeleteAsync<TEntity> (TEntity entity) where TEntity : BaseEntity;
 		Task<int> CommitAsync<TEntity> ();
 		Task<int> RollbackAsync<TEntity> (TEntity entity) where TEntity : BaseEntity;
-
 	}
 }
