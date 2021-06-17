@@ -5,6 +5,7 @@ import { Task } from "../../models";
 
 import { RootStore } from "../../stores";
 import { TaskPageStore } from "../../stores/page-stores";
+import { MyTaskPageStore } from "../../stores/page-stores/MyTaskPageStore";
 import { UiState } from "../../stores/ui-store/UiState";
 
 import TaskView from "../task/TaskView";
@@ -13,18 +14,13 @@ import './TaskList.css';
 
 interface TaskListProps
 {
-    taskPageStore: TaskPageStore;
-
-    UiState: UiState;
+    taskPageStore: TaskPageStore | MyTaskPageStore;
 }
 
-const TaskList = observer(({ taskPageStore, UiState } : TaskListProps) => {
+const TaskList = observer(({ taskPageStore } : TaskListProps) => {
 
     // local observable (ili state?) currentPageNumber
-    //let tasks = taskPageStore.tasks_.get()
     let tasks = taskPageStore?.tasks_.get(1) as Task[];
-
-    console.log(toJS(tasks));
 
     return (
         <div id="accordionContainer" className="row w-100 justify-content-start">
@@ -35,7 +31,7 @@ const TaskList = observer(({ taskPageStore, UiState } : TaskListProps) => {
                         <p className="lead">Far far away, behind the word mountains, far from the countries Vokalia</p>
                     </div>
                     {
-                        [...Array(tasks.length).keys()].map(idx => <TaskView task={tasks[idx]} />)
+                        [...Array(tasks.length).keys()].map(idx => <TaskView task={ tasks[idx] } />)
                     }
                 </div>
             </div>

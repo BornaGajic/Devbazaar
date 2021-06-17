@@ -7,6 +7,7 @@ using Devbazaar.DAL.EntityModels;
 using Devbazaar.RestModels.ClientTaskRest;
 using Devbazaar.Model.Common;
 using Devbazaar.Model;
+using Devbazaar.Common.DTO.ClientTask;
 
 namespace Devbazaar.AutoMapperProfiles
 {
@@ -18,6 +19,7 @@ namespace Devbazaar.AutoMapperProfiles
 			CreateMap<UpdateClientTaskRest, IClientTask>();
 			CreateMap<IClientTask, TaskEntity>().ReverseMap();
 			CreateMap<ClientTask, IClientTask>().ReverseMap();
+			CreateMap<TaskEntity, ClientTaskDto>();
 		}
 	}
 }

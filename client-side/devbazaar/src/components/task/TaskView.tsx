@@ -20,7 +20,7 @@ const TaskView = observer(({ task } : { task: Task }) => {
                                 <span className="fs-6 ps-3">{ task?.username }</span>
                             </div>
                             <div className="col text-center">
-                                <span>Title #1</span>
+                                <span>{ task.title ?? "Title" }</span>
                             </div>
                             <div className="col text-end">
                                 <span className="me-3"><i className="bi bi-pencil-square update-task"></i></span>

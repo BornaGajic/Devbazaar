@@ -7,6 +7,7 @@ export class Task implements ITask
     id?: string;
 
     description?: string;
+    title?: string;
     username?: string;
     email?: string;
 
@@ -25,6 +26,7 @@ export class Task implements ITask
         return {
             Id: this.id,
             Description: this.description,
+            Title: this.title,
             LowPrice: this.lowPrice,
             HighPrice: this.highPrice,
             DateAdded: this.dateAdded,
@@ -37,6 +39,7 @@ export class Task implements ITask
     set data (data: ITask)
     {
         this.description = data.description ?? this.description;
+        this.title = data.title ?? this.title;
         this.lowPrice = data.lowPrice ?? this.lowPrice;
         this.highPrice = data.highPrice ?? this.highPrice;
         this.username = data.username ?? this.username;

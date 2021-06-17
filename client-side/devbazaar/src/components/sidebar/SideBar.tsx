@@ -43,7 +43,7 @@ const Sidebar = observer(({ role }: { role: string }) => {
                             navArray.map((item: string, idx: number) => {
                                 return (
                                     <li className="nav-item fw-bold pb-3 pt-3 w-100">
-                                        <NavLink to={"/" + item} className="nav-link" aria-current="page">
+                                        <NavLink to={"/" + item.replace(' ', '')} className="nav-link" aria-current="page">
                                             <i className={navArrayIcons[idx] + ' pe-1'} style={{verticalAlign: "text-bottom"}} />
                                             <span>{item}</span>
                                         </NavLink>    

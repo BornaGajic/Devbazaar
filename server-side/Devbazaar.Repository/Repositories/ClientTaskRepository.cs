@@ -70,6 +70,7 @@ namespace Devbazaar.Repository.Repositories
 					new ClientTaskDto ()
 					{
 						Description = task.Description,
+						Title = task.Title,
 						LowPrice = task.LowPrice,
 						HighPrice = task.HighPrice,
 						Username = string.Empty,

@@ -7,6 +7,7 @@ import { CategoryStore } from './CategoryStore';
 import { Services } from '../services';
 import { IServices } from '../services/contracts';
 import { UiState } from './ui-store/UiState';
+import { MyTaskPageStore } from './page-stores/MyTaskPageStore';
 
 
 class RootStore
@@ -16,6 +17,7 @@ class RootStore
     userStore: UserStore;
     businessPageStore: BusinessCardPageStore;
     taskPageStore: TaskPageStore;
+    myTaskPageStore: MyTaskPageStore;
     categoryStore: CategoryStore;
     authStore: AuthStore
 
@@ -34,6 +36,7 @@ class RootStore
         this.businessPageStore = new BusinessCardPageStore(this, this.service);
         
         this.taskPageStore = new TaskPageStore(this, this.service);
+        this.myTaskPageStore = new MyTaskPageStore(this, this.service);
     }
 }
 

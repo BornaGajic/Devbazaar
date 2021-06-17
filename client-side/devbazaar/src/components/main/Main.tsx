@@ -13,12 +13,13 @@ import { Business } from "../../models";
 import BrowseCardsPage from "../../pages/BrowseCardsPage";
 import BrowseTaskPage from "../../pages/BrowseTaskPage";
 import { Route, Switch } from "react-router";
+import MyTaskPage from "../../pages/MyTaskPage";
 
 const Main = observer(({ rootStore }: {rootStore: RootStore}) => {
 
-	// <BrowseCardsPage  rootStore={rootStore} />
-	// <BrowseTaskPage rootStore={rootStore}/>
-
+	// this can be probably be switched with the new Suspense component from React 18.0
+	// TODO: Check the Suspense component, React 18.0
+	// @see link: https://reactjs.org/docs/react-api.html#reactsuspense
 	let loadingOrContent = rootStore.UiState.isLoadingPage ? 
 	(
 		<div className="d-flex justify-content-center min-vw-100">
@@ -42,6 +43,9 @@ const Main = observer(({ rootStore }: {rootStore: RootStore}) => {
 					</Route>
 					<Route exact path="/Tasks">
 						<BrowseTaskPage rootStore={rootStore} />
+					</Route>
+					<Route exact path="/MyTasks">
+						<MyTaskPage rootStore={rootStore}/>
 					</Route>
 				</Switch>
 			</div>

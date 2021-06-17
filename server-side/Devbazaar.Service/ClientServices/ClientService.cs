@@ -13,6 +13,8 @@ using Devbazaar.Common.DTO.Client;
 
 using static Devbazaar.Utility.Utility;
 using Devbazaar.Common.IDTO.Business;
+using Devbazaar.Common.DTO.ClientTask;
+using Devbazaar.Common.IDTO.ClientTask;
 
 namespace Devbazaar.Service.ClientServices
 {
@@ -65,11 +67,21 @@ namespace Devbazaar.Service.ClientServices
 			await UnitOfWork.CommitAsync<ClientEntity>();
 		}
 
-		public async Task<List<IClientTask>> GetTasks (Guid clientId)
+		public async Task<List<ClientTaskDto>> GetTasks (Guid clientId)
 		{
 			var clientEntity = await UnitOfWork.ClientRepository.GetByIdAsync(clientId);
+			
+			var clientTasks = Mapper.Map<List<ClientTaskDto>>(clientEntity.Tasks);
 
-			return Mapper.Map<List<IClientTask>>(clientEntity.Tasks);
+			foreach (var task in clientTasks)
+			{
+				var userEntity = await (from user in UnitOfWork.UserRepository.Table where task.ClientId == user.Id select user).SingleAsync();
+
+				task.Username = userEntity.Username;
+				task.Email = userEntity.Email;
+			}
+
+			return clientTasks;
 		}
 
 		public async Task UpdateAsync (Dictionary<string, object> updateClient, Guid clientId)
