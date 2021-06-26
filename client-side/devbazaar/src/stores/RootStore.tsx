@@ -8,6 +8,7 @@ import { Services } from '../services';
 import { IServices } from '../services/contracts';
 import { UiState } from './ui-store/UiState';
 import { MyTaskPageStore } from './page-stores/MyTaskPageStore';
+import { FavoriteBusinessesPageStore } from './page-stores/FavoriteBusinessesPageStore';
 
 
 class RootStore
@@ -16,6 +17,7 @@ class RootStore
 
     userStore: UserStore;
     businessPageStore: BusinessCardPageStore;
+    favoriteBusinessesPageStore: FavoriteBusinessesPageStore;
     taskPageStore: TaskPageStore;
     myTaskPageStore: MyTaskPageStore;
     categoryStore: CategoryStore;
@@ -37,6 +39,8 @@ class RootStore
 
         this.myTaskPageStore = new MyTaskPageStore(this, this.service);
         this.taskPageStore = new TaskPageStore(this, this.service);
+
+        this.favoriteBusinessesPageStore = new FavoriteBusinessesPageStore(this, this.service);
     }
 }
 

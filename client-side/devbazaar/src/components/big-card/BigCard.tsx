@@ -1,12 +1,13 @@
 import { observer } from "mobx-react";
 import { BusinessCardPageStore } from "../../stores/page-stores";
+import { FavoriteBusinessesPageStore } from "../../stores/page-stores/FavoriteBusinessesPageStore";
 import { UiState } from "../../stores/ui-store/UiState";
 
 import './BigCard.css';
 
 interface BigCardProps
 {
-    businessCardPageStore: BusinessCardPageStore;
+    businessCardPageStore: BusinessCardPageStore | FavoriteBusinessesPageStore;
     UiState: UiState;
 
     clickedCardId?: string;

@@ -123,11 +123,12 @@ export class Business implements IBusiness, IRole
      */
     set data (data: IBusiness)
     {
-        this.description = data.description ?? this.description;
+        this.description = this.description === '' ? data.description : this.description;
+        this.country = this.country === '' ? data.country : this.country;
+        this.city = this.city === '' ? data.city : this.city;
+
         this.about = data.about ?? this.about;
         this.website = data.website ?? this.website;
-        this.country = data.country ?? this.country;
-        this.city = data.city ?? this.city;
         this.postalCode = data.postalCode ?? this.postalCode;
         this.available = data.available ?? this.available;
         this.popularity = data.popularity ?? this.popularity;

@@ -14,7 +14,7 @@ namespace Devbazaar.Service.Common.IClientServices
 	{
 		Task UpdateAsync (Dictionary<string, object> updateClient, Guid clientId);
 		Task<IBusinessDto> AddToFavourites (Guid clientId, Guid businessId);
-		Task<List<IBusiness>> GetFavouriteBusinesses (Guid clientId);
+		Task<List<IBusinessDto>> GetFavouriteBusinesses (Guid clientId);
 		Task<List<ClientTaskDto>> GetTasks (Guid clientId);
 		Task<ClientDto> GetClientDataById (Guid id);
 		Task RemoveFromFavourites (Guid clientId, Guid businessId);

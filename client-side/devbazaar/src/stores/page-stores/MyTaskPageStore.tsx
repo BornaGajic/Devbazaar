@@ -20,7 +20,7 @@ export class MyTaskPageStore
         this.service = service;
     }
 
-    async fetchMyTasks (): Promise<void>
+    async loadMyTasks (): Promise<void>
     {
         let pageNumber = 1;
         let taskList = this.rootStore.userStore.clientStore.clienTaskStore.tasks;

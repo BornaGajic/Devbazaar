@@ -14,6 +14,7 @@ import BrowseCardsPage from "../../pages/BrowseCardsPage";
 import BrowseTaskPage from "../../pages/BrowseTaskPage";
 import { Route, Switch } from "react-router";
 import MyTaskPage from "../../pages/MyTaskPage";
+import FavoriteBusinessesPage from "../../pages/FavoriteBusinessesPage";
 
 const Main = observer(({ rootStore }: {rootStore: RootStore}) => {
 
@@ -39,6 +40,9 @@ const Main = observer(({ rootStore }: {rootStore: RootStore}) => {
 					</Route>
 					<Route exact path="/MyTasks">
 						<MyTaskPage myTaskPageStore={rootStore.myTaskPageStore}/>
+					</Route>
+					<Route exact path="/Favorites">
+						<FavoriteBusinessesPage favoriteBusinessPageStore={rootStore.favoriteBusinessesPageStore} UiState={rootStore.UiState}/>
 					</Route>
 				</Switch>
 			</div>

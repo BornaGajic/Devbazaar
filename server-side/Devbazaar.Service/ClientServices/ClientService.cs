@@ -49,11 +49,33 @@ namespace Devbazaar.Service.ClientServices
 			return clientDto;
 		}
 
-		public async Task<List<IBusiness>> GetFavouriteBusinesses (Guid clientId)
+		public async Task<List<IBusinessDto>> GetFavouriteBusinesses (Guid clientId)
 		{
 			var clientEntity = await UnitOfWork.ClientRepository.GetByIdAsync(clientId);
+			var businessDtoList = new List<IBusinessDto>();
 
-			return Mapper.Map<List<IBusiness>>(clientEntity.Businesses);
+			foreach (var business in clientEntity.Businesses)
+			{
+				//var user = await UnitOfWork.UserRepository.GetByIdAsync(business.Id);
+
+				businessDtoList.Add(new BusinessDto(){
+					Id = business.Id,
+					Email = business.User.Email,
+					Username = business.User.Username,
+					Description = business.Description,
+					About = business.About,
+					Available = business.Available,
+					City = business.City,
+					Country = business.Country,
+					PostalCode = business.PostalCode,
+					Website = business.Website,
+					Popularity = business.Clients.Count,
+					Categories = Mapper.Map<List<ICategory>>(business.Categories)
+				});	
+			}
+
+
+			return businessDtoList;
 		}
 
 		public async Task RemoveFromFavourites (Guid clientId, Guid businessId)
@@ -110,6 +132,8 @@ namespace Devbazaar.Service.ClientServices
 
 			IBusinessDto businessDto = new BusinessDto () { 
 				Id = businessEntity.Id,
+				Username = businessEntity.User.Username,
+				Email = businessEntity.User.Email,
 				Description = businessEntity.Description,
 				About = businessEntity.About,
 				Available = businessEntity.Available,

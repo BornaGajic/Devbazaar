@@ -17,6 +17,11 @@ namespace Devbazaar.Repository.Repositories
 		{
 		}
 
+		public async Task<UserEntity> GetByIdAsync (Guid guid)
+		{
+			return await (from u in Table where u.Id == guid select u).SingleAsync();
+		}
+
 		public async Task<UserEntity> CheckExistence (string email, string password)
 		{
 			var result = from user in TableAsNoTracking where user.Email == email && user.Password == password select user;
