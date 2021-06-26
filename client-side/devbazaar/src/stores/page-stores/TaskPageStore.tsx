@@ -10,6 +10,8 @@ export class TaskPageStore
 {
     service: IServices;
 
+    isLoading: boolean = true;
+
     tasks_: Map<number, Task[]> = new Map<number, Task[]>();
 
     constructor (public rootStore: RootStore, service: IServices)
@@ -29,7 +31,7 @@ export class TaskPageStore
         Promise.all([
             await this.fetchTasksPage({ PageNumber: 1 }),
             await this.fetchTasksPage({ PageNumber: 2 }),
-        ]);
+        ]).then(() => this.isLoading = false);
     }
 
     async fetchTasksPage (pageData: ITaskPage): Promise<void>

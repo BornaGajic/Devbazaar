@@ -23,7 +23,10 @@ export class CategoryStore
 
         this.service = service;
 
-        this.loadCategories();
+        if (rootStore.UiState.isLoggedIn)
+        {
+            this.loadCategories();
+        }
     }
 
     async loadCategories (): Promise<void>

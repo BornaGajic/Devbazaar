@@ -22,6 +22,8 @@ const TaskList = observer(({ taskPageStore } : TaskListProps) => {
     // local observable (ili state?) currentPageNumber
     let tasks = taskPageStore?.tasks_.get(1) as Task[];
 
+    let isMyTask = taskPageStore instanceof MyTaskPageStore ? true : false;
+
     return (
         <div id="accordionContainer" className="row w-100 justify-content-start">
             <div className="col-lg-7 col-md-8 col-sm-9 col-12 m-0 p-0">
@@ -31,7 +33,7 @@ const TaskList = observer(({ taskPageStore } : TaskListProps) => {
                         <p className="lead">Far far away, behind the word mountains, far from the countries Vokalia</p>
                     </div>
                     {
-                        [...Array(tasks.length).keys()].map(idx => <TaskView task={ tasks[idx] } />)
+                        [...Array(tasks.length).keys()].map(idx => <TaskView task={ tasks[idx] } isMyTask={isMyTask} />)
                     }
                 </div>
             </div>

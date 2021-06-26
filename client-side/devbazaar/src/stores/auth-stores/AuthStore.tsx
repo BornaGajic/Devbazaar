@@ -17,6 +17,8 @@ export class AuthStore
     {
         this.authService = authService;
         this.rootStore = rootStore;
+
+        rootStore.UiState.isLoggedIn = localStorage.getItem('token') ? true : false;
     }
 
     /**

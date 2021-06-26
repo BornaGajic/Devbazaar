@@ -20,32 +20,25 @@ const Main = observer(({ rootStore }: {rootStore: RootStore}) => {
 	// this can be probably be switched with the new Suspense component from React 18.0
 	// TODO: Check the Suspense component, React 18.0
 	// @see link: https://reactjs.org/docs/react-api.html#reactsuspense
-	let loadingOrContent = rootStore.UiState.isLoadingPage ? 
-	(
-		<div className="d-flex justify-content-center min-vw-100">
-			<div className="spinner-border" role="status">
-				<span className="visually-hidden">Loading...</span>
-			</div>
-		</div>
-	) : 
+	let content = 
 	(
 		<div>
 			<div id="mainSection">
 				<Switch>
-					<Route exact path="/">
-						<BrowseCardsPage rootStore={rootStore} />
+					<Route exact path="/">	
+						<BrowseCardsPage businessPageStore={rootStore.businessPageStore} UiState={rootStore.UiState} />
 					</Route>
 					<Route exact path="/Home">
-						<BrowseCardsPage rootStore={rootStore} />
+						<BrowseCardsPage businessPageStore={rootStore.businessPageStore} UiState={rootStore.UiState} />
 					</Route>
 					<Route exact path="/Businesses">
-						<BrowseCardsPage rootStore={rootStore} />
+						<BrowseCardsPage businessPageStore={rootStore.businessPageStore} UiState={rootStore.UiState} />
 					</Route>
 					<Route exact path="/Tasks">
-						<BrowseTaskPage rootStore={rootStore} />
+						<BrowseTaskPage taskPageStore={rootStore.taskPageStore} />
 					</Route>
 					<Route exact path="/MyTasks">
-						<MyTaskPage rootStore={rootStore}/>
+						<MyTaskPage myTaskPageStore={rootStore.myTaskPageStore}/>
 					</Route>
 				</Switch>
 			</div>
@@ -61,7 +54,7 @@ const Main = observer(({ rootStore }: {rootStore: RootStore}) => {
 				<div className="col m-0 p-0">
 					<div className="row m-0 p-0">
 						<main id="main" className="min-vh-100 m-0 p-0">
-							{ loadingOrContent }
+							{ content }
 						</main>
 					</div>
 						

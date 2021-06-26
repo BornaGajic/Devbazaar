@@ -3,8 +3,13 @@ import React, { useState } from "react";
 import { Task } from "../../models";
 import { RootStore } from "../../stores";
 
+interface TaskViewProps
+{
+    task: Task;
+    isMyTask: boolean;
+}
 
-const TaskView = observer(({ task } : { task: Task }) => {
+const TaskView = observer(({ task, isMyTask }: TaskViewProps) => {
 
     return (
         <div>
@@ -23,7 +28,7 @@ const TaskView = observer(({ task } : { task: Task }) => {
                                 <span>{ task.title ?? "Title" }</span>
                             </div>
                             <div className="col text-end">
-                                <span className="me-3"><i className="bi bi-pencil-square update-task"></i></span>
+                                { isMyTask ? <span className="me-3"><i className="bi bi-pencil-square update-task"></i></span> : true }
                                 <span><i className="bi bi-dash"></i></span>
                             </div>
                             </div>

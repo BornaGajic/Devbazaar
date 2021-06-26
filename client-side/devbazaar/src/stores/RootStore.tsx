@@ -34,9 +34,9 @@ class RootStore
         this.userStore = new UserStore(this, this.service);
         
         this.businessPageStore = new BusinessCardPageStore(this, this.service);
-        
-        this.taskPageStore = new TaskPageStore(this, this.service);
+
         this.myTaskPageStore = new MyTaskPageStore(this, this.service);
+        this.taskPageStore = new TaskPageStore(this, this.service);
     }
 }
 

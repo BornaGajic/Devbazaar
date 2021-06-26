@@ -47,7 +47,9 @@ export class ClientStore
     {
         let response = await this.service.clientService.fetchClientData();
 
-        this.clienTaskStore.loadTasks()
+        await this.clienTaskStore.loadTasks();
+        this.userStore.rootStore.myTaskPageStore.fetchMyTasks();
+
         this.favouriteBusinessStore.loadFavouriteBusinesses();
 
         runInAction(() => {

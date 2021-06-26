@@ -9,6 +9,8 @@ import { UiState } from '../ui-store/UiState';
 export class BusinessCardPageStore
 { 
     service: IServices;
+
+    isLoading: boolean = true;
     
     // page_number : page_content
     businessCards_: Map<number, Business[]> = new Map<number, Business[]>()
@@ -30,13 +32,11 @@ export class BusinessCardPageStore
      */
     async loadNextBatch (): Promise<void>
     {
-        runInAction(() => this.rootStore.UiState.isLoadingPage = true);
-
         Promise.all([
             await this.fetchBusinessCardPage({ PageNumber: 1 }),
             await this.fetchBusinessCardPage({ PageNumber: 2 }),
             await this.fetchBusinessCardPage({ PageNumber: 3 })
-        ]).then(() => runInAction(() => this.rootStore.UiState.isLoadingPage = false));
+        ]).then(() => runInAction(() => this.isLoading = false));
     }
 
     /**

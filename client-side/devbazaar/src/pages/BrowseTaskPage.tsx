@@ -7,19 +7,39 @@ import TaskList from "../components/task-list/TaskList";
 import { useStores } from "../hooks/useStores";
 
 import { RootStore } from "../stores";
+import { TaskPageStore } from "../stores/page-stores";
 
-const BrowseTaskPage = observer(({ rootStore } : { rootStore: RootStore }) => {
+interface BrowseTaskPageProps
+{
+    taskPageStore: TaskPageStore;
+}
 
-    let maxPages = rootStore.taskPageStore.tasks_.size;
+const BrowseTaskPage = observer(({ taskPageStore } : BrowseTaskPageProps) => {
+
+    let maxPages = taskPageStore.tasks_.size;
 
     return (
         <div>
-            <TaskList 
-                taskPageStore={rootStore.taskPageStore}
-            />
-            <div className="" style={{marginRight: "15%"}}>
-				<PageNavigation maxPages={maxPages} />
-			</div>
+            {
+                taskPageStore.isLoading ?
+                (
+                    <div className="d-flex justify-content-center min-vw-100">
+                        <div className="spinner-border" role="status">
+                            <span className="visually-hidden">Loading...</span>
+                        </div>
+		            </div>
+                ) : 
+                (
+                    <div>
+                        <TaskList 
+                            taskPageStore={taskPageStore}
+                        />
+                        <div className="" style={{marginRight: "15%"}}>
+                            <PageNavigation maxPages={maxPages} />
+                        </div>
+                    </div>
+                )
+            }
         </div>
     );
 });
