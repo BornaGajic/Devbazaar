@@ -10,7 +10,7 @@ interface CardProps
 
 
 const Card = observer(({ businessCard, setClickedCardId }: CardProps) => {
-    
+
     return (
         <button className="btn border-none p-0 m-0 shadow-none text-start h-100" onClick={(e) => setClickedCardId(businessCard.id ?? '')}  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
             <div className="card h-100 shadow" style={{outline: "none"}}>
