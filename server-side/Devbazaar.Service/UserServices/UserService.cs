@@ -129,7 +129,7 @@ namespace Devbazaar.Service.UserServices
 				new Claim("Id", user.Id.ToString()),
 				new Claim("Username", user.Username),
 				new Claim("Email", user.Email),
-				new Claim("Role", role.ToString()),
+				new Claim(ClaimTypes.Role, role.ToString()),
 				new Claim("Logo", user.Logo ?? string.Empty)
 			};
 

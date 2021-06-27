@@ -32,7 +32,7 @@ export class FavouriteBusinessCardStore
     async loadFavouriteBusinesses (): Promise<void>
     {
         let response = await this.service.clientService.fetchFavouriteBusinesses();
-
+        
         await this.updateFavouritesFromJson(response.data);
     }
 

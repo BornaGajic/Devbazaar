@@ -17,9 +17,6 @@ interface CardListProps
 
 const CardList = observer(({ businessCardPageStore, setClickedCardId, cardsPageNumber }: CardListProps) => {
 
-    console.log(cardsPageNumber);
-
-    // local observable (ili state?) currentPageNumber
     let businessCards = businessCardPageStore?.businessCards_.get(cardsPageNumber) as Business[];
 
     return (

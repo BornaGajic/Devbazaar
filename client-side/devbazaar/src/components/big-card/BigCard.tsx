@@ -17,7 +17,21 @@ interface BigCardProps
 const BigCard = observer(({businessCardPageStore, clickedCardId, cardsPageNumber}: BigCardProps) => {
 
     let card = businessCardPageStore.businessCards_.get(cardsPageNumber)?.find(c => c.id === clickedCardId);
-
+    
+    let addToFvrtBtn = card?.isFavourited ? 
+    (
+        <button className="btn btn-sm btn-primary fw-bold shadow-none rounded-3 mt-3"> 
+            <i className="bi bi-heart-fill me-2" style={{color: "white", verticalAlign: "text-bottom"}}></i>
+            In Favorites
+        </button>
+    ) :
+    (
+        <button className="btn btn-sm btn-outline-secondary fw-bold shadow-none rounded-3 mt-3"> 
+            <i className="bi bi-heart me-2"></i>
+            Add to Favorites
+        </button>
+    );
+    
     return (
         <div className="modal fade mt-3 h-100" id="exampleModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true" style={{zIndex: 99999}}>
             <div id="bigCard" className="modal-dialog modal-dialog-centered mb-0 mt-0">
@@ -35,7 +49,7 @@ const BigCard = observer(({businessCardPageStore, clickedCardId, cardsPageNumber
                             <p>{ card?.about }</p>  
                         
                             <button className="btn btn-sm btn-outline-primary rounded-pill shadow-none disabeled">CategoryXY</button> <br/>
-                            <button className="btn btn-sm btn-outline-secondary fw-bold shadow-none rounded-3 mt-3"> <i className="bi bi-heart me-2"></i>Add to favorites</button>
+                            { addToFvrtBtn }
                         </div>
                     </div>
                     <div className="card-footer">

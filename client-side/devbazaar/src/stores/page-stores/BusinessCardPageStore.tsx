@@ -45,7 +45,7 @@ export class BusinessCardPageStore
     async fetchBusinessCardPage (pageData: IBusinessPage): Promise<void>
     {
         let response = await this.service.businessCardService.fetchPage(pageData);
-
+        
         if (response.data.length === 0) return;
 
         runInAction(() => {

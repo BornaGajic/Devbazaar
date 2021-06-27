@@ -56,11 +56,8 @@ namespace Devbazaar.Service.ClientServices
 
 			foreach (var business in clientEntity.Businesses)
 			{
-				//var user = await UnitOfWork.UserRepository.GetByIdAsync(business.Id);
-
 				businessDtoList.Add(new BusinessDto(){
 					Id = business.Id,
-
 					Email = business.User.Email,
 					Username = business.User.Username,
 					Description = business.Description,
@@ -72,7 +69,12 @@ namespace Devbazaar.Service.ClientServices
 					Website = business.Website,
 					Popularity = business.Clients.Count,
 					Categories = Mapper.Map<List<ICategory>>(business.Categories)
-				});	
+				});
+
+				if (business.Clients.Contains(clientEntity))
+				{
+					businessDtoList.Last().IsFavourited = true;
+				}
 			}
 
 

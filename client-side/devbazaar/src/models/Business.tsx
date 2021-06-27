@@ -27,6 +27,7 @@ export class Business implements IBusiness, IRole
     popularity?: number;
 
     available: boolean = true;
+    isFavourited: boolean = false;
 
     categories: Category[] = [];
 
@@ -130,9 +131,11 @@ export class Business implements IBusiness, IRole
         this.about = data.about ?? this.about;
         this.website = data.website ?? this.website;
         this.postalCode = data.postalCode ?? this.postalCode;
-        this.available = data.available ?? this.available;
         this.popularity = data.popularity ?? this.popularity;
         this.username = data.username ?? this.username;
         this.email = data.email ?? this.email;
+
+        this.isFavourited = data.isFavourited;
+        this.available = data.available;
     }
 }

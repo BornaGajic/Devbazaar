@@ -17,6 +17,7 @@ export interface IBusiness
     popularity?: number;
 
     available: boolean;
+    isFavourited: boolean;
 
     categories?: ICategory[];
 }
