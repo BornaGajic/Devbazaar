@@ -30,13 +30,15 @@ export class TaskPageStore
     {
         Promise.all([
             await this.fetchTasksPage({ PageNumber: 1 }),
-            await this.fetchTasksPage({ PageNumber: 2 }),
-        ]).then(() => this.isLoading = false);
+            await this.fetchTasksPage({ PageNumber: 2 })
+        ]).then(() => runInAction(() => this.isLoading = false));
     }
 
     async fetchTasksPage (pageData: ITaskPage): Promise<void>
     {
         let response = await this.service.taskService.fetchPage(pageData);
+
+        if (response.data.length === 0) return;
 
         runInAction(() => {
             if (this.tasks_.has(pageData.PageNumber) === false)

@@ -1,15 +1,12 @@
 import { observer } from "mobx-react";
-import React, { useState } from "react";
-import BigCard from "../big-card/BigCard";
 
-import CardList from "../card-list/CardList";
 import Footer from "../footer/Footer";
 import Sidebar from "../sidebar/SideBar";
 
 import './Main.css';
-import PageNavigation from "../page-navigation/PageNavigation";
+
 import { RootStore } from "../../stores";
-import { Business } from "../../models";
+
 import BrowseCardsPage from "../../pages/BrowseCardsPage";
 import BrowseTaskPage from "../../pages/BrowseTaskPage";
 import { Route, Switch } from "react-router";
@@ -27,21 +24,21 @@ const Main = observer(({ rootStore }: {rootStore: RootStore}) => {
 			<div id="mainSection">
 				<Switch>
 					<Route exact path="/">	
-						<BrowseCardsPage businessPageStore={rootStore.businessPageStore} UiState={rootStore.UiState} />
+						<BrowseCardsPage businessPageStore={rootStore.businessPageStore} />
 					</Route>
-					<Route exact path="/Home">
-						<BrowseCardsPage businessPageStore={rootStore.businessPageStore} UiState={rootStore.UiState} />
+					<Route path="/Home">
+						<BrowseCardsPage businessPageStore={rootStore.businessPageStore} />
 					</Route>
-					<Route exact path="/Businesses">
-						<BrowseCardsPage businessPageStore={rootStore.businessPageStore} UiState={rootStore.UiState} />
+					<Route path="/Businesses">
+						<BrowseCardsPage businessPageStore={rootStore.businessPageStore} />
 					</Route>
-					<Route exact path="/Tasks">
+					<Route path="/Tasks">
 						<BrowseTaskPage taskPageStore={rootStore.taskPageStore} />
 					</Route>
-					<Route exact path="/MyTasks">
+					<Route path="/MyTasks">
 						<MyTaskPage myTaskPageStore={rootStore.myTaskPageStore}/>
 					</Route>
-					<Route exact path="/Favorites">
+					<Route path="/Favorites">
 						<FavoriteBusinessesPage favoriteBusinessPageStore={rootStore.favoriteBusinessesPageStore} UiState={rootStore.UiState}/>
 					</Route>
 				</Switch>

@@ -1,8 +1,10 @@
+import { queryByRole } from "@testing-library/react";
 import { observer } from "mobx-react";
 import { useState } from "react";
 import BigCard from "../components/big-card/BigCard";
 import CardList from "../components/card-list/CardList";
 import PageNavigation from "../components/page-navigation/PageNavigation";
+import { useQuery } from "../hooks/useQuery";
 import { FavoriteBusinessesPageStore } from "../stores/page-stores/FavoriteBusinessesPageStore";
 import { UiState } from "../stores/ui-store/UiState";
 
@@ -15,6 +17,7 @@ interface FavoriteBusinessesPageProps
 export const FavoriteBusinessesPage = observer(({ favoriteBusinessPageStore, UiState }: FavoriteBusinessesPageProps) => {
     
     let [clickedCardId, setClickedCardId] = useState('');
+    let query = useQuery();
 
     let maxPages = favoriteBusinessPageStore.businessCards_.size;
 
@@ -33,18 +36,20 @@ export const FavoriteBusinessesPage = observer(({ favoriteBusinessPageStore, UiS
                     <div id="browseCardsPage">
                         <CardList 
                             businessCardPageStore={ favoriteBusinessPageStore }
-                            UiState={ UiState } 
+                            cardsPageNumber={Number.parseInt(query.get("pageNumber") ?? '1')}
                             setClickedCardId={(cardId: string) => setClickedCardId(cardId)}
                         />
                     
                         <BigCard 
                             businessCardPageStore={ favoriteBusinessPageStore }
-                            UiState={ UiState } 
+                            cardsPageNumber={Number.parseInt(query.get("pageNumber") ?? '1')}
                             clickedCardId={clickedCardId}  
                         />
             
                         <div className="" style={{marginRight: "5%"}}>
-                            <PageNavigation maxPages={maxPages} />
+                            <PageNavigation 
+                                maxPages={maxPages} 
+                            />
                         </div>
                     </div>
                 )

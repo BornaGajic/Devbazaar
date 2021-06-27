@@ -3,21 +3,24 @@ import { observer } from "mobx-react";
 import { Business } from "../../models";
 import { BusinessCardPageStore } from "../../stores/page-stores";
 import { FavoriteBusinessesPageStore } from "../../stores/page-stores/FavoriteBusinessesPageStore";
-import { UiState } from "../../stores/ui-store/UiState";
+
 import Card from "../card/Card";
 
 interface CardListProps
 {
     businessCardPageStore: BusinessCardPageStore | FavoriteBusinessesPageStore;
-    UiState: UiState;
+
+    cardsPageNumber: number;
 
     setClickedCardId: (id: string) => void;
 }
 
-const CardList = observer(({ businessCardPageStore, UiState, setClickedCardId }: CardListProps) => {
+const CardList = observer(({ businessCardPageStore, setClickedCardId, cardsPageNumber }: CardListProps) => {
+
+    console.log(cardsPageNumber);
 
     // local observable (ili state?) currentPageNumber
-    let businessCards = businessCardPageStore?.businessCards_.get(UiState.currentPage) as Business[];
+    let businessCards = businessCardPageStore?.businessCards_.get(cardsPageNumber) as Business[];
 
     return (
         <div className="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-3 g-4 m-3">

@@ -60,6 +60,7 @@ namespace Devbazaar.Service.ClientServices
 
 				businessDtoList.Add(new BusinessDto(){
 					Id = business.Id,
+
 					Email = business.User.Email,
 					Username = business.User.Username,
 					Description = business.Description,

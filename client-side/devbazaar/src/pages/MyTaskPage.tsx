@@ -1,7 +1,9 @@
 import { observer } from "mobx-react";
+import { useState } from "react";
 import PageNavigation from "../components/page-navigation/PageNavigation";
 import TaskActions from "../components/task-actions/TaskActions";
 import TaskList from "../components/task-list/TaskList";
+import { useQuery } from "../hooks/useQuery";
 import { RootStore } from "../stores";
 import { MyTaskPageStore } from "../stores/page-stores/MyTaskPageStore";
 
@@ -11,6 +13,8 @@ interface MyTaskPageProps
 }
 
 const MyTaskPage = observer(({ myTaskPageStore }: MyTaskPageProps) => {
+
+    let query = useQuery();
 
     let maxPages = myTaskPageStore.tasks_.size;
 
@@ -29,10 +33,13 @@ const MyTaskPage = observer(({ myTaskPageStore }: MyTaskPageProps) => {
                     <div>
                         <TaskList 
                             taskPageStore={myTaskPageStore}
+                            pageNumber={Number.parseInt(query.get("pageNumber") ?? '1')}
                         />
                         <TaskActions />
                         <div className="" style={{marginRight: "15%"}}>
-                            <PageNavigation maxPages={maxPages} />
+                            <PageNavigation 
+                                maxPages={maxPages}
+                            />
                         </div>
                     </div>
                 )

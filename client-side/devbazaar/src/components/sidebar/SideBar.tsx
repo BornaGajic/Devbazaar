@@ -6,7 +6,9 @@ import './SideBar.css';
 
 const Sidebar = observer(({ role }: { role: string }) => {
 
+    // Pretvoriti u Obeject s key path exact i search parametrima
     const navArray = role === UserRole.CLIENT ? ['Home', 'Businesses', 'Tasks','My Tasks', 'Favorites'] : ['Home', 'Businesses', 'Tasks', 'Pinned Tasks'];
+    const toArray = role === UserRole.CLIENT ? ['?pageNumber=1', '?pageNumber=1', '?pageNumber=1','?pageNumber=1', '?pageNumber=1'] : ['?pageNumber=1', '?pageNumber=1', '?pageNumber=1', '?pageNumber=1'];
 
     const navArrayIcons = role === UserRole.CLIENT ? 
     [
@@ -43,7 +45,11 @@ const Sidebar = observer(({ role }: { role: string }) => {
                             navArray.map((item: string, idx: number) => {
                                 return (
                                     <li className="nav-item fw-bold pb-3 pt-3 w-100">
-                                        <NavLink to={"/" + item.replace(' ', '')} className="nav-link" aria-current="page">
+                                        <NavLink 
+                                            to={{
+                                                pathname: '/' + item.replace(' ', '')
+                                            }} className="nav-link" aria-current="page"
+                                        >
                                             <i className={navArrayIcons[idx] + ' pe-1'} style={{verticalAlign: "text-bottom"}} />
                                             <span>{item}</span>
                                         </NavLink>    

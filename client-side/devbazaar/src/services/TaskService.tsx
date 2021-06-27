@@ -12,7 +12,7 @@ export class TaskService implements ITaskService
     {
         let response = await axios.post(`${axios.defaults.baseURL}/Task/Tasks`,
         {
-           pageData: pageData
+           PageNumber: pageData.PageNumber
         }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
 
         if (response.status !== 200)

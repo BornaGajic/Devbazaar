@@ -46,6 +46,8 @@ export class BusinessCardPageStore
     {
         let response = await this.service.businessCardService.fetchPage(pageData);
 
+        if (response.data.length === 0) return;
+
         runInAction(() => {
             if (this.businessCards_.has(pageData.PageNumber) === false)
             {

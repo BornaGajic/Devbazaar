@@ -1,22 +1,22 @@
 import { observer } from "mobx-react";
 import { BusinessCardPageStore } from "../../stores/page-stores";
 import { FavoriteBusinessesPageStore } from "../../stores/page-stores/FavoriteBusinessesPageStore";
-import { UiState } from "../../stores/ui-store/UiState";
 
 import './BigCard.css';
 
 interface BigCardProps
 {
     businessCardPageStore: BusinessCardPageStore | FavoriteBusinessesPageStore;
-    UiState: UiState;
+    
+    cardsPageNumber: number;
 
     clickedCardId?: string;
 }
 
 
-const BigCard = observer(({businessCardPageStore, UiState, clickedCardId}: BigCardProps) => {
+const BigCard = observer(({businessCardPageStore, clickedCardId, cardsPageNumber}: BigCardProps) => {
 
-    let card = businessCardPageStore.businessCards_.get(UiState.currentPage)?.find(c => c.id === clickedCardId);
+    let card = businessCardPageStore.businessCards_.get(cardsPageNumber)?.find(c => c.id === clickedCardId);
 
     return (
         <div className="modal fade mt-3 h-100" id="exampleModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true" style={{zIndex: 99999}}>
