@@ -26,9 +26,13 @@ export class ClientService implements IClientService
 
     async addToFavourites (businessCardId: string): Promise<AxiosResponse<IBusiness>>
     {
-        let response = await axios.put(`${axios.defaults.baseURL}/Client/AddFavourites`, {
+        let response = await axios.put(`${axios.defaults.baseURL}/Client/AddFavourites`, null, 
+        {
             params: {
                 businessId: businessCardId
+            },
+            headers: { 
+                Authorization: `Bearer ${localStorage.getItem('token')}` 
             }
         });
 
@@ -40,13 +44,13 @@ export class ClientService implements IClientService
 
     async removeFromFavourites (businessCardId: string): Promise<AxiosResponse>
     {
-        let response = await axios.put(`${axios.defaults.baseURL}/Client/RemoveFavourite`, 
-        { 
-            headers: { 
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            },
+        let response = await axios.put(`${axios.defaults.baseURL}/Client/RemoveFavourite`, null, 
+        {
             params: {
                 businessId: businessCardId
+            },
+            headers: { 
+                Authorization: `Bearer ${localStorage.getItem('token')}` 
             }
         });
 

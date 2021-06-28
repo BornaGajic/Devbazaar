@@ -91,11 +91,13 @@ namespace Devbazaar.Controllers
 		
 		[HttpPut]
 		[Route("AddFavourites")]
-		public async Task<HttpResponseMessage> AddBusinessToFavourites ([FromUri] Guid businessId)
+		public async Task<HttpResponseMessage> AddBusinessToFavourites ([FromUri] string businessId)
 		{   
+			var bId = Guid.Parse(businessId);
+
 			try
 			{
-				var result = await ClientService.AddToFavourites(Guid.Parse(User.Identity.GetUserId()), businessId);
+				var result = await ClientService.AddToFavourites(Guid.Parse(User.Identity.GetUserId()), bId);
 
 				return Request.CreateResponse(HttpStatusCode.OK, result);
 			}
@@ -107,13 +109,15 @@ namespace Devbazaar.Controllers
 
 		[HttpPut]
 		[Route("RemoveFavourite")]
-		public async Task<HttpResponseMessage> RemoveBusinessFromFavourites ([FromUri] Guid businessId)
+		public async Task<HttpResponseMessage> RemoveBusinessFromFavourites ([FromUri] string businessId)
 		{
+			var bId = Guid.Parse(businessId);
+
 			Guid clientId = Guid.Parse(User.Identity.GetUserId());
 
 			try
 			{
-				await ClientService.RemoveFromFavourites(clientId, businessId);
+				await ClientService.RemoveFromFavourites(clientId, bId);
 
 				return Request.CreateResponse(HttpStatusCode.OK);
 			}

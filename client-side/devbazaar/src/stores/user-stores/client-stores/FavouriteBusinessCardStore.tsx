@@ -47,25 +47,26 @@ export class FavouriteBusinessCardStore
         });
     }
 
-    async removeFromFavourites (businessCardId: string): Promise<void>
+    async removeFromFavourites (businessCard: Business): Promise<void>
     {
-        let idx = this.businesses.findIndex(business => business.id === businessCardId);
+        let idx = this.businesses.findIndex(business => business.id === businessCard.id);
+        let cardPage = (idx % this.clientStore.userStore.rootStore.UiState.itemsPerPage) + 1;
+
+        businessCard.isFavourited = false;
 
         runInAction(() => this.businesses.splice(idx, 1));
 
-        this.service.clientService.removeFromFavourites(businessCardId);
+        this.service.clientService.removeFromFavourites(businessCard.id!);
+        this.clientStore.userStore.rootStore.favoriteBusinessesPageStore.removeFromFavorites(businessCard, cardPage);
     }
 
-    async addToFavourites (businessCardId: string): Promise<void>
+    async addToFavourites (businessCard: Business): Promise<void>
     {
-        let response = await this.service.clientService.addToFavourites(businessCardId);
+        let response = await this.service.clientService.addToFavourites(businessCard.id!);
+        businessCard.isFavourited = true;
 
-        let nFavBusiness = new Business(this.service);
-        runInAction(() => {
-            nFavBusiness.data = response.data;
-            nFavBusiness.id = businessCardId;
+        this.clientStore.userStore.rootStore.favoriteBusinessesPageStore.addToFavorites(businessCard);
 
-            this.businesses.push(nFavBusiness);
-        });
+        runInAction(() => this.businesses.push(businessCard));
     }
 }

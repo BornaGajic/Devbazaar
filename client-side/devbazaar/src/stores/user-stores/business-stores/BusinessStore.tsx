@@ -25,7 +25,7 @@ export class BusinessStore
         this.pinnedTaskStore = new PinnedTaskStore(this, service);
         this.service = service;
 
-        this.business = new Business(this.service);
+        this.business = new Business(this.service, this);
     }
 
     async initBusiness (): Promise<Business>

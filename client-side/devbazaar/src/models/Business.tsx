@@ -27,9 +27,10 @@ export class Business implements IBusiness, IRole
     popularity?: number;
 
     available: boolean = true;
-    isFavourited: boolean = false;
-
+    
     categories: Category[] = [];
+
+    isFavourited: boolean = false;
 
     constructor (service: IServices, businessStore?: BusinessStore)
     {

@@ -29,7 +29,7 @@ const Card = observer(({ businessCard, setClickedCardId }: CardProps) => {
                 <div className="card-footer">
                     <p className="card-text">
                         <small className="text-muted d-flex justify-content-end">
-                            <i className="bi bi-geo-alt pe-1"></i>
+                            <i className="bi bi-geo-alt pe-1" style={{verticalAlign: "text-bottom"}}></i>
                             <span>{ businessCard.country as string }, { businessCard.postalCode }, { businessCard.city as string }</span>
                         </small>
                     </p>

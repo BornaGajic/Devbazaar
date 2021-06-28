@@ -19,6 +19,8 @@ import { IServices } from '../../services/contracts';
 import { IRole } from '../../common';
 import { BusinessStore } from './business-stores/BusinessStore';
 
+// TODO: business / client store should be initialised lazely, because only one is needed. 
+
 export class UserStore
 {
     rootStore: RootStore;

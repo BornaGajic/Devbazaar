@@ -1,33 +1,47 @@
 import { observer } from "mobx-react";
+import { render } from "react-dom";
+import BrowseCardsPage from "../../pages/BrowseCardsPage";
 import { BusinessCardPageStore } from "../../stores/page-stores";
 import { FavoriteBusinessesPageStore } from "../../stores/page-stores/FavoriteBusinessesPageStore";
+import { FavouriteBusinessCardStore } from "../../stores/user-stores/client-stores/FavouriteBusinessCardStore";
 
 import './BigCard.css';
 
 interface BigCardProps
 {
     businessCardPageStore: BusinessCardPageStore | FavoriteBusinessesPageStore;
-    
+
     cardsPageNumber: number;
 
     clickedCardId?: string;
 }
 
 
-const BigCard = observer(({businessCardPageStore, clickedCardId, cardsPageNumber}: BigCardProps) => {
+const BigCard = observer((bigCardProps: BigCardProps) => {
+    let favBStore = bigCardProps.businessCardPageStore.rootStore.userStore.clientStore.favouriteBusinessStore;
 
-    let card = businessCardPageStore.businessCards_.get(cardsPageNumber)?.find(c => c.id === clickedCardId);
+    let card = bigCardProps.businessCardPageStore.businessCards_.get(bigCardProps.cardsPageNumber)?.find(c => c.id === bigCardProps.clickedCardId);
     
     let addToFvrtBtn = card?.isFavourited ? 
     (
-        <button className="btn btn-sm btn-primary fw-bold shadow-none rounded-3 mt-3"> 
+        <button 
+            className="btn btn-sm btn-primary fw-bold shadow-none rounded-3 mt-3" 
+            onClick={() => {
+                favBStore.removeFromFavourites(card!);
+
+                
+            }}
+        > 
             <i className="bi bi-heart-fill me-2" style={{color: "white", verticalAlign: "text-bottom"}}></i>
             In Favorites
         </button>
     ) :
     (
-        <button className="btn btn-sm btn-outline-secondary fw-bold shadow-none rounded-3 mt-3"> 
-            <i className="bi bi-heart me-2"></i>
+        <button 
+            className="btn btn-sm btn-outline-secondary fw-bold shadow-none rounded-3 mt-3" 
+            onClick={() => favBStore.addToFavourites(card!)}
+        >  
+            <i className="bi bi-heart me-2" style={{verticalAlign: "text-bottom"}}></i>
             Add to Favorites
         </button>
     );
@@ -55,10 +69,10 @@ const BigCard = observer(({businessCardPageStore, clickedCardId, cardsPageNumber
                     <div className="card-footer">
                         <div className="card-text">
                             <small className="text-muted d-flex lead align-items-center">
-                                <i className="bi bi-link-45deg">{ card?.website }</i>
+                                <i className="bi bi-link-45deg" style={{verticalAlign: "text-bottom"}}>{ card?.website }</i>
                             </small>
                             <small className="text-muted d-flex lead align-items-center">
-                                <i className="bi bi-geo-alt">{ card?.country }, { card?.postalCode }, { card?.city }</i>
+                                <i className="bi bi-geo-alt" style={{verticalAlign: "text-bottom"}}>{ card?.country }, { card?.postalCode }, { card?.city }</i>
                             </small>
                         </div>
                     </div>

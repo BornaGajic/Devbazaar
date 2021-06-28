@@ -14,9 +14,8 @@ interface BrowseCardsPageProps
 const BrowseCardsPage = observer(({ businessPageStore } : BrowseCardsPageProps) => {
 
     let [clickedCardId, setClickedCardId] = useState('');
-
     let query = useQuery();
-
+    
     let maxPages = businessPageStore.businessCards_.size;
 
     return (

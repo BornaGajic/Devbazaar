@@ -14,7 +14,7 @@ interface FavoriteBusinessesPageProps
     UiState: UiState;
 }
 
-export const FavoriteBusinessesPage = observer(({ favoriteBusinessPageStore, UiState }: FavoriteBusinessesPageProps) => {
+export const FavoriteBusinessesPage = observer(({ favoriteBusinessPageStore }: FavoriteBusinessesPageProps) => {
     
     let [clickedCardId, setClickedCardId] = useState('');
     let query = useQuery();

@@ -2,6 +2,7 @@ import { makeAutoObservable, runInAction } from "mobx";
 import { Business } from "../../models";
 import { IServices } from "../../services/contracts";
 import RootStore from "../RootStore";
+import { UiState } from "../ui-store/UiState";
 
 export class FavoriteBusinessesPageStore
 {
@@ -33,5 +34,52 @@ export class FavoriteBusinessesPageStore
 
             this.isLoading = false
         });
+    }
+
+    async addToFavorites (business: Business)
+    {   
+        let busFavArr = this.businessCards_.get(this.businessCards_.size)!;
+
+        if (busFavArr.length < this.rootStore.UiState.itemsPerPage)
+        {
+            this.businessCards_.get(this.businessCards_.size)!.push(business);
+        }
+        else
+        {
+            this.businessCards_.set(this.businessCards_.size + 1, [business]);
+        }
+    }
+
+    async removeFromFavorites (business: Business, cardsPageNumber: number)
+    {
+        if (this.businessCards_.get(cardsPageNumber)!.length - 1 === 0)
+        {            
+            for (let i = cardsPageNumber; i <= this.businessCards_.size; i++)
+            {   
+                if (i == this.businessCards_.size)
+                {
+                    this.businessCards_.delete(i);
+
+                    break;
+                }
+                else
+                {
+                    this.businessCards_.set(i, this.businessCards_.get(i + 1)!);
+                }
+            }
+
+            this.businessCards_.delete(cardsPageNumber);
+
+            if (this.businessCards_.size === 0)
+            {            
+                this.businessCards_.set(1, []);
+            }
+        }
+        else
+        {
+            let idx = this.businessCards_.get(cardsPageNumber)!.findIndex(b => b.id === business.id);
+
+            this.businessCards_.get(cardsPageNumber)!.splice(idx, 1);
+        }
     }
 }
