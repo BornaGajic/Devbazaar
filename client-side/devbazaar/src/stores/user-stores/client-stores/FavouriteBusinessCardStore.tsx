@@ -49,24 +49,34 @@ export class FavouriteBusinessCardStore
 
     async removeFromFavourites (businessCard: Business): Promise<void>
     {
-        let idx = this.businesses.findIndex(business => business.id === businessCard.id);
-        let cardPage = (idx % this.clientStore.userStore.rootStore.UiState.itemsPerPage) + 1;
+        let pageNumber = 0, idx = 0;
+        for (let [key, list] of this.clientStore.userStore.rootStore.favoriteBusinessesPageStore.businessCards_)
+        {
+            let idx = list.findIndex(b => b.id === businessCard.id)
+            if (idx !== -1)
+            {
+                pageNumber = key;
+                break;
+            }
+        }
 
-        businessCard.isFavourited = false;
-
-        runInAction(() => this.businesses.splice(idx, 1));
+        runInAction(() => {
+            businessCard.isFavourited = false;
+            this.businesses.splice(idx, 1)
+        });
 
         this.service.clientService.removeFromFavourites(businessCard.id!);
-        this.clientStore.userStore.rootStore.favoriteBusinessesPageStore.removeFromFavorites(businessCard, cardPage);
+        this.clientStore.userStore.rootStore.favoriteBusinessesPageStore.removeFromFavorites(businessCard, pageNumber);
     }
 
     async addToFavourites (businessCard: Business): Promise<void>
-    {
-        let response = await this.service.clientService.addToFavourites(businessCard.id!);
-        businessCard.isFavourited = true;
-
+    {        
+        runInAction(() => {
+            businessCard.isFavourited = true;
+            this.businesses.push(businessCard)
+        });
+        
+        this.service.clientService.addToFavourites(businessCard.id!);
         this.clientStore.userStore.rootStore.favoriteBusinessesPageStore.addToFavorites(businessCard);
-
-        runInAction(() => this.businesses.push(businessCard));
     }
 }

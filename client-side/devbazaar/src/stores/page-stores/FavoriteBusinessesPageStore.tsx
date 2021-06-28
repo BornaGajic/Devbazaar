@@ -40,46 +40,50 @@ export class FavoriteBusinessesPageStore
     {   
         let busFavArr = this.businessCards_.get(this.businessCards_.size)!;
 
-        if (busFavArr.length < this.rootStore.UiState.itemsPerPage)
-        {
-            this.businessCards_.get(this.businessCards_.size)!.push(business);
-        }
-        else
-        {
-            this.businessCards_.set(this.businessCards_.size + 1, [business]);
-        }
+        runInAction(() => {
+            if (busFavArr.length < this.rootStore.UiState.itemsPerPage)
+            {
+                this.businessCards_.get(this.businessCards_.size)!.push(business);
+            }
+            else
+            {
+                this.businessCards_.set(this.businessCards_.size + 1, [business]);
+            }
+        })
+        
     }
 
     async removeFromFavorites (business: Business, cardsPageNumber: number)
     {
+        
         if (this.businessCards_.get(cardsPageNumber)!.length - 1 === 0)
         {            
             for (let i = cardsPageNumber; i <= this.businessCards_.size; i++)
             {   
                 if (i == this.businessCards_.size)
                 {
-                    this.businessCards_.delete(i);
-
+                    runInAction(() => this.businessCards_.delete(i));
+                    
                     break;
                 }
                 else
                 {
-                    this.businessCards_.set(i, this.businessCards_.get(i + 1)!);
+                    runInAction(() => this.businessCards_.set(i, this.businessCards_.get(i + 1)!));
                 }
             }
 
-            this.businessCards_.delete(cardsPageNumber);
+            runInAction(() => this.businessCards_.delete(cardsPageNumber));
 
             if (this.businessCards_.size === 0)
             {            
-                this.businessCards_.set(1, []);
+                runInAction(() => this.businessCards_.set(1, []));
             }
         }
         else
         {
             let idx = this.businessCards_.get(cardsPageNumber)!.findIndex(b => b.id === business.id);
 
-            this.businessCards_.get(cardsPageNumber)!.splice(idx, 1);
+            runInAction(() => this.businessCards_.get(cardsPageNumber)!.splice(idx, 1));
         }
     }
 }
