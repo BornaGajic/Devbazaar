@@ -27,9 +27,20 @@ const BigCard = observer((bigCardProps: BigCardProps) => {
         <button 
             className="btn btn-sm btn-primary fw-bold shadow-none rounded-3 mt-3" 
             onClick={() => {
-                favBStore.removeFromFavourites(card!);
+                let completeChanges = favBStore.removeFromFavourites(card!);
 
-                
+                let myModal = document.getElementById("exampleModal");
+
+                let hiddenModalHandler = async () => {
+                    if (card?.isFavourited === false)
+                    {
+                        (await completeChanges)();
+                    }
+
+                    myModal?.removeEventListener('hidden.bs.modal', hiddenModalHandler);
+                }
+
+                myModal?.addEventListener('hidden.bs.modal', hiddenModalHandler);
             }}
         > 
             <i className="bi bi-heart-fill me-2" style={{color: "white", verticalAlign: "text-bottom"}}></i>
