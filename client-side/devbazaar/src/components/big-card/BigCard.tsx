@@ -1,4 +1,5 @@
 import { observer } from "mobx-react";
+import { useState } from "react";
 import { render } from "react-dom";
 import BrowseCardsPage from "../../pages/BrowseCardsPage";
 import { BusinessCardPageStore } from "../../stores/page-stores";
@@ -22,25 +23,24 @@ const BigCard = observer((bigCardProps: BigCardProps) => {
 
     let card = bigCardProps.businessCardPageStore.businessCards_.get(bigCardProps.cardsPageNumber)?.find(c => c.id === bigCardProps.clickedCardId);
     
+
     let addToFvrtBtn = card?.isFavourited ? 
     (
         <button 
             className="btn btn-sm btn-primary fw-bold shadow-none rounded-3 mt-3" 
             onClick={() => {
+                let myModal = document.getElementById("exampleModal");
+                
                 let completeChanges = favBStore.removeFromFavourites(card!);
 
-                let myModal = document.getElementById("exampleModal");
-
-                let hiddenModalHandler = async () => {
+                myModal?.addEventListener('hidden.bs.modal', async () => {
                     if (card?.isFavourited === false)
                     {
-                        (await completeChanges)();
+                        (await completeChanges)(card.id!);
                     }
-
-                    myModal?.removeEventListener('hidden.bs.modal', hiddenModalHandler);
-                }
-
-                myModal?.addEventListener('hidden.bs.modal', hiddenModalHandler);
+                }, {
+                    once: true
+                });
             }}
         > 
             <i className="bi bi-heart-fill me-2" style={{color: "white", verticalAlign: "text-bottom"}}></i>

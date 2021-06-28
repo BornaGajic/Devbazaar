@@ -71,8 +71,6 @@ export class FavoriteBusinessesPageStore
                 }
             }
 
-            runInAction(() => this.businessCards_.delete(cardsPageNumber));
-
             if (this.businessCards_.size === 0)
             {            
                 runInAction(() => this.businessCards_.set(1, []));

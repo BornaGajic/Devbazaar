@@ -47,28 +47,34 @@ export class FavouriteBusinessCardStore
         });
     }
 
-    async removeFromFavourites (businessCard: Business): Promise<() => void>
+    async removeFromFavourites (businessCard: Business): Promise<(cardId: string) => void>
     {
-        let pageNumber = 0, idx = 0;
-        for (let [key, list] of this.clientStore.userStore.rootStore.favoriteBusinessesPageStore.businessCards_)
-        {
-            let idx = list.findIndex(b => b.id === businessCard.id)
-            if (idx !== -1)
-            {
-                pageNumber = key;
-                break;
-            }
-        }
-
         runInAction(() => {
             businessCard.isFavourited = false;
         });
 
-        let completeChanges = () => {
-            runInAction(() => this.businesses.splice(idx, 1));
+        let completeChanges = async (cardId: string) => {
 
-            this.service.clientService.removeFromFavourites(businessCard.id!);
-            this.clientStore.userStore.rootStore.favoriteBusinessesPageStore.removeFromFavorites(businessCard, pageNumber);
+            let pageNumber = -1, idx = -1;
+            for (let [key, list] of this.clientStore.userStore.rootStore.favoriteBusinessesPageStore.businessCards_)
+            {
+                idx = list.findIndex(b => b.id === businessCard.id)
+                if (idx !== -1)
+                {
+                    pageNumber = key;
+                    break;
+                }
+            }
+
+            if (idx !== -1)
+            {
+                runInAction(() => this.businesses.splice(idx, 1));
+
+                await this.clientStore.userStore.rootStore.favoriteBusinessesPageStore.removeFromFavorites(businessCard, pageNumber)
+                                                                                      .then(() => runInAction(() => this.businesses.sort()));
+                
+                this.service.clientService.removeFromFavourites(businessCard.id!);
+            }
         }
 
         return completeChanges;
@@ -79,15 +85,17 @@ export class FavouriteBusinessCardStore
         if (this.businesses.find(business => business.id === businessCard.id)) // User has un-favorited a card, then changed its mind and favorited again.
         {
             runInAction(() => businessCard.isFavourited = true);
-            return;
         }
-
-        runInAction(() => {
-            businessCard.isFavourited = true;
-            this.businesses.push(businessCard)
-        });
-        
-        this.service.clientService.addToFavourites(businessCard.id!);
-        this.clientStore.userStore.rootStore.favoriteBusinessesPageStore.addToFavorites(businessCard);
+        else
+        {
+            runInAction(() => {
+                businessCard.isFavourited = true;
+                this.businesses.push(businessCard)
+            });
+            
+            await this.clientStore.userStore.rootStore.favoriteBusinessesPageStore.addToFavorites(businessCard)
+                                                                                  .then(() => runInAction(() => this.businesses.sort()));
+            this.service.clientService.addToFavourites(businessCard.id!);
+        }
     }
 }
