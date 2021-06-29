@@ -46,7 +46,7 @@ const BigCard = observer((bigCardProps: BigCardProps) => {
     ) :
     (
         <button 
-            className="btn btn-sm btn-outline-secondary fw-bold shadow-none rounded-3 mt-3 mb-3" 
+            className="btn btn-sm btn-outline-secondary fw-bold shadow-none rounded-3 mt-2 mb-2" 
             onClick={() => favBStore.addToFavourites(card!)}
         >  
             <i className="bi bi-heart me-2" style={{verticalAlign: "text-bottom"}}></i>
@@ -73,9 +73,9 @@ const BigCard = observer((bigCardProps: BigCardProps) => {
                             <ul className="list-inline">
                                 {
                                     card?.categories.map(category =>
-                                        <li key={category.id} className="list-inline-item">
+                                        <li key={category?.id} className="list-inline-item">
                                             <button className="btn btn-sm btn-outline-primary rounded-pill shadow-none disabeled">
-                                                <span>{category.name}</span>
+                                                <span>{category?.name}</span>
                                             </button>
                                         </li>                                        
                                     )

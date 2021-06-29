@@ -2,6 +2,7 @@ import { makeAutoObservable, runInAction } from "mobx";
 import { Business } from "../../models";
 import { IServices } from "../../services/contracts";
 import RootStore from "../RootStore";
+import { SearchStore } from "../SearchStore";
 import { UiState } from "../ui-store/UiState";
 
 export class FavoriteBusinessesPageStore
@@ -11,12 +12,39 @@ export class FavoriteBusinessesPageStore
     isLoading: boolean = true;
 
     businessCards_: Map<number, Business[]> = new Map<number, Business[]>();
+    private searchResults: Map<number, Business[]> = new Map<number, Business[]>();
 
     constructor (public rootStore: RootStore, service: IServices)
     {
         makeAutoObservable(this, { rootStore: false, service: false });
 
         this.service = service;
+    }
+
+    async swap (searchStore: SearchStore)
+    {
+        if (searchStore.query !== '')
+        {
+            let pageNumber = 1;
+            let ipp = this.rootStore.UiState.itemsPerPage;
+
+            this.searchResults.clear();
+            this.searchResults.set(pageNumber, []);
+
+            let favoriteBusinesses = this.rootStore.userStore.clientStore.favouriteBusinessStore.businesses;
+            let regex = new RegExp(`${searchStore.query}`, 'gi');
+
+            let filtered = favoriteBusinesses.filter(value => {
+                return value.username?.match(regex)?.length ?? -1 > 0;
+            });
+
+            for (let i = 0; i <= filtered.length; i += ipp, pageNumber++)
+            {
+                this.searchResults.set(pageNumber, filtered.slice(i, ipp));
+            }
+
+            [this.businessCards_, this.searchResults] = [this.searchResults, this.businessCards_];
+        }
     }
 
     async loadFavoriteBusinesses (): Promise<void>
@@ -55,6 +83,8 @@ export class FavoriteBusinessesPageStore
 
     async removeFromFavorites (business: Business, cardsPageNumber: number): Promise<void>
     {
+        console.log(business, cardsPageNumber);
+
         if (this.businessCards_.get(cardsPageNumber)!.length - 1 === 0)
         {            
             for (let i = cardsPageNumber; i <= this.businessCards_.size; i++)

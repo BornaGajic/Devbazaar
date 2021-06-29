@@ -4,7 +4,7 @@
  * -----------------------------
  */
 
-import { makeAutoObservable, runInAction } from "mobx";
+import { makeAutoObservable, runInAction, toJS } from "mobx";
 
 import { ClientStore } from "./ClientStore";
 
@@ -87,7 +87,7 @@ export class FavouriteBusinessCardStore
                     this.businesses.splice(idx, 1);
                 });
     
-                await favBusPageStore.removeFromFavorites(businessCard, pageNumber)
+                await favBusPageStore.removeFromFavorites(businessCard, pageNumberFav)
                                      .then(() => runInAction(() => this.businesses.sort()));
                 
                 this.service.clientService.removeFromFavourites(businessCard.id!);
@@ -102,6 +102,11 @@ export class FavouriteBusinessCardStore
     {        
         if (this.businesses.find(business => business.id === businessCard.id)) // User has un-favorited a card, then changed its mind and favorited again.
         {
+            console.log(businessCard);
+
+            console.log(toJS(this.businesses));
+
+
             runInAction(() => businessCard.isFavourited = true);
         }
         else

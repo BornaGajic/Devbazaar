@@ -39,7 +39,7 @@ const Main = observer(({ rootStore }: {rootStore: RootStore}) => {
 						<MyTaskPage myTaskPageStore={rootStore.myTaskPageStore}/>
 					</Route>
 					<Route path="/Favorites">
-						<FavoriteBusinessesPage favoriteBusinessPageStore={rootStore.favoriteBusinessesPageStore} UiState={rootStore.UiState}/>
+						<FavoriteBusinessesPage favoriteBusinessPageStore={rootStore.favoriteBusinessesPageStore} searchStore={rootStore.searchStore}/>
 					</Route>
 				</Switch>
 			</div>

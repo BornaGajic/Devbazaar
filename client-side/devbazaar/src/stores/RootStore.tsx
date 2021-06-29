@@ -9,6 +9,7 @@ import { IServices } from '../services/contracts';
 import { UiState } from './ui-store/UiState';
 import { MyTaskPageStore } from './page-stores/MyTaskPageStore';
 import { FavoriteBusinessesPageStore } from './page-stores/FavoriteBusinessesPageStore';
+import { SearchStore } from './SearchStore';
 
 
 class RootStore
@@ -21,7 +22,8 @@ class RootStore
     taskPageStore: TaskPageStore;
     myTaskPageStore: MyTaskPageStore;
     categoryStore: CategoryStore;
-    authStore: AuthStore
+    authStore: AuthStore;
+    searchStore: SearchStore;
 
     UiState: UiState;
 
@@ -30,7 +32,8 @@ class RootStore
         this.UiState = new UiState(this);
 
         this.service = new Services();
-
+        
+        this.searchStore = new SearchStore(this);
         this.authStore = new AuthStore(this, this.service.authService);
         this.categoryStore = new CategoryStore(this, this.service);
         this.userStore = new UserStore(this, this.service);

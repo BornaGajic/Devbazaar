@@ -1,4 +1,3 @@
-import { queryByRole } from "@testing-library/react";
 import { observer } from "mobx-react";
 import { useState } from "react";
 import BigCard from "../components/big-card/BigCard";
@@ -6,18 +5,24 @@ import CardList from "../components/card-list/CardList";
 import PageNavigation from "../components/page-navigation/PageNavigation";
 import { useQuery } from "../hooks/useQuery";
 import { FavoriteBusinessesPageStore } from "../stores/page-stores/FavoriteBusinessesPageStore";
+import { SearchStore } from "../stores/SearchStore";
 import { UiState } from "../stores/ui-store/UiState";
 
 interface FavoriteBusinessesPageProps
 {
     favoriteBusinessPageStore: FavoriteBusinessesPageStore;
-    UiState: UiState;
+    searchStore: SearchStore;
 }
 
-export const FavoriteBusinessesPage = observer(({ favoriteBusinessPageStore }: FavoriteBusinessesPageProps) => {
+export const FavoriteBusinessesPage = observer(({ favoriteBusinessPageStore, searchStore }: FavoriteBusinessesPageProps) => {
     
     let [clickedCardId, setClickedCardId] = useState('');
     let query = useQuery();
+
+    if (searchStore.query !== '')
+    {
+        //favoriteBusinessPageStore.swap(searchStore);
+    }
 
     let maxPages = favoriteBusinessPageStore.businessCards_.size;
 
