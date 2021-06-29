@@ -38,6 +38,8 @@ export class AuthStore
 
         localStorage.setItem('token', this.token);
 
+        await this.rootStore.categoryStore.loadCategories();
+
         this.rootStore.businessPageStore.loadNextBatch();
         this.rootStore.taskPageStore.loadNextBatch();
 

@@ -83,8 +83,6 @@ export class FavoriteBusinessesPageStore
 
     async removeFromFavorites (business: Business, cardsPageNumber: number): Promise<void>
     {
-        console.log(business, cardsPageNumber);
-
         if (this.businessCards_.get(cardsPageNumber)!.length - 1 === 0)
         {            
             for (let i = cardsPageNumber; i <= this.businessCards_.size; i++)

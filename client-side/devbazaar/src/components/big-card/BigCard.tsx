@@ -9,7 +9,7 @@ import './BigCard.css';
 interface BigCardProps
 {
     businessCardPageStore: BusinessCardPageStore | FavoriteBusinessesPageStore;
-
+    
     cardsPageNumber: number;
 
     clickedCardId?: string;
@@ -18,6 +18,7 @@ interface BigCardProps
 
 const BigCard = observer((bigCardProps: BigCardProps) => {
     let favBStore = bigCardProps.businessCardPageStore.rootStore.userStore.clientStore.favouriteBusinessStore;
+    let categoryStore = bigCardProps.businessCardPageStore.rootStore.categoryStore;
 
     let card = bigCardProps.businessCardPageStore.businessCards_.get(bigCardProps.cardsPageNumber)?.find(c => c.id === bigCardProps.clickedCardId);
     
@@ -71,15 +72,15 @@ const BigCard = observer((bigCardProps: BigCardProps) => {
                             <p>{ card?.about }</p>  
                             
                             <ul className="list-inline">
-                                {
-                                    card?.categories.map(category =>
-                                        <li key={category?.id} className="list-inline-item">
-                                            <button className="btn btn-sm btn-outline-primary rounded-pill shadow-none disabeled">
-                                                <span>{category?.name}</span>
-                                            </button>
-                                        </li>                                        
-                                    )
-                                }
+                            {
+                                card?.categories.map(category =>
+                                    <li key={category?.id} className="list-inline-item">
+                                        <button className="btn btn-sm btn-outline-primary rounded-pill shadow-none disabeled">
+                                            <span>{category?.name}</span>
+                                        </button>
+                                    </li>
+                                )
+                            }
                             </ul>  
 
                             <div className="d-flex justify-content-center">

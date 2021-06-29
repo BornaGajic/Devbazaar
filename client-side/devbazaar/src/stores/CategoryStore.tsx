@@ -12,7 +12,7 @@ export class CategoryStore
     rootStore: RootStore;
 
     service: IServices;
-
+    
     readonly categories: Category[] = [];
 
     constructor (rootStore: RootStore, service: IServices)
