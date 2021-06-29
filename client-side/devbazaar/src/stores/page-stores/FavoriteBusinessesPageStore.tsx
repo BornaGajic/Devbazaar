@@ -55,7 +55,7 @@ export class FavoriteBusinessesPageStore
         runInAction(() => {
             let ipp = this.rootStore.UiState.itemsPerPage;
             
-            for (let i = 0; i <= favoriteBusinesses.length; i += ipp, pageNumber++)
+            for (let i = 0; i < favoriteBusinesses.length; i += ipp, pageNumber++)
             {
                 this.businessCards_.set(pageNumber, favoriteBusinesses.slice(i, ipp));
             }

@@ -84,7 +84,7 @@ export class FavouriteBusinessCardStore
                     favBusPageStore.businessCards_.get(pageNumberFav)!.find(b => b.id === businessCard.id)!.isFavourited = false;
                     busPageStore.businessCards_.get(pageNumber)!.find(b => b.id === businessCard.id)!.isFavourited = false;
                     
-                    this.businesses.splice(idx, 1);
+                    this.businesses.splice(idxFav, 1);
                 });
     
                 await favBusPageStore.removeFromFavorites(businessCard, pageNumberFav)

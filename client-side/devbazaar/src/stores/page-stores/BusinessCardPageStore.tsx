@@ -1,4 +1,4 @@
-import { makeAutoObservable, runInAction, toJS } from 'mobx';
+import { IReactionDisposer, makeAutoObservable, reaction, runInAction, toJS } from 'mobx';
 import { RootStore } from '..';
 
 import { IBusinessPage } from '../../common';
@@ -11,6 +11,8 @@ export class BusinessCardPageStore
     service: IServices;
 
     isLoading: boolean = true;
+
+    reactionHandler: IReactionDisposer;
     
     // page_number : page_content
     businessCards_: Map<number, Business[]> = new Map<number, Business[]>()
@@ -25,6 +27,13 @@ export class BusinessCardPageStore
         {
             this.loadNextBatch();
         }
+
+        this.reactionHandler = reaction(
+            () => rootStore.searchStore.query,
+            value => {
+                console.log(value);
+            }
+        );
     }
 
     /**
@@ -32,6 +41,8 @@ export class BusinessCardPageStore
      */
     async loadNextBatch (): Promise<void>
     {
+        runInAction(() => this.isLoading = true);
+
         Promise.all([
             await this.fetchBusinessCardPage({ PageNumber: 1 }),
             await this.fetchBusinessCardPage({ PageNumber: 2 }),
@@ -63,5 +74,10 @@ export class BusinessCardPageStore
                 this.businessCards_.get(pageData.PageNumber)!.push(bCard);
             });
         });
+    }
+
+    dispose ()
+    {
+        this.reactionHandler();
     }
 }

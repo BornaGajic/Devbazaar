@@ -47,7 +47,7 @@ const Main = observer(({ rootStore }: {rootStore: RootStore}) => {
 		<div className="container-fluid"> 
 			<div className="row"> 
 
-				<Sidebar role={rootStore.userStore.user.role} />
+				<Sidebar role={rootStore.userStore.user.role} searchStore={rootStore.searchStore} />
 
 				<div className="col m-0 p-0">
 					<div className="row m-0 p-0">

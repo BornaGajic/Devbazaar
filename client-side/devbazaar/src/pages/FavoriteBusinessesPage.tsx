@@ -1,3 +1,4 @@
+import { toJS } from "mobx";
 import { observer } from "mobx-react";
 import { useState } from "react";
 import BigCard from "../components/big-card/BigCard";
@@ -25,6 +26,7 @@ export const FavoriteBusinessesPage = observer(({ favoriteBusinessPageStore, sea
     }
 
     let maxPages = favoriteBusinessPageStore.businessCards_.size;
+    console.log(toJS(favoriteBusinessPageStore.businessCards_));
 
     return (
         <div>
