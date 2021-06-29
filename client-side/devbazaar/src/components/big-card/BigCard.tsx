@@ -1,10 +1,8 @@
 import { observer } from "mobx-react";
 import { useState } from "react";
-import { render } from "react-dom";
 import BrowseCardsPage from "../../pages/BrowseCardsPage";
 import { BusinessCardPageStore } from "../../stores/page-stores";
 import { FavoriteBusinessesPageStore } from "../../stores/page-stores/FavoriteBusinessesPageStore";
-import { FavouriteBusinessCardStore } from "../../stores/user-stores/client-stores/FavouriteBusinessCardStore";
 
 import './BigCard.css';
 
@@ -23,7 +21,8 @@ const BigCard = observer((bigCardProps: BigCardProps) => {
 
     let card = bigCardProps.businessCardPageStore.businessCards_.get(bigCardProps.cardsPageNumber)?.find(c => c.id === bigCardProps.clickedCardId);
     
-
+    console.log(card);
+    
     let addToFvrtBtn = card?.isFavourited ? 
     (
         <button 
@@ -36,7 +35,7 @@ const BigCard = observer((bigCardProps: BigCardProps) => {
                 myModal?.addEventListener('hidden.bs.modal', async () => {
                     if (card?.isFavourited === false)
                     {
-                        (await completeChanges)(card.id!);
+                        (await completeChanges)();
                     }
                 }, {
                     once: true

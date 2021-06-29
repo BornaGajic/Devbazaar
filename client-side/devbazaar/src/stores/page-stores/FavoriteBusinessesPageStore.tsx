@@ -36,7 +36,7 @@ export class FavoriteBusinessesPageStore
         });
     }
 
-    async addToFavorites (business: Business)
+    async addToFavorites (business: Business): Promise<void>
     {   
         let busFavArr = this.businessCards_.get(this.businessCards_.size)!;
 
@@ -53,7 +53,7 @@ export class FavoriteBusinessesPageStore
         
     }
 
-    async removeFromFavorites (business: Business, cardsPageNumber: number)
+    async removeFromFavorites (business: Business, cardsPageNumber: number): Promise<void>
     {
         if (this.businessCards_.get(cardsPageNumber)!.length - 1 === 0)
         {            
