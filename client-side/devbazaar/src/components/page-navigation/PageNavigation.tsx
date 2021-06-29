@@ -16,8 +16,11 @@ const PageNavigation = observer(({ maxPages }: PageNavigationProps) => {
     let query = useQuery();
 
     let setSearchParam = (pageNumber: number) => {
-        query.set('pageNumber', pageNumber.toString());
+        console.log(query.toString());
+        console.log(location);
         
+        query.set('pageNumber', pageNumber.toString());
+    
         return query.toString();
     }
 

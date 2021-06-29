@@ -15,10 +15,11 @@ const Searchbox = observer(({ searchStore }: { searchStore: SearchStore }) => {
         e.preventDefault();
     
         runInAction(() => searchStore.query = typing);
+        console.log(searchStore.query);
     };
 
     let handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        runInAction(() =>  setTyping(e.target.value));
+        runInAction(() =>  setTyping('?username=' + e.target.value));
     }
 
     return (

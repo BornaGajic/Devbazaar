@@ -26,9 +26,6 @@ const Main = observer(({ rootStore }: {rootStore: RootStore}) => {
 					<Route exact path="/">	
 						<BrowseCardsPage businessPageStore={rootStore.businessPageStore} />
 					</Route>
-					<Route path="/Home">
-						<BrowseCardsPage businessPageStore={rootStore.businessPageStore} />
-					</Route>
 					<Route path="/Businesses">
 						<BrowseCardsPage businessPageStore={rootStore.businessPageStore} />
 					</Route>
