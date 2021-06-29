@@ -21,8 +21,6 @@ const BigCard = observer((bigCardProps: BigCardProps) => {
 
     let card = bigCardProps.businessCardPageStore.businessCards_.get(bigCardProps.cardsPageNumber)?.find(c => c.id === bigCardProps.clickedCardId);
     
-    console.log(card);
-
     let addToFvrtBtn = card?.isFavourited ? 
     (
         <button 

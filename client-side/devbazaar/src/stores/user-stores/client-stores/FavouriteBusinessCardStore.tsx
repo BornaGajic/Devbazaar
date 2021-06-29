@@ -55,9 +55,20 @@ export class FavouriteBusinessCardStore
 
         let completeChanges = async () => {
             let favBusPageStore = this.clientStore.userStore.rootStore.favoriteBusinessesPageStore;
+            let busPageStore = this.clientStore.userStore.rootStore.businessPageStore;
 
-            let pageNumber = -1, idx = -1;
+            let pageNumberFav = -1, idxFav = -1;
             for (let [key, list] of favBusPageStore.businessCards_)
+            {
+                idxFav = list.findIndex(b => b.id === businessCard.id)
+                if (idxFav !== -1)
+                {
+                    pageNumberFav = key;
+                    break;
+                }
+            }
+            let pageNumber = -1, idx = -1;
+            for (let [key, list] of busPageStore.businessCards_)
             {
                 idx = list.findIndex(b => b.id === businessCard.id)
                 if (idx !== -1)
@@ -66,19 +77,22 @@ export class FavouriteBusinessCardStore
                     break;
                 }
             }
-
-            if (idx !== -1)
+            
+            if (idx !== -1 && idxFav !== -1)
             {
                 runInAction(() => {
-                    favBusPageStore.businessCards_.get(pageNumber)!.find(b => b.id === businessCard.id)!.isFavourited = false;
+                    favBusPageStore.businessCards_.get(pageNumberFav)!.find(b => b.id === businessCard.id)!.isFavourited = false;
+                    busPageStore.businessCards_.get(pageNumber)!.find(b => b.id === businessCard.id)!.isFavourited = false;
+                    
                     this.businesses.splice(idx, 1);
                 });
-
+    
                 await favBusPageStore.removeFromFavorites(businessCard, pageNumber)
                                      .then(() => runInAction(() => this.businesses.sort()));
                 
                 this.service.clientService.removeFromFavourites(businessCard.id!);
             }
+            
         }
 
         return completeChanges;
