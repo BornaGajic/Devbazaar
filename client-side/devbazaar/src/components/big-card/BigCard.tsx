@@ -22,11 +22,11 @@ const BigCard = observer((bigCardProps: BigCardProps) => {
     let card = bigCardProps.businessCardPageStore.businessCards_.get(bigCardProps.cardsPageNumber)?.find(c => c.id === bigCardProps.clickedCardId);
     
     console.log(card);
-    
+
     let addToFvrtBtn = card?.isFavourited ? 
     (
         <button 
-            className="btn btn-sm btn-primary fw-bold shadow-none rounded-3 mt-3" 
+            className="btn btn-sm btn-primary fw-bold shadow-none rounded-3 mt-2 mb-2" 
             onClick={() => {
                 let myModal = document.getElementById("exampleModal");
                 
@@ -48,7 +48,7 @@ const BigCard = observer((bigCardProps: BigCardProps) => {
     ) :
     (
         <button 
-            className="btn btn-sm btn-outline-secondary fw-bold shadow-none rounded-3 mt-3" 
+            className="btn btn-sm btn-outline-secondary fw-bold shadow-none rounded-3 mt-3 mb-3" 
             onClick={() => favBStore.addToFavourites(card!)}
         >  
             <i className="bi bi-heart me-2" style={{verticalAlign: "text-bottom"}}></i>
@@ -71,9 +71,22 @@ const BigCard = observer((bigCardProps: BigCardProps) => {
                             <p>{card?.description}</p>
                             <p className="h5">About</p>
                             <p>{ card?.about }</p>  
-                        
-                            <button className="btn btn-sm btn-outline-primary rounded-pill shadow-none disabeled">CategoryXY</button> <br/>
-                            { addToFvrtBtn }
+                            
+                            <ul className="list-inline">
+                                {
+                                    card?.categories.map(category =>
+                                        <li key={category.id} className="list-inline-item">
+                                            <button className="btn btn-sm btn-outline-primary rounded-pill shadow-none disabeled">
+                                                <span>{category.name}</span>
+                                            </button>
+                                        </li>                                        
+                                    )
+                                }
+                            </ul>  
+
+                            <div className="d-flex justify-content-center">
+                                { addToFvrtBtn }
+                            </div>              
                         </div>
                     </div>
                     <div className="card-footer">

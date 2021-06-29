@@ -56,7 +56,7 @@ export class BusinessCardPageStore
 
             response.data.forEach(item => {
             
-                let bCard = new Business(this.service);
+                let bCard = new Business(this.service, this.rootStore.categoryStore);
                 bCard.id = item.id;
                 bCard.data = item;
 

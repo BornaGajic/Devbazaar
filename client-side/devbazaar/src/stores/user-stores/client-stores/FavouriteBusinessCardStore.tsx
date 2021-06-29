@@ -39,7 +39,7 @@ export class FavouriteBusinessCardStore
     async updateFavouritesFromJson (data: IBusiness[]): Promise<void>
     {
         data.forEach(business => {
-            let nFavBusiness = new Business(this.service);
+            let nFavBusiness = new Business(this.service, this.clientStore.userStore.rootStore.categoryStore);
             nFavBusiness.id = business.id;
             nFavBusiness.data = business;
 
