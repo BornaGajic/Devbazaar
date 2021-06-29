@@ -30,8 +30,8 @@ export class BusinessCardPageStore
 
         this.reactionHandler = reaction(
             () => rootStore.searchStore.query,
-            value => {
-                console.log(value);
+            searchString => {
+                console.log(searchString);
             }
         );
     }

@@ -20,13 +20,7 @@ export const FavoriteBusinessesPage = observer(({ favoriteBusinessPageStore, sea
     let [clickedCardId, setClickedCardId] = useState('');
     let query = useQuery();
 
-    if (searchStore.query !== '')
-    {
-        //favoriteBusinessPageStore.swap(searchStore);
-    }
-
     let maxPages = favoriteBusinessPageStore.businessCards_.size;
-    console.log(toJS(favoriteBusinessPageStore.businessCards_));
 
     return (
         <div>

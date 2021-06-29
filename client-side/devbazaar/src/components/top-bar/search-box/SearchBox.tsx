@@ -1,7 +1,7 @@
 import { runInAction } from "mobx";
 import { observer } from "mobx-react";
 import React, { useState } from "react";
-import { useLocation } from "react-router";
+import { useHistory, useLocation } from "react-router";
 import { useQuery } from "../../../hooks/useQuery";
 import { SearchStore } from "../../../stores/SearchStore";
 
@@ -10,23 +10,26 @@ import './SearchBox.css';
 const Searchbox = observer(({ searchStore }: { searchStore: SearchStore }) => {
 
     let [typing, setTyping] = useState('');
+    let location = useLocation();
+    let history = useHistory();
 
     let handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
     
-        runInAction(() => searchStore.query = typing);
+        history.push(location.pathname + location.search + typing);
 
-        let myInput = document.getElementById("inputField") as HTMLInputElement;
-        myInput.value = '';
+        runInAction(() => searchStore.query = location.pathname + location.search + typing);
+
+        (document.getElementById("inputField") as HTMLInputElement).value = ''; // After submit set value of input field to ''
     };
 
-    let handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        runInAction(() =>  setTyping('?username=' + e.target.value));
+    let handleMainInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        runInAction(() => setTyping('&username=' + e.target.value));
     }
 
     return (
         <form onSubmit={handleSubmit} id="searchBox" className="col col-md-5 dropdown d-flex ms-3 me-3">
-            <input id="inputField" onChange={handleChange} className="mx-3 bg-dark form-control form-control-dark shadow-none me-2 ms-5" type="text" placeholder="Search pinned tasks" aria-label="Search" />
+            <input id="inputField" onChange={handleMainInputChange} className="mx-3 bg-dark form-control form-control-dark shadow-none me-2 ms-5" type="text" placeholder="Search pinned tasks" aria-label="Search" />
             <button id="dropdownBtn" className="btn btn-outline-success dropdown-toggle shadow-none my-auto mx-auto btn-sm" data-bs-toggle="dropdown" aria-expanded="false" data-bs-target="#advancedSearch" aria-controls="advancedSearch" type="button"><i className="bi bi-filter fs-6"></i></button>
             
             <div id="advancedSearch" className="dropdown-menu bg-dark w-100 animate__animated animate__fadeIn animate__faster">

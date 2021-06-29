@@ -10,8 +10,10 @@ export class FavoriteBusinessesPageStore
     service: IServices;
 
     isLoading: boolean = true;
+    favBtnPressed: boolean = false;
 
     businessCards_: Map<number, Business[]> = new Map<number, Business[]>();
+
     private searchResults: Map<number, Business[]> = new Map<number, Business[]>();
 
     constructor (public rootStore: RootStore, service: IServices)
@@ -64,51 +66,94 @@ export class FavoriteBusinessesPageStore
         });
     }
 
-    async addToFavorites (business: Business): Promise<void>
+    async addToFavorites (business: Business): Promise<() => void>
     {   
-        let busFavArr = this.businessCards_.get(this.businessCards_.size)!;
-
         runInAction(() => {
-            if (busFavArr.length < this.rootStore.UiState.itemsPerPage)
-            {
-                this.businessCards_.get(this.businessCards_.size)!.push(business);
-            }
-            else
-            {
-                this.businessCards_.set(this.businessCards_.size + 1, [business]);
-            }
-        })
-        
-    }
+            business.isFavourited = true;
+        });
 
-    async removeFromFavorites (business: Business, cardsPageNumber: number): Promise<void>
-    {
-        if (this.businessCards_.get(cardsPageNumber)!.length - 1 === 0)
-        {            
-            for (let i = cardsPageNumber; i <= this.businessCards_.size; i++)
-            {   
-                if (i == this.businessCards_.size)
+        let completeChanges = async () => {
+            let busFavArr = this.businessCards_.get(this.businessCards_.size)!;
+            
+            runInAction(() => {
+                if (busFavArr.length < this.rootStore.UiState.itemsPerPage)
                 {
-                    runInAction(() => this.businessCards_.delete(i));
-                    
-                    break;
+                    this.businessCards_.get(this.businessCards_.size)!.push(business);
                 }
                 else
                 {
-                    runInAction(() => this.businessCards_.set(i, this.businessCards_.get(i + 1)!));
+                    this.businessCards_.set(this.businessCards_.size + 1, [business]);
+                }
+            });
+            
+            this.setIsFavorited(true, business, true);
+            this.setIsFavorited(true, business, false);
+
+            this.service.clientService.addToFavourites(business.id!);
+        }
+        
+        return completeChanges;
+    }
+
+    async removeFromFavorites (business: Business): Promise<() => void>
+    {
+        runInAction(() => {
+            business.isFavourited = false;
+        });
+
+        let completeChanges = async () => {
+            let [idxFav, cardsPageNumberFav] = this.setIsFavorited(false, business, true);
+            this.setIsFavorited(false, business, false);
+        
+            if (this.businessCards_.get(cardsPageNumberFav)!.length - 1 === 0)
+            {            
+                for (let i = cardsPageNumberFav; i <= this.businessCards_.size; i++)
+                {   
+                    if (i == this.businessCards_.size)
+                    {
+                        runInAction(() => this.businessCards_.delete(i));
+                        
+                        break;
+                    }
+                    else
+                    {
+                        runInAction(() => this.businessCards_.set(i, this.businessCards_.get(i + 1)!));
+                    }
+                }
+    
+                if (this.businessCards_.size === 0)
+                {            
+                    runInAction(() => this.businessCards_.set(1, []));
                 }
             }
-
-            if (this.businessCards_.size === 0)
-            {            
-                runInAction(() => this.businessCards_.set(1, []));
+            else
+            {
+                runInAction(() => this.businessCards_.get(cardsPageNumberFav)!.splice(idxFav, 1));
             }
+            
+            this.service.clientService.removeFromFavourites(business.id!);
         }
-        else
-        {
-            let idx = this.businessCards_.get(cardsPageNumber)!.findIndex(b => b.id === business.id);
 
-            runInAction(() => this.businessCards_.get(cardsPageNumber)!.splice(idx, 1));
+
+        return completeChanges;
+    }
+
+    private setIsFavorited (favoriteValue: boolean, business: Business, isFavPage: boolean) 
+    {
+        let businessCards = isFavPage ? this.businessCards_ : this.rootStore.businessPageStore.businessCards_;
+        let idx = -1, pageNumber = -1;
+
+        for (let [key, value] of businessCards)
+        {
+            idx = value.findIndex(b => b.id === business.id);
+            pageNumber = key;
+            if (idx !== -1)
+            {
+                runInAction(() => value[idx].isFavourited = favoriteValue); 
+                break;
+            } 
         }
+
+        return [idx, pageNumber];
     }
 }

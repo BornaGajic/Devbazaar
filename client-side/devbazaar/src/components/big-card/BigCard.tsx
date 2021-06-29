@@ -1,3 +1,4 @@
+import { runInAction } from "mobx";
 import { observer } from "mobx-react";
 import { useState } from "react";
 import BrowseCardsPage from "../../pages/BrowseCardsPage";
@@ -17,25 +18,24 @@ interface BigCardProps
 
 
 const BigCard = observer((bigCardProps: BigCardProps) => {
-    let favBStore = bigCardProps.businessCardPageStore.rootStore.userStore.clientStore.favouriteBusinessStore;
-    let categoryStore = bigCardProps.businessCardPageStore.rootStore.categoryStore;
-
+    let bFavPageStore = bigCardProps.businessCardPageStore.rootStore.favoriteBusinessesPageStore;
     let card = bigCardProps.businessCardPageStore.businessCards_.get(bigCardProps.cardsPageNumber)?.find(c => c.id === bigCardProps.clickedCardId);
     
     let addToFvrtBtn = card?.isFavourited ? 
     (
-        <button 
-            className="btn btn-sm btn-primary fw-bold shadow-none rounded-3 mt-2 mb-2" 
-            onClick={() => {
-                let myModal = document.getElementById("exampleModal");
-                
-                let completeChanges = favBStore.removeFromFavourites(card!);
+        <button
+        disabled={bFavPageStore.favBtnPressed}   
+        id="favBtn"
+        className="btn btn-sm btn-primary fw-bold shadow-none rounded-3 mt-2 mb-2" 
+        onClick={() => {
+            let completeChanges = bFavPageStore.removeFromFavorites(card!);
+            let myModal = document.getElementById("exampleModal");
+            
+            runInAction(() => bFavPageStore.favBtnPressed = true)
 
                 myModal?.addEventListener('hidden.bs.modal', async () => {
-                    if (card?.isFavourited === false)
-                    {
-                        (await completeChanges)();
-                    }
+                    runInAction(() => bFavPageStore.favBtnPressed = false);
+                    (await completeChanges)();
                 }, {
                     once: true
                 });
@@ -47,8 +47,22 @@ const BigCard = observer((bigCardProps: BigCardProps) => {
     ) :
     (
         <button 
+            disabled={bFavPageStore.favBtnPressed}
+            id="favBtn"
             className="btn btn-sm btn-outline-secondary fw-bold shadow-none rounded-3 mt-2 mb-2" 
-            onClick={() => favBStore.addToFavourites(card!)}
+            onClick={() => {
+                let completeChanges = bFavPageStore.addToFavorites(card!);
+                let myModal = document.getElementById("exampleModal");
+                
+                runInAction(() => bFavPageStore.favBtnPressed = true)
+
+                myModal?.addEventListener('hidden.bs.modal', async () => {
+                    runInAction(() => bFavPageStore.favBtnPressed = false);
+                    (await completeChanges)();
+                }, {
+                    once: true
+                });
+            }}
         >  
             <i className="bi bi-heart me-2" style={{verticalAlign: "text-bottom"}}></i>
             Add to Favorites
@@ -74,9 +88,9 @@ const BigCard = observer((bigCardProps: BigCardProps) => {
                             <ul className="list-inline">
                             {
                                 card?.categories.map(category =>
-                                    <li key={category?.id} className="list-inline-item">
+                                    <li key={category.id} className="list-inline-item">
                                         <button className="btn btn-sm btn-outline-primary rounded-pill shadow-none disabeled">
-                                            <span>{category?.name}</span>
+                                            <span>{category.name}</span>
                                         </button>
                                     </li>
                                 )

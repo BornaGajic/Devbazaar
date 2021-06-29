@@ -46,7 +46,7 @@ export class FavouriteBusinessCardStore
             runInAction(() => this.businesses.push(nFavBusiness));
         });
     }
-
+    /*
     async removeFromFavourites (businessCard: Business): Promise<() => void>
     {
         runInAction(() => {
@@ -121,4 +121,5 @@ export class FavouriteBusinessCardStore
             this.service.clientService.addToFavourites(businessCard.id!);
         }
     }
+    */
 }
