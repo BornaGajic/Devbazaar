@@ -1,6 +1,7 @@
 import { runInAction } from "mobx";
 import { observer } from "mobx-react";
 import { useState } from "react";
+import { useHistory } from "react-router";
 import BrowseCardsPage from "../../pages/BrowseCardsPage";
 import { BusinessCardPageStore } from "../../stores/page-stores";
 import { FavoriteBusinessesPageStore } from "../../stores/page-stores/FavoriteBusinessesPageStore";
@@ -15,7 +16,6 @@ interface BigCardProps
 
     clickedCardId?: string;
 }
-
 
 const BigCard = observer((bigCardProps: BigCardProps) => {
     let bFavPageStore = bigCardProps.businessCardPageStore.rootStore.favoriteBusinessesPageStore;
@@ -33,14 +33,13 @@ const BigCard = observer((bigCardProps: BigCardProps) => {
             
             runInAction(() => bFavPageStore.favBtnPressed = true)
 
-                myModal?.addEventListener('hidden.bs.modal', async () => {
-                    runInAction(() => bFavPageStore.favBtnPressed = false);
-                    (await completeChanges)();
-                }, {
-                    once: true
-                });
-            }}
-        > 
+            myModal?.addEventListener('hidden.bs.modal', async () => {
+                runInAction(() => bFavPageStore.favBtnPressed = false);
+                (await completeChanges)();
+            }, {
+                once: true
+            });
+        }}> 
             <i className="bi bi-heart-fill me-2" style={{color: "white", verticalAlign: "text-bottom"}}></i>
             In Favorites
         </button>

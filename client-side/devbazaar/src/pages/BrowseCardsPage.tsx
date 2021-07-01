@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import BigCard from "../components/big-card/BigCard";
 import CardList from "../components/card-list/CardList";
 import PageNavigation from "../components/page-navigation/PageNavigation";
@@ -15,6 +15,10 @@ const BrowseCardsPage = observer(({ businessPageStore } : BrowseCardsPageProps) 
 
     let [clickedCardId, setClickedCardId] = useState('');
     let query = useQuery();
+
+    useEffect(() => {
+        businessPageStore.loadNextBatch(true);
+    }, []);
     
     let maxPages = businessPageStore.businessCards_.size;
 

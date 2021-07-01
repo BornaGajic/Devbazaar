@@ -25,7 +25,7 @@ export class BusinessCardPageStore
 
         if (rootStore.UiState.isLoggedIn)
         {
-            this.loadNextBatch();
+            this.loadNextBatch(false);
         }
 
         this.reactionHandler = reaction(
@@ -39,8 +39,10 @@ export class BusinessCardPageStore
     /**
      * fetches next batch of business cards
      */
-    async loadNextBatch (): Promise<void>
+    async loadNextBatch (clear: boolean): Promise<void>
     {
+        if (clear) this.businessCards_.clear();
+
         runInAction(() => this.isLoading = true);
 
         Promise.all([

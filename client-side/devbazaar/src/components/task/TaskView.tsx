@@ -1,5 +1,9 @@
 import { observer } from "mobx-react";
 import React, { useState } from "react";
+import { useLocation } from "react-router";
+import { Link } from "react-router-dom";
+import { UserRole } from "../../common";
+import { useRole } from "../../hooks/useRole";
 import { Task } from "../../models";
 import { RootStore } from "../../stores";
 
@@ -10,6 +14,9 @@ interface TaskViewProps
 }
 
 const TaskView = observer(({ task, isMyTask }: TaskViewProps) => {
+    
+    let role = useRole();
+    let location = useLocation();
 
     return (
         <div>
@@ -28,7 +35,19 @@ const TaskView = observer(({ task, isMyTask }: TaskViewProps) => {
                                 <span>{ task.title ?? "Title" }</span>
                             </div>
                             <div className="col text-end">
-                                { isMyTask ? <span className="me-3"><i className="bi bi-pencil-square update-task"></i></span> : true }
+                                { 
+                                    isMyTask ? 
+                                        <Link 
+                                            to={location.pathname + '/UpdateTask/' + task.id} 
+                                            style={{ color: 'inherit', textDecoration: 'inherit'}}
+                                        >
+                                            <span className="me-3">
+                                                <i className="bi bi-pencil-square update-task"></i>
+                                            </span> 
+                                        </Link>
+                                    : 
+                                    true 
+                                }
                                 <span><i className="bi bi-dash"></i></span>
                             </div>
                             </div>
@@ -66,11 +85,17 @@ const TaskView = observer(({ task, isMyTask }: TaskViewProps) => {
                     <div className="col text-start ps-3">
                         <span className="text-muted">{ task?.dateAdded }</span>
                     </div>
-                    <div className="col d-flex p-0 pe-3 justify-content-end">
-                        <button type="button" className="btn btn-outline-primary btn-sm rounded-pill fs-6 w-25 pb-1 text-primary">
-                        <i className="bi bi-pin fs-6"></i>Pin
-                        </button>
-                    </div>
+                    {
+                        role === UserRole.BUSINESS ? 
+                        (
+                            <div className="col d-flex p-0 pe-3 justify-content-end">
+                                <button type="button" className="btn btn-outline-primary btn-sm rounded-pill fs-6 w-25 pb-1 text-primary">
+                                <i className="bi bi-pin fs-6"></i>Pin
+                                </button>
+                            </div>
+                        ) : true
+                    }
+
                     </div>
                 </div>
             </div>

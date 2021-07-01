@@ -1,5 +1,6 @@
 import { observer } from "mobx-react";
 import React from "react";
+import { Link, useLocation } from "react-router-dom";
 import { AuthStore } from "../../../stores/auth-stores";
 
 const UserDropdown = observer(({ authStore }: { authStore: AuthStore }) => {
@@ -18,7 +19,10 @@ const UserDropdown = observer(({ authStore }: { authStore: AuthStore }) => {
                     </a>
                     <ul id="moreinfo" className="position-absolute dropdown-menu dropdown-menu-end dropdown-menu-lg-start mt-3 shadow animate__animated animate__fadeIn animate__faster">
                         <li>
-                            <a className="dropdown-item" href="#"><i className="bi bi-person me-2 text-gray-400"></i> Profile</a>
+                            <Link to="/UpdateUser" className="dropdown-item" style={{ color: 'inherit', textDecoration: 'inherit'}}>
+                                <i className="bi bi-person me-2 text-gray-400"></i>
+                                <span>Update Profile</span>
+                            </Link>
                         </li>
                         <li>
                             <a className="dropdown-item" href="#"><i className="bi bi-gear me-2 text-gray-400"></i> Settings</a>

@@ -12,6 +12,10 @@ import BrowseTaskPage from "../../pages/BrowseTaskPage";
 import { Route, Switch } from "react-router";
 import MyTaskPage from "../../pages/MyTaskPage";
 import FavoriteBusinessesPage from "../../pages/FavoriteBusinessesPage";
+import NewTaskPage from "../../pages/NewTaskPage";
+import RemoveTaskPage from "../../pages/RemoveTaskPage";
+import UpdateUserPage from "../../pages/UpdateUserPage";
+import UpdateTaskPage from "../../pages/UpdateTaskPage";
 
 const Main = observer(({ rootStore }: {rootStore: RootStore}) => {
 
@@ -26,11 +30,23 @@ const Main = observer(({ rootStore }: {rootStore: RootStore}) => {
 					<Route exact path="/">	
 						<BrowseCardsPage businessPageStore={rootStore.businessPageStore} />
 					</Route>
+					<Route path="/UpdateUser">
+						<UpdateUserPage />
+					</Route>
 					<Route path="/Businesses">
 						<BrowseCardsPage businessPageStore={rootStore.businessPageStore} />
 					</Route>
 					<Route path="/Tasks">
 						<BrowseTaskPage taskPageStore={rootStore.taskPageStore} />
+					</Route>
+					<Route path="/MyTasks/NewTask">
+						<NewTaskPage />
+					</Route>
+					<Route path="/MyTasks/RemoveTask">
+						<RemoveTaskPage />
+					</Route>
+					<Route path="/MyTasks/UpdateTask/:taskId">
+						<UpdateTaskPage />
 					</Route>
 					<Route path="/MyTasks">
 						<MyTaskPage myTaskPageStore={rootStore.myTaskPageStore}/>
