@@ -22,12 +22,16 @@ export class TaskPageStore
 
         if (rootStore.UiState.isLoggedIn)
         {
-            this.loadNextBatch();
+            this.loadNextBatch(false);
         }
     }
 
-    async loadNextBatch (): Promise<void>
+    async loadNextBatch (clear: boolean): Promise<void>
     {
+        if (clear) this.tasks_.clear();
+
+        runInAction(() => this.isLoading = true);
+
         Promise.all([
             await this.fetchTasksPage({ PageNumber: 1 }),
             await this.fetchTasksPage({ PageNumber: 2 })

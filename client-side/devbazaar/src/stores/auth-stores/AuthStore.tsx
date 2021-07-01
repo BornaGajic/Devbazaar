@@ -40,9 +40,6 @@ export class AuthStore
 
         await this.rootStore.categoryStore.loadCategories();
 
-        this.rootStore.businessPageStore.loadNextBatch(false);
-        this.rootStore.taskPageStore.loadNextBatch();
-
         runInAction(() => this.rootStore.UiState.isLoggedIn = true);
 
         await this.rootStore.userStore.fetchUserData(this.token);        
