@@ -1,6 +1,12 @@
 import { observer } from "mobx-react";
+import { Task } from "../models";
 
-const RemoveTaskPage = observer(() => {
+interface RemoveTaskPageProps
+{
+    myTasks: Task[];
+}
+
+const RemoveTaskPage = observer(({ myTasks }: RemoveTaskPageProps) => {
 
     return (
         <div className="row">
@@ -19,58 +25,24 @@ const RemoveTaskPage = observer(() => {
                         </div>
                         <div className="row align-self-center">
                             <ul className="list-group list-group-flush">
-                                <li className="list-group-item d-flex">
-                                    <div className="col text-start align-self-center">
-                                        <span>A first item</span>
-                                    </div>
-                                    <div className="d-none d-sm-block col align-self-center">
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                    </div>
-                                    <div className="col text-end align-self-center">
-                                        <button className="btn shadow-none">
-                                            <i className="bi bi-x fs-4 text-danger"></i>
-                                        </button>
-                                    </div>
-                                </li>
-                                <li className="list-group-item d-flex">
-                                    <div className="col text-start align-self-center">
-                                        <span>A first item</span>
-                                    </div>
-                                    <div className="col d-none d-sm-block align-self-center">
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                    </div>
-                                    <div className="col text-end align-self-center">
-                                        <button className="btn shadow-none">
-                                            <i className="bi bi-x fs-4 text-danger"></i>
-                                        </button>
-                                    </div>
-                                </li>
-                                <li className="list-group-item d-flex">
-                                    <div className="col text-start align-self-center">
-                                        <span>A first item</span>
-                                    </div>
-                                    <div className="col d-none d-sm-block align-self-center">
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                    </div>
-                                    <div className="col text-end align-self-center">
-                                        <button className="btn shadow-none">
-                                            <i className="bi bi-x fs-4 text-danger"></i>
-                                        </button>
-                                    </div>
-                                </li>
-                                <li className="list-group-item d-flex">
-                                    <div className="col text-start align-self-center">
-                                        <span>A first item</span>
-                                    </div>
-                                    <div className="col d-none d-sm-block align-self-center">
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                    </div>
-                                    <div className="col text-end align-self-center">
-                                        <button className="btn shadow-none">
-                                            <i className="bi bi-x fs-4 text-danger"></i>
-                                        </button>
-                                    </div>
-                                </li>
+
+                                {
+                                    myTasks.map(task => 
+                                        <li className="list-group-item d-flex" key={task.id}>
+                                            <div className="col text-start align-self-center">
+                                                <span>{task.title}</span>
+                                            </div>
+                                            <div className="d-none d-sm-block col align-self-center">
+                                                {task.description?.slice(0, 100)}
+                                            </div>
+                                            <div className="col text-end align-self-center">
+                                                <button className="btn shadow-none">
+                                                    <i className="bi bi-x fs-4 text-danger"></i>
+                                                </button>
+                                            </div>
+                                        </li>
+                                    )    
+                                }
                             </ul>
                             <hr className="border-2 border-top border-secondary"/>
                             <div className="row mt-2">

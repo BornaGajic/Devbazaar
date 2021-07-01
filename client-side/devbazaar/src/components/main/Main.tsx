@@ -43,7 +43,7 @@ const Main = observer(({ rootStore }: {rootStore: RootStore}) => {
 						<NewTaskPage />
 					</Route>
 					<Route path="/MyTasks/RemoveTask">
-						<RemoveTaskPage />
+						<RemoveTaskPage myTasks={Array.from(rootStore.myTaskPageStore.tasks_.values()).flat()}/>
 					</Route>
 					<Route path="/MyTasks/UpdateTask/:taskId">
 						<UpdateTaskPage />
