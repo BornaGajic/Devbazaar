@@ -31,7 +31,7 @@ const Main = observer(({ rootStore }: {rootStore: RootStore}) => {
 						<BrowseCardsPage businessPageStore={rootStore.businessPageStore} />
 					</Route>
 					<Route path="/UpdateUser">
-						<UpdateUserPage />
+						<UpdateUserPage userStore={rootStore.userStore}/>
 					</Route>
 					<Route path="/Businesses">
 						<BrowseCardsPage businessPageStore={rootStore.businessPageStore} />
@@ -43,7 +43,7 @@ const Main = observer(({ rootStore }: {rootStore: RootStore}) => {
 						<NewTaskPage />
 					</Route>
 					<Route path="/MyTasks/RemoveTask">
-						<RemoveTaskPage myTasks={Array.from(rootStore.myTaskPageStore.tasks_.values()).flat()}/>
+						<RemoveTaskPage myTaskPageStore={rootStore.myTaskPageStore}/>
 					</Route>
 					<Route path="/MyTasks/UpdateTask/:taskId">
 						<UpdateTaskPage />

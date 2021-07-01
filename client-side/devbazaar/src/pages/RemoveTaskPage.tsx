@@ -1,12 +1,15 @@
 import { observer } from "mobx-react";
 import { Task } from "../models";
+import { MyTaskPageStore } from "../stores/page-stores/MyTaskPageStore";
 
 interface RemoveTaskPageProps
 {
-    myTasks: Task[];
+    myTaskPageStore: MyTaskPageStore
 }
 
-const RemoveTaskPage = observer(({ myTasks }: RemoveTaskPageProps) => {
+const RemoveTaskPage = observer(({ myTaskPageStore }: RemoveTaskPageProps) => {
+
+    let myTasks = Array.from(myTaskPageStore.tasks_.values()).flat();
 
     return (
         <div className="row">
