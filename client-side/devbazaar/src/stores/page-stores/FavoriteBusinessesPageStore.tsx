@@ -60,7 +60,7 @@ export class FavoriteBusinessesPageStore
             
             for (let i = 0; i < favoriteBusinesses.length; i += ipp, pageNumber++)
             {
-                this.businessCards_.set(pageNumber, favoriteBusinesses.slice(i, ipp));
+                this.businessCards_.set(pageNumber, favoriteBusinesses.slice(i, i + ipp));
             }
 
             this.isLoading = false

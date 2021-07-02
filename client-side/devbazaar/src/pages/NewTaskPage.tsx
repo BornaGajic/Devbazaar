@@ -1,5 +1,6 @@
 import { observer } from "mobx-react";
 import React, { SyntheticEvent, useState } from "react";
+import { useHistory } from "react-router";
 import { ClientTaskStore } from "../stores/user-stores/client-stores/ClientTaskStore";
 
 interface NewTaskPageProps
@@ -8,6 +9,8 @@ interface NewTaskPageProps
 }
 
 const NewTaskPage = observer(({ myTaskStore }: NewTaskPageProps) => {
+
+    let history = useHistory();
 
     let [title, setTitle] = useState('');
     let [description, setDescription] = useState('');
@@ -43,6 +46,7 @@ const NewTaskPage = observer(({ myTaskStore }: NewTaskPageProps) => {
         });
 
         removeFieldValues();
+        history.goBack();
     };
 
     return (
@@ -85,9 +89,6 @@ const NewTaskPage = observer(({ myTaskStore }: NewTaskPageProps) => {
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className="alert alert-success" role="alert">
-              A simple success alert—check it out!
             </div>
     </div>
     );

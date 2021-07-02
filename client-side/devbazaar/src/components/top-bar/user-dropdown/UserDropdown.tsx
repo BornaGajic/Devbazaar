@@ -1,12 +1,20 @@
 import { observer } from "mobx-react";
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { AuthStore } from "../../../stores/auth-stores";
 
 const UserDropdown = observer(({ authStore }: { authStore: AuthStore }) => {
 
-    let handleLoguout = (e: React.SyntheticEvent) => authStore.logoutAsync();
+	let history = useHistory();
 
+    let handleLoguout = (e: React.SyntheticEvent) =>
+    {
+        authStore.logoutAsync();
+
+		history.push("/Login");  
+    } 
+
+        
     return (
         <ul className="navbar-nav flex-nowrap ms-auto p-2 h-100">
             <li className="nav-item dropdown">

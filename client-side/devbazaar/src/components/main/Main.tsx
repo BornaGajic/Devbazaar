@@ -46,7 +46,7 @@ const Main = observer(({ rootStore }: {rootStore: RootStore}) => {
 						<RemoveTaskPage myTaskStore={rootStore.userStore.clientStore.clienTaskStore}/>
 					</Route>
 					<Route path="/MyTasks/UpdateTask/:taskId">
-						<UpdateTaskPage />
+						<UpdateTaskPage myTaskStore={rootStore.userStore.clientStore.clienTaskStore}/>
 					</Route>
 					<Route path="/MyTasks">
 						<MyTaskPage myTaskPageStore={rootStore.myTaskPageStore}/>

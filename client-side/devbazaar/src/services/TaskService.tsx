@@ -42,6 +42,7 @@ export class TaskService implements ITaskService
 		let response = await axios.put(`${axios.defaults.baseURL}/Task/Update`,
 		{
 			Description: newTask.description,
+			Title: newTask.title,
 			LowPrice: newTask.lowPrice,
 			HighPrice: newTask.highPrice
 		}, 
