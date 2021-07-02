@@ -23,7 +23,7 @@ const TaskView = observer(({ task, isMyTask }: TaskViewProps) => {
             <div className="card">
                 <div className="card-header py-3 px-4" id={"heading" + task.id}>
                     <h2 className="mb-0">
-                        <button className="d-flex align-items-center justify-content-between btn" data-bs-toggle="collapse" data-bs-target={"#" + task.id} aria-expanded="false" aria-controls={"collapse" + task.id}>
+                        <button className="d-flex align-items-center justify-content-between btn" data-bs-toggle="collapse" data-bs-target={"#a" + task.id} aria-expanded="false" aria-controls={"collapse" + task.id}>
                             <div className="row w-100">
                             <div className="col text-start">
                                 <svg className="" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: avatar" preserveAspectRatio="xMidYMid slice" focusable="false">
@@ -54,7 +54,7 @@ const TaskView = observer(({ task, isMyTask }: TaskViewProps) => {
                         </button>
                     </h2>
                 </div>
-                <div id={task.id} className="collapse" aria-labelledby={"heading" + task.id} data-bs-parent="#accordion">
+                <div id={'a' + task.id} className="collapse" aria-labelledby={"heading" + task.id} data-bs-parent="#accordion">
                     <div className="card-body">
                     <div className="card-text mx-3">
                         <p>

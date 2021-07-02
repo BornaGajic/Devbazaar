@@ -72,6 +72,8 @@ export class ClientTaskStore
         runInAction(() => {
             nTask.id = response.data.id;
             nTask.data = response.data;
+            nTask.email = this.clientStore.client.email;
+            nTask.username = this.clientStore.client.username;
             this.tasks.push(nTask);
         });
     }

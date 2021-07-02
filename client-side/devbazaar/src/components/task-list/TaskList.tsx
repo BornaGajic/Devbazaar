@@ -20,7 +20,6 @@ interface TaskListProps
 
 const TaskList = observer(({ taskPageStore, pageNumber } : TaskListProps) => {
 
-    // local observable (ili state?) currentPageNumber
     let tasks = taskPageStore?.tasks_.get(pageNumber) as Task[];
 
     let isMyTask = taskPageStore instanceof MyTaskPageStore ? true : false;

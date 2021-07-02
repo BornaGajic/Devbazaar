@@ -1,15 +1,21 @@
 import { observer } from "mobx-react";
+import React, { SyntheticEvent } from "react";
 import { Task } from "../models";
 import { MyTaskPageStore } from "../stores/page-stores/MyTaskPageStore";
+import { ClientTaskStore } from "../stores/user-stores/client-stores/ClientTaskStore";
 
 interface RemoveTaskPageProps
 {
-    myTaskPageStore: MyTaskPageStore
+    myTaskStore: ClientTaskStore;
 }
 
-const RemoveTaskPage = observer(({ myTaskPageStore }: RemoveTaskPageProps) => {
+const RemoveTaskPage = observer(({ myTaskStore }: RemoveTaskPageProps) => {
 
-    let myTasks = Array.from(myTaskPageStore.tasks_.values()).flat();
+    let myTasks = myTaskStore.tasks;
+
+    let handleXClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+        myTaskStore.removeTask(e.currentTarget.value);
+    };  
 
     return (
         <div className="row">
@@ -39,7 +45,7 @@ const RemoveTaskPage = observer(({ myTaskPageStore }: RemoveTaskPageProps) => {
                                                 {task.description?.slice(0, 100)}
                                             </div>
                                             <div className="col text-end align-self-center">
-                                                <button className="btn shadow-none">
+                                                <button value={task.id} onClick={handleXClick} className="btn shadow-none">
                                                     <i className="bi bi-x fs-4 text-danger"></i>
                                                 </button>
                                             </div>

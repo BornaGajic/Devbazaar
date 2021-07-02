@@ -21,7 +21,7 @@ const UserDropdown = observer(({ authStore }: { authStore: AuthStore }) => {
                         <li>
                             <Link to="/UpdateUser" className="dropdown-item" style={{ color: 'inherit', textDecoration: 'inherit'}}>
                                 <i className="bi bi-person me-2 text-gray-400"></i>
-                                <span>Update Profile</span>
+                                <span>Edit Profile</span>
                             </Link>
                         </li>
                         <li>

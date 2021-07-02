@@ -19,11 +19,6 @@ export class TaskPageStore
         makeAutoObservable(this, { service: false, rootStore: false });
 
         this.service = service;
-
-        if (rootStore.UiState.isLoggedIn)
-        {
-            this.loadNextBatch(false);
-        }
     }
 
     async loadNextBatch (clear: boolean): Promise<void>

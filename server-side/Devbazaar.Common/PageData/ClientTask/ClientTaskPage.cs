@@ -10,6 +10,7 @@ namespace Devbazaar.Common.PageData.ClientTask
 	public class ClientTaskPage : Page, IClientTaskPage
 	{
 		// filter
+		public string Title { get; set; } = "";
 		public int LowPrice { get; set; } = 0;
 		public int HighPrice { get; set; } = int.MaxValue;
 

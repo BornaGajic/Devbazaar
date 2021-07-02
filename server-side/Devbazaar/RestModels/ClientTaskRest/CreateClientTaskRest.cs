@@ -11,6 +11,7 @@ namespace Devbazaar.RestModels.ClientTaskRest
 	{
 		[Required]
 		public string Description { get; set; }
+		public string Title { get; set; }
 		public int LowPrice { get; set; }
 		public int HighPrice { get; set; }
 	}

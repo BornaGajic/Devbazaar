@@ -23,11 +23,6 @@ export class BusinessCardPageStore
 
         this.service = service;
 
-        if (rootStore.UiState.isLoggedIn)
-        {
-            this.loadNextBatch(false);
-        }
-
         this.reactionHandler = reaction(
             () => rootStore.searchStore.query,
             searchString => {

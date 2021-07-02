@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PageNavigation from "../components/page-navigation/PageNavigation";
 import TaskActions from "../components/task-actions/TaskActions";
 import TaskList from "../components/task-list/TaskList";
@@ -13,6 +13,10 @@ interface MyTaskPageProps
 }
 
 const MyTaskPage = observer(({ myTaskPageStore }: MyTaskPageProps) => {
+
+    useEffect(() => {
+        myTaskPageStore.loadMyTasks();
+    }, []);
 
     let query = useQuery();
 

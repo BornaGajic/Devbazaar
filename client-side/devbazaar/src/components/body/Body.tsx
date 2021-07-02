@@ -1,4 +1,5 @@
 import { observer } from "mobx-react";
+import { useHistory } from "react-router";
 import { useStores } from "../../hooks/useStores";
 
 import Login from '../auth/Login';
@@ -10,7 +11,7 @@ import { TopBar } from "../top-bar";
 const Body = observer(() => {
 
     let store = useStores();
-
+        
     let firstPage = store.UiState.isLoggedIn ? (
         <div id="wrapper">
             <TopBar rootStore={store} />

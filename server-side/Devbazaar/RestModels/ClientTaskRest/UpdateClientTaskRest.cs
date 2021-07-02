@@ -10,6 +10,7 @@ namespace Devbazaar.RestModels.ClientTaskRest
 	public class UpdateClientTaskRest : IUpdateClientTaskRest
 	{
 		public string Description { get; set; } = null;
+		public string Title { get; set; } = null;
 		public int? LowPrice { get; set; } = null;
 		public int? HighPrice { get; set; } = null;
 
