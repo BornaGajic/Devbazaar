@@ -91,14 +91,7 @@ namespace Devbazaar.Controllers
 		{
 			try
 			{
-				Guid? businessId = null;
-
-				if (User.IsInRole("Business"))
-				{
-					businessId = Guid.Parse(User.Identity.GetUserId());
-				}
-
-				var result = await ClientTaskService.PaginatedGetAsync(pageData, businessId);
+				var result = await ClientTaskService.PaginatedGetAsync(pageData, null);
 
 				return Request.CreateResponse(HttpStatusCode.OK, result);
 			}

@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-import { Route, Switch, useHistory } from "react-router";
+import { Redirect, Route, Switch, useHistory } from "react-router";
 import { PrivateRoute } from "../../hoc";
 import { useStores } from "../../hooks/useStores";
 
@@ -11,18 +11,7 @@ import { TopBar } from "../top-bar";
 
 const Body = observer(() => {
 
-    // PRIVATE ROUTE NAPRAVITI!!
-
     let store = useStores();
-
-    let loginComponent = <Login authStore={store.authStore} userStore={store.userStore} />;
-
-    let firstPage = store.UiState.isLoggedIn ? (
-        <div id="wrapper">
-            <TopBar rootStore={store} />
-            <Main rootStore={store} />
-        </div>
-    ) : <Login authStore={store.authStore} userStore={store.userStore} />;
 
     return (
         <Switch>
@@ -35,6 +24,9 @@ const Body = observer(() => {
                     <Main rootStore={store} />
                 </div>
             </PrivateRoute>
+            <Route path="">
+                <Redirect to="/"/>
+            </Route>
         </Switch>
     );
 });

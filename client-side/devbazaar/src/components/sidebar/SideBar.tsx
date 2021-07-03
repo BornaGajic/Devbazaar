@@ -12,19 +12,17 @@ const Sidebar = observer(({ role, searchStore }: { role: string, searchStore: Se
     let location = useLocation();
 
     // Pretvoriti u Obeject s key path exact i search parametrima
-    const navArray = role === UserRole.CLIENT ? ['Businesses', 'Tasks','My Tasks', 'Favorites'] : ['Home', 'Businesses', 'Tasks', 'Pinned Tasks'];
-    const toArray = role === UserRole.CLIENT ? ['?pageNumber=1', '?pageNumber=1','?pageNumber=1', '?pageNumber=1'] : ['?pageNumber=1', '?pageNumber=1', '?pageNumber=1', '?pageNumber=1'];
+    const navArray = role === UserRole.CLIENT ? ['Businesses', 'Tasks','My Tasks', 'Favorites'] : ['Businesses', 'Tasks', 'Pinned Tasks'];
+    const toArray = role === UserRole.CLIENT ? ['?pageNumber=1', '?pageNumber=1','?pageNumber=1', '?pageNumber=1'] : ['?pageNumber=1', '?pageNumber=1', '?pageNumber=1'];
 
     const navArrayIcons = role === UserRole.CLIENT ? 
     [
-        'bi bi-house', 
         'bi bi-briefcase', 
         'bi bi-card-text',
         'bi bi-card-heading', 
         'bi bi-bookmark-heart'
     ] : 
     [
-        'bi bi-house', 
         'bi bi-briefcase', 
         'bi bi-card-text', 
         'bi bi-pin'

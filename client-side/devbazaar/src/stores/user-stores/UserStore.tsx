@@ -80,7 +80,7 @@ export class UserStore
             this.user.data = {
                 username: payload['Username'],
                 email: payload['Email'],
-                role: payload['Role'],
+                role: payload['Role'] as UserRole,
                 logo: payload['Logo']
             } as IUser;
         });
