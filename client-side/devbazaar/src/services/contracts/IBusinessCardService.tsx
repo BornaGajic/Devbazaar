@@ -3,13 +3,14 @@ import { IBusinessPage } from "../../common";
 import { ITaskPage } from "../../common/ITaskPage";
 import { IBusiness, ICategory } from "../../models/contracts";
 import { ITask } from "../../models/contracts/ITask";
+import { UpdateBusiness } from "../../models/crud";
 
 export interface IBusinessCardService
 {
     createBusinessCard (creationData: IBusiness): Promise<AxiosResponse<IBusiness>>;
     fetchPage (pageData: IBusinessPage): Promise<AxiosResponse<IBusiness[]>>;
     fetchPinnedTasks (pageData?: ITaskPage): Promise<AxiosResponse<ITask[]>>;
-    update (data: IBusiness): Promise<void>;
+    update (data: UpdateBusiness): Promise<void>;
     pinTask (taskId: string): Promise<AxiosResponse<ITask>>;
     removePinnedTask (taskId: string): Promise<AxiosResponse>;
     fetchBusinessCardData (): Promise<AxiosResponse<IBusiness>>;

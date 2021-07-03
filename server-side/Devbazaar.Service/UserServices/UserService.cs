@@ -65,7 +65,6 @@ namespace Devbazaar.Service.UserServices
 		// returns token if User exists, else returns empty string
 		public async Task<string> LoginAsync (IUser user)
 		{
-			
 			UserEntity thisUser = await UnitOfWork.UserRepository.CheckExistence(user.Email, EncodePassword(user.Password));
 			TypeOfUser role = TypeOfUser.Business;
 
@@ -85,7 +84,7 @@ namespace Devbazaar.Service.UserServices
 			return GenerateToken(user, role);
 		}
 
-		public async Task UpdateAsync (Dictionary<string, object> changedValues, Guid userId)
+		public async Task<User> UpdateAsync (Dictionary<string, object> changedValues, Guid userId)
 		{
 			var userEntity = await (from u in UnitOfWork.UserRepository.Table where u.Id == userId select u).SingleAsync();	
 
@@ -100,6 +99,8 @@ namespace Devbazaar.Service.UserServices
 			{
 				throw e;
 			}
+
+			return Mapper.Map<User>(userEntity);
 		}
 
 		public async Task DeleteAsync (IUser user)
@@ -118,7 +119,7 @@ namespace Devbazaar.Service.UserServices
 			}
 		}
 
-		private static string GenerateToken (IUser user, TypeOfUser role, int expireMinutes = 30)
+		public string GenerateToken (IUser user, TypeOfUser role, int expireMinutes = 30)
 		{
 			var SecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ConfigurationManager.AppSettings["SecretKey"]));
 			var credentials = new SigningCredentials(SecurityKey, SecurityAlgorithms.HmacSha256);

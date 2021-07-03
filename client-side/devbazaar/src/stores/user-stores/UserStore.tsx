@@ -76,13 +76,14 @@ export class UserStore
 
         runInAction(() => {
             this.user.id = payload['Id'];
-            this.user.update({
+            
+            this.user.data = {
                 username: payload['Username'],
                 email: payload['Email'],
                 role: payload['Role'],
                 logo: payload['Logo']
-            } as IUser);
-        })
+            } as IUser;
+        });
 
         await this.fetchRoleData();
     }

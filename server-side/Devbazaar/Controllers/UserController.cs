@@ -75,16 +75,18 @@ namespace Devbazaar.Controllers
 		[Authorize]
 		[HttpPut]
 		[Route("Update")]
-		public async Task<HttpResponseMessage> UpdateAsync ([FromBody] UpdateUserRest updateData)
+		public async Task<HttpResponseMessage> UpdateAsync ([FromBody] UpdateUserRest updateData, [FromUri] TypeOfUser tou)
 		{
 			var updateUser = GenerateUpdateDict(updateData);
 			var userId = Guid.Parse(User.Identity.GetUserId());
 
 			try
 			{
-				await UserService.UpdateAsync(updateUser, userId);
+				var user = await UserService.UpdateAsync(updateUser, userId);
+				
+				var newToken = UserService.GenerateToken(user, tou);
 
-				return Request.CreateResponse(HttpStatusCode.OK);
+				return Request.CreateResponse(HttpStatusCode.OK, newToken);
 			}
 			catch (Exception e)
 			{

@@ -55,7 +55,7 @@ const RemoveTaskPage = observer(({ myTaskStore }: RemoveTaskPageProps) => {
         setEnd(start);
     }
 
-    let handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
         setSearch(e.target.value);
     }
 

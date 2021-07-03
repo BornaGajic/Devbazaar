@@ -92,6 +92,10 @@
       <Project>{68471875-4f49-4516-b163-dd08636a08cb}</Project>
       <Name>Devbazaar.Model.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Devbazaar.Model\Devbazaar.Model.csproj">
+      <Project>{E980BA94-4BDF-4280-ABCC-77A354B20C88}</Project>
+      <Name>Devbazaar.Model</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Devbazaar.Utility\Devbazaar.Utility.csproj">
       <Project>{25d9bfdc-e4b4-4b79-8bc2-0c06f8d2ee66}</Project>
       <Name>Devbazaar.Utility</Name>

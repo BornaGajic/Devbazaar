@@ -1,10 +1,32 @@
 import { observer } from "mobx-react";
-import { useState } from "react";
+import { SyntheticEvent, useState } from "react";
+import { UserStore } from "../../stores/user-stores/UserStore";
 
-const UpdateUserSettings = observer(() => {
+interface UpdateUserSettingsProps
+{
+    userStore: UserStore;
+}
 
-    let [username, setUsername] = useState('');
-    let [email, setEmail] = useState('');
+const UpdateUserSettings = observer(({ userStore }: UpdateUserSettingsProps) => {
+
+    let [username, setUsername] = useState(userStore.user.username);
+    let [email, setEmail] = useState(userStore.user.email);
+
+    const resetFields = () => {
+        document.getElementById("username")!.nodeValue = '';
+        document.getElementById("email")!.nodeValue = '';
+    };
+
+    const handleSaveChanges = (e: SyntheticEvent) => {
+        e.preventDefault();
+
+        userStore.user.update({
+            email: email,
+            username: username
+        }).then(() => window.location.reload());
+    };
+
+    const handleCancel = (e: SyntheticEvent) => resetFields();
 
     return (
         <div className="card shadow mb-4">
@@ -12,7 +34,7 @@ const UpdateUserSettings = observer(() => {
                 <p className="text-primary m-0 fw-bold">User settings</p>
             </div>
             <div className="card-body">
-                <form>
+                <form onSubmit={handleSaveChanges}>
                     <div className="row">
                         <div className="mb-3">
                             <label className="form-label fw-bold text-muted" htmlFor="username">Username</label>
@@ -25,8 +47,9 @@ const UpdateUserSettings = observer(() => {
                             <input onChange={(e) => setEmail(e.target.value)} type="text" className="form-control" id="email" placeholder="user@example.com"/>
                         </div>
                     </div>
-                    <div className="mb-3 text-center mb-0">
-                        <button className="btn btn-sm btn-primary">Save changes</button>
+                    <div className="mb-3 text-center mb-0 d-flex justify-content-around">
+                        <button type="submit" className="btn btn-sm btn-primary">Save changes</button>
+                        <button onClick={handleCancel} className="btn btn-sm btn-secondary">Cancel</button>
                     </div>
                 </form>
             </div>

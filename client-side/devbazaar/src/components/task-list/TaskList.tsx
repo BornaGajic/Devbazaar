@@ -30,7 +30,7 @@ const TaskList = observer(({ taskPageStore, pageNumber } : TaskListProps) => {
                 <div id="accordion" className="myaccordion mt-5">
                     <div className="p-4 text-center">
                         <h3>Tasks</h3>                                
-                        <p className="lead">Far far away, behind the word mountains, far from the countries Vokalia</p>
+                        <p className="lead">Daily dose of work orders!</p>
                     </div>
                     {
                         [...Array(tasks.length).keys()].map(idx => <TaskView task={ tasks[idx] } isMyTask={isMyTask} />)

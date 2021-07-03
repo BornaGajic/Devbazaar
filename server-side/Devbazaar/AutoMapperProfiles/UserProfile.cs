@@ -5,6 +5,7 @@ using System.Web;
 using AutoMapper;
 using Devbazaar.Common.DTO.User;
 using Devbazaar.DAL.EntityModels;
+using Devbazaar.Model;
 using Devbazaar.Model.Common.IUser;
 using Devbazaar.RestModels.UserRest;
 
@@ -15,6 +16,7 @@ namespace Devbazaar.AutoMapperProfiles
 		public UserProfile ()
 		{
 			CreateMap<IUser, UserEntity>().ReverseMap();
+			CreateMap<User, UserEntity>().ReverseMap();
 
 			CreateMap<CreateUserRest, IUser>();
 			CreateMap<LoginRest, IUser>();

@@ -2,8 +2,15 @@ import { observer } from "mobx-react";
 import React from "react";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import { AuthStore } from "../../../stores/auth-stores";
+import { UserStore } from "../../../stores/user-stores/UserStore";
 
-const UserDropdown = observer(({ authStore }: { authStore: AuthStore }) => {
+interface UserDropdownProps
+{
+    authStore: AuthStore;
+    userStore: UserStore
+}
+
+const UserDropdown = observer(({ authStore, userStore }: UserDropdownProps) => {
 
 	let history = useHistory();
 
@@ -12,15 +19,14 @@ const UserDropdown = observer(({ authStore }: { authStore: AuthStore }) => {
         authStore.logoutAsync();
 
 		history.push("/Login");  
-    } 
-
+    }
         
     return (
         <ul className="navbar-nav flex-nowrap ms-auto p-2 h-100">
             <li className="nav-item dropdown">
                 <div className="nav-item dropdown">
                     <a className="dropdown-toggle nav-link p-0 m-0" aria-expanded="false" data-bs-toggle="dropdown" href="#">
-                        <span className="d-none d-lg-inline me-2 text-gray-600 small fw-bold">Borna Gajić</span>
+                        <span className="d-none d-lg-inline me-2 text-gray-600 small fw-bold">{userStore.user.username}</span>
                         <svg className="" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: avatar" preserveAspectRatio="xMidYMid slice" focusable="false">
                             <circle cx="16" cy="16" r="16" fill="#868e96"></circle>
                         </svg>

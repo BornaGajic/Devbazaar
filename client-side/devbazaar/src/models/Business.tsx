@@ -6,6 +6,7 @@ import { CategoryStore } from "../stores/CategoryStore";
 import { BusinessStore } from "../stores/user-stores/business-stores/BusinessStore";
 import { Category } from "./Category";
 import { IBusiness, ICategory } from "./contracts";
+import { UpdateBusiness } from "./crud";
 
 export class Business implements IBusiness, IRole
 {
@@ -71,12 +72,12 @@ export class Business implements IBusiness, IRole
     /**
      * Updates Business card 
      */
-    async update (data: IBusiness): Promise<void>
+    async update (data: UpdateBusiness): Promise<void>
     {
         this.service.businessCardService.update(data);
 
         runInAction(() => {
-            this.data = data;
+            this.data = data as IBusiness;
         }); 
     }
     

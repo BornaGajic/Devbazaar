@@ -4,6 +4,7 @@ import { IUser } from "./contracts";
 import { IServices } from "../services/contracts";
 
 import { UserRole } from '../common';
+import jwtDecode from "jwt-decode";
 
 export class User implements IUser
 {
@@ -27,9 +28,24 @@ export class User implements IUser
      */
     async update (data: IUser): Promise<void>
     {
-        this.services.userService.update(data);
+        const response = await this.services.userService.update(data, this.role);
+
+        interface jwtPayload
+        {
+            Username: string;
+            Email: string;
+        }
+
+		let payload: jwtPayload = jwtDecode(response.data);
+
+        runInAction(() => {
+            this.username = payload['Username'];
+            this.email = payload['Email'];
+        });
         
         runInAction(() => this.data = data);
+
+        localStorage.setItem('token', response.data);
     }
 
     /**

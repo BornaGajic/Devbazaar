@@ -41,7 +41,7 @@ const UpdateUserPage = observer(({ userStore }: UpdateUserPageProps) => {
             <div className="row justify-content-start mt-5">
                 <div className="col-lg-4">
                     <UpdateProfilePicture />
-                    <UpdateUserSettings />
+                    <UpdateUserSettings userStore={userStore}/>
                     {
                         user.role === UserRole.BUSINESS ? 
                             <UpdateCategories userStore={userStore}/>
@@ -55,21 +55,21 @@ const UpdateUserPage = observer(({ userStore }: UpdateUserPageProps) => {
                                 <div className="card-header py-3">
                                     <p className="text-primary m-0 fw-bold">Settings</p>
                                 </div>
-                            <UpdateClientSettings />
+                            <UpdateClientSettings clientStore={userStore.clientStore} />
                             </div>
                         :
                             <div className="card shadow mb-3">
                                 <div className="card-header py-3">
                                     <p className="text-primary m-0 fw-bold">Settings</p>
                                 </div>
-                                <UpdateBusinessSettings />
+                                <UpdateBusinessSettings businessStore={userStore.businessStore} />
                             </div>
                     }
                     <div className="card shadow mb-3">
                         <div className="card-header py-3">
                             <p className="text-primary m-0 fw-bold">Contact settings</p>
                         </div>
-                        <UpdateLocationSettings />
+                        <UpdateLocationSettings userStore={userStore}/>
                     </div>
                 </div>
             </div>

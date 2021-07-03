@@ -78,3 +78,6 @@ D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Service.Common\obj\Debug\Dev
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Service.Common\obj\Debug\Devbazaar.Service.Common.dll
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Service.Common\obj\Debug\Devbazaar.Service.Common.pdb
 D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Service.Common\obj\Debug\Devbazaar.Service.Common.csproj.AssemblyReference.cache
+D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Service.Common\bin\Debug\Devbazaar.Model.dll
+D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Service.Common\bin\Debug\Devbazaar.Model.pdb
+D:\GitHubRepository\Devbazaar\server-side\Devbazaar.Service.Common\bin\Debug\Devbazaar.Model.dll.config

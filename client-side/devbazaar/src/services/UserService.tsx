@@ -7,7 +7,7 @@ import { IUserService } from './contracts';
 
 export class UserService implements IUserService
 {    
-    async update (data: IUser): Promise<AxiosResponse<any>>
+    async update (data: IUser, role: UserRole): Promise<AxiosResponse<any>>
     {
         let response = await axios.put(`${axios.defaults.baseURL}/User/Update`,
         {
@@ -15,7 +15,15 @@ export class UserService implements IUserService
             Email: data.email,
             Password: data.password,
             Logo: data.logo
-        }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
+        }, 
+        { 
+            headers: { 
+                Authorization: `Bearer ${localStorage.getItem('token')}` 
+            },
+            params: {
+                tou: role.toString()
+            }
+        });
         
         if (response.status !== 200)
             throw new Error(response.statusText);   

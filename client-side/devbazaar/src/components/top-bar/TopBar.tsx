@@ -23,7 +23,7 @@ export const TopBar = observer(({ rootStore }: { rootStore: RootStore }) => {
 				<Searchbox searchStore={rootStore.searchStore} />
 
 				<div className="col-2">
-					<UserDropdown authStore={rootStore.authStore} />
+					<UserDropdown authStore={rootStore.authStore} userStore={rootStore.userStore} />
 				</div>
 
 			</nav>
