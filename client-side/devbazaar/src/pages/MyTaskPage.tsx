@@ -1,5 +1,6 @@
 import { observer } from "mobx-react";
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router";
 import PageNavigation from "../components/page-navigation/PageNavigation";
 import TaskActions from "../components/task-actions/TaskActions";
 import TaskList from "../components/task-list/TaskList";
@@ -14,11 +15,12 @@ interface MyTaskPageProps
 
 const MyTaskPage = observer(({ myTaskPageStore }: MyTaskPageProps) => {
 
+    let location = useLocation();
+    let query = useQuery();
+
     useEffect(() => {
         myTaskPageStore.loadMyTasks();
-    }, []);
-
-    let query = useQuery();
+    }, [location]);
 
     let maxPages = myTaskPageStore.tasks_.size;
 

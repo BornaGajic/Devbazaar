@@ -1,7 +1,7 @@
 import { toJS } from "mobx";
 import { observer } from "mobx-react";
 import React, { useEffect, useState } from "react";
-import { Route } from "react-router";
+import { Route, useLocation } from "react-router";
 import PageNavigation from "../components/page-navigation/PageNavigation";
 import TaskActions from "../components/task-actions/TaskActions";
 import TaskList from "../components/task-list/TaskList";
@@ -18,10 +18,16 @@ interface BrowseTaskPageProps
 
 const BrowseTaskPage = observer(({ taskPageStore } : BrowseTaskPageProps) => {
 
+    let location = useLocation();
     let query = useQuery();
+
     useEffect(() => {
-        taskPageStore.loadNextBatch(true);
-    }, [])
+        if (query.has('search'))
+            taskPageStore.loadNextBatch(true, query.get('search')!);
+        else
+            taskPageStore.loadNextBatch(true);
+
+    }, [location]);
 
     let maxPages = taskPageStore.tasks_.size;
 

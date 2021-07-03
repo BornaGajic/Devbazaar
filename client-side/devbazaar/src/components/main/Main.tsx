@@ -52,7 +52,7 @@ const Main = observer(({ rootStore }: {rootStore: RootStore}) => {
 						<MyTaskPage myTaskPageStore={rootStore.myTaskPageStore}/>
 					</Route>
 					<Route path="/Favorites">
-						<FavoriteBusinessesPage favoriteBusinessPageStore={rootStore.favoriteBusinessesPageStore} searchStore={rootStore.searchStore}/>
+						<FavoriteBusinessesPage favoriteBusinessPageStore={rootStore.favoriteBusinessesPageStore} />
 					</Route>
 				</Switch>
 			</div>
@@ -63,7 +63,7 @@ const Main = observer(({ rootStore }: {rootStore: RootStore}) => {
 		<div className="container-fluid"> 
 			<div className="row"> 
 
-				<Sidebar role={rootStore.userStore.user.role} searchStore={rootStore.searchStore} />
+				<Sidebar role={rootStore.userStore.user.role} />
 
 				<div className="col m-0 p-0">
 					<div className="row m-0 p-0">

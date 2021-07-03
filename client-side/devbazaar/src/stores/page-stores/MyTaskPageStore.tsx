@@ -8,7 +8,6 @@ import RootStore from "../RootStore";
 export class MyTaskPageStore
 {
     service: IServices;
-    reactionHandler: IReactionDisposer;
 
     isLoading: boolean = true;
 
@@ -19,13 +18,6 @@ export class MyTaskPageStore
         makeAutoObservable(this, { service: false, rootStore: false });
 
         this.service = service;
-
-        this.reactionHandler = reaction(
-            () => this.rootStore.userStore.clientStore.clienTaskStore.tasks,
-            value => {
-                this.loadMyTasks();
-            }
-        );
     }
 
     async loadMyTasks (): Promise<void>
@@ -36,17 +28,12 @@ export class MyTaskPageStore
         runInAction(() => {
             let ipp = this.rootStore.UiState.itemsPerPage;
             
-            for (let i = 0; i <= taskList.length; i += ipp, pageNumber++)
+            for (let i = 0; i < taskList.length; i += ipp, pageNumber++)
             {
                 this.tasks_.set(pageNumber, taskList.slice(i, i + ipp));
             }
 
             this.isLoading = false
         });
-    }
-
-    dispose ()
-    {
-        this.reactionHandler();
     }
 }

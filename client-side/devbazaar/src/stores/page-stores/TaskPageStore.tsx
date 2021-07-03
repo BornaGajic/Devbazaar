@@ -21,7 +21,7 @@ export class TaskPageStore
         this.service = service;
     }
 
-    async loadNextBatch (clear: boolean): Promise<void>
+    async loadNextBatch (clear: boolean, search?: string): Promise<void>
     {
         if (clear) this.tasks_.clear();
 

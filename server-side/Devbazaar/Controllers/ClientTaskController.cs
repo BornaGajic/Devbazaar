@@ -17,7 +17,7 @@ using static  Devbazaar.Utility.Utility;
 namespace Devbazaar.Controllers
 {
 	[Authorize]
-	[RoutePrefix("Devbazaar/Task")]
+	[RoutePrefix("Task")]
 	public class ClientTaskController : ApiController
 	{
 		private IClientTaskService ClientTaskService { get; set; }

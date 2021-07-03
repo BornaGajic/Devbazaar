@@ -11,8 +11,6 @@ export class BusinessCardPageStore
     service: IServices;
 
     isLoading: boolean = true;
-
-    reactionHandler: IReactionDisposer;
     
     // page_number : page_content
     businessCards_: Map<number, Business[]> = new Map<number, Business[]>()
@@ -22,28 +20,21 @@ export class BusinessCardPageStore
         makeAutoObservable(this, { service: false, rootStore: false });
 
         this.service = service;
-
-        this.reactionHandler = reaction(
-            () => rootStore.searchStore.query,
-            searchString => {
-                console.log(searchString);
-            }
-        );
     }
 
     /**
      * fetches next batch of business cards
      */
-    async loadNextBatch (clear: boolean): Promise<void>
+    async loadNextBatch (clear: boolean, search?: string): Promise<void>
     {
         if (clear) this.businessCards_.clear();
 
         runInAction(() => this.isLoading = true);
 
         Promise.all([
-            await this.fetchBusinessCardPage({ PageNumber: 1 }),
-            await this.fetchBusinessCardPage({ PageNumber: 2 }),
-            await this.fetchBusinessCardPage({ PageNumber: 3 })
+            await this.fetchBusinessCardPage({ PageNumber: 1, Username: search }),
+            await this.fetchBusinessCardPage({ PageNumber: 2, Username: search }),
+            await this.fetchBusinessCardPage({ PageNumber: 3, Username: search })
         ]).then(() => runInAction(() => this.isLoading = false));
     }
 
@@ -73,8 +64,4 @@ export class BusinessCardPageStore
         });
     }
 
-    dispose ()
-    {
-        this.reactionHandler();
-    }
 }

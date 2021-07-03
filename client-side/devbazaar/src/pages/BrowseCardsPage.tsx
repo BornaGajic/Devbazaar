@@ -1,5 +1,6 @@
 import { observer } from "mobx-react";
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router";
 import BigCard from "../components/big-card/BigCard";
 import CardList from "../components/card-list/CardList";
 import PageNavigation from "../components/page-navigation/PageNavigation";
@@ -13,12 +14,18 @@ interface BrowseCardsPageProps
 
 const BrowseCardsPage = observer(({ businessPageStore } : BrowseCardsPageProps) => {
 
-    let [clickedCardId, setClickedCardId] = useState('');
+    let location = useLocation();
     let query = useQuery();
 
+    let [clickedCardId, setClickedCardId] = useState('');
+
     useEffect(() => {
-        businessPageStore.loadNextBatch(true);
-    }, []);
+        if (query.has('search'))
+            businessPageStore.loadNextBatch(true, query.get('search')!);
+        else
+            businessPageStore.loadNextBatch(true);
+
+    }, [location]);
     
     let maxPages = businessPageStore.businessCards_.size;
 

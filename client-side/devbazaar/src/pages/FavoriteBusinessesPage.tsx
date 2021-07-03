@@ -6,16 +6,13 @@ import CardList from "../components/card-list/CardList";
 import PageNavigation from "../components/page-navigation/PageNavigation";
 import { useQuery } from "../hooks/useQuery";
 import { FavoriteBusinessesPageStore } from "../stores/page-stores/FavoriteBusinessesPageStore";
-import { SearchStore } from "../stores/SearchStore";
-import { UiState } from "../stores/ui-store/UiState";
 
 interface FavoriteBusinessesPageProps
 {
     favoriteBusinessPageStore: FavoriteBusinessesPageStore;
-    searchStore: SearchStore;
 }
 
-export const FavoriteBusinessesPage = observer(({ favoriteBusinessPageStore, searchStore }: FavoriteBusinessesPageProps) => {
+export const FavoriteBusinessesPage = observer(({ favoriteBusinessPageStore }: FavoriteBusinessesPageProps) => {
     
     let [clickedCardId, setClickedCardId] = useState('');
     let query = useQuery();

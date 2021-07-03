@@ -16,7 +16,7 @@ using IUser = Devbazaar.Model.Common.IUser.IUser;
 
 namespace Devbazaar.Controllers
 {
-	[RoutePrefix("Devbazaar/User")]
+	[RoutePrefix("User")]
 	public class UserController : ApiController
 	{
 		protected IUserService UserService { get; set; }

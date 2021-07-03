@@ -32,7 +32,8 @@ export class BusinessCardService implements IBusinessCardService
     {
         let response = await axios.post(`${axios.defaults.baseURL}/Business/Businesses`,
         {
-           PageNumber: pageData.PageNumber
+           PageNumber: pageData.PageNumber,
+           Username: pageData.Username
         }, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }});
 
         return response;

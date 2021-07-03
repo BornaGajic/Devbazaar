@@ -2,7 +2,6 @@ import { runInAction } from "mobx";
 import { observer } from "mobx-react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useQuery } from "../../hooks/useQuery";
-import { SearchStore } from "../../stores/SearchStore";
 import { UiState } from "../../stores/ui-store/UiState";
 
 import './PageNavigation.css';

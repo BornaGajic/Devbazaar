@@ -74,6 +74,7 @@ export class ClientTaskStore
             nTask.data = response.data;
             nTask.email = this.clientStore.client.email;
             nTask.username = this.clientStore.client.username;
+            
             this.tasks.push(nTask);
         });
     }

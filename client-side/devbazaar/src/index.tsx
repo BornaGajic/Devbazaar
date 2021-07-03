@@ -19,7 +19,6 @@ configure({
 
 ReactDOM.render(
   <BrowserRouter
-    basename='/Devbazaar'
     forceRefresh={false}
   >
     <React.StrictMode>

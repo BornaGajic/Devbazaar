@@ -17,7 +17,7 @@ using static Devbazaar.Utility.Utility;
 namespace Devbazaar.Controllers
 {
 	[Authorize]
-	[RoutePrefix("Devbazaar/Business")]
+	[RoutePrefix("Business")]
 	public class BusinessController : ApiController
 	{
 		IBusinessService BusinessService { get; set; }

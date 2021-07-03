@@ -46,7 +46,6 @@ const NewTaskPage = observer(({ myTaskStore }: NewTaskPageProps) => {
         });
 
         removeFieldValues();
-        history.goBack();
     };
 
     return (

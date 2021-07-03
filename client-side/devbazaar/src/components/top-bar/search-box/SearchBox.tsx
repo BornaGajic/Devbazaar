@@ -3,28 +3,31 @@ import { observer } from "mobx-react";
 import React, { useState } from "react";
 import { useHistory, useLocation } from "react-router";
 import { useQuery } from "../../../hooks/useQuery";
-import { SearchStore } from "../../../stores/SearchStore";
 
 import './SearchBox.css';
 
-const Searchbox = observer(({ searchStore }: { searchStore: SearchStore }) => {
+const Searchbox = observer(() => {
 
     let [typing, setTyping] = useState('');
     let location = useLocation();
     let history = useHistory();
+    let query = useQuery();
 
     let handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-    
-        history.push(location.pathname + location.search + typing);
 
-        runInAction(() => searchStore.query = location.pathname + location.search + typing);
+        let comp = location.pathname.split('/')[1];
+
+        query.set('search', typing);
+        query.set('comp', comp);
+
+        history.push(location.pathname + '?' + query.toString());
 
         (document.getElementById("inputField") as HTMLInputElement).value = ''; // After submit set value of input field to ''
     };
 
     let handleMainInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        runInAction(() => setTyping('&username=' + e.target.value));
+        runInAction(() => setTyping(e.target.value));
     }
 
     return (

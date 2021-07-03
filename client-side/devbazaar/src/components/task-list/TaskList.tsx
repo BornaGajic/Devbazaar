@@ -20,7 +20,7 @@ interface TaskListProps
 
 const TaskList = observer(({ taskPageStore, pageNumber } : TaskListProps) => {
 
-    let tasks = taskPageStore?.tasks_.get(pageNumber) as Task[];
+    let tasks = taskPageStore?.tasks_.get(pageNumber);
 
     let isMyTask = taskPageStore instanceof MyTaskPageStore ? true : false;
 
@@ -33,7 +33,7 @@ const TaskList = observer(({ taskPageStore, pageNumber } : TaskListProps) => {
                         <p className="lead">Daily dose of work orders!</p>
                     </div>
                     {
-                        [...Array(tasks.length).keys()].map(idx => <TaskView task={ tasks[idx] } isMyTask={isMyTask} />)
+                        tasks?.map(task => <TaskView task={task} isMyTask={isMyTask} />)
                     }
                 </div>
             </div>

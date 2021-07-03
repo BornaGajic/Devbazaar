@@ -3,13 +3,10 @@ import { observer } from "mobx-react";
 import { NavLink, useLocation } from "react-router-dom";
 import { UserRole } from "../../common";
 import { useQuery } from "../../hooks/useQuery";
-import { SearchStore } from "../../stores/SearchStore";
 
 import './SideBar.css';
 
-const Sidebar = observer(({ role, searchStore }: { role: string, searchStore: SearchStore }) => {
-
-    let location = useLocation();
+const Sidebar = observer(({ role }: { role: string }) => {
 
     // Pretvoriti u Obeject s key path exact i search parametrima
     const navArray = role === UserRole.CLIENT ? ['Businesses', 'Tasks','My Tasks', 'Favorites'] : ['Businesses', 'Tasks', 'Pinned Tasks'];
@@ -48,7 +45,6 @@ const Sidebar = observer(({ role, searchStore }: { role: string, searchStore: Se
                             navArray.map((item: string, idx: number) => {
                                 return (
                                     <li 
-                                        onClick={() => runInAction(() => searchStore.query = location.pathname + '?pageNumber=1')} 
                                         className="nav-item fw-bold pb-3 pt-3 w-100"
                                     >
                                         <NavLink 
