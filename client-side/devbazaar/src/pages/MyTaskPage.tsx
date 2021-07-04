@@ -1,3 +1,4 @@
+import { runInAction } from "mobx";
 import { observer } from "mobx-react";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
@@ -19,7 +20,10 @@ const MyTaskPage = observer(({ myTaskPageStore }: MyTaskPageProps) => {
     let query = useQuery();
 
     useEffect(() => {
-        myTaskPageStore.loadMyTasks();
+        runInAction(() => {
+            myTaskPageStore.isLoading = true;
+        })
+        myTaskPageStore.loadMyTasks().then(() => runInAction(() => myTaskPageStore.isLoading = false));
     }, [location]);
 
     let maxPages = myTaskPageStore.tasks_.size;

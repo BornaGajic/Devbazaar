@@ -10,6 +10,7 @@ const Login = observer(({ authStore, userStore } : { authStore: AuthStore, userS
 
     let history = useHistory();
     let [password, setPassword] = useState('');
+    let [isLoading, setIsLoading] = useState(false);
 
     let handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
         userStore.user.data = { email: e.target.value };
@@ -22,8 +23,13 @@ const Login = observer(({ authStore, userStore } : { authStore: AuthStore, userS
     function handleLogin (e: React.SyntheticEvent)
     {
         e.preventDefault();
+        
+        setIsLoading(true);
 
-        authStore.loginAsync(userStore.user.email!, password).then(() => history.push('/'));
+        authStore.loginAsync(userStore.user.email!, password).then(() =>{
+            setIsLoading(false);
+            history.push('/')
+        });
     }
 
     return (
@@ -40,7 +46,16 @@ const Login = observer(({ authStore, userStore } : { authStore: AuthStore, userS
                         <input type="password" className="form-control shadow-none mb-3" id="floatingPassword" placeholder="Password" required onChange={(e) => handlePasswordChange(e)} />
                         <label htmlFor="floatingPassword" className="text-muted">Password</label>
                     </div>
-                    <button className="w-100 btn btn-lg btn-primary mb-3" type="submit">Sign in</button>
+                    <button className="w-100 btn btn-lg btn-primary mb-3" type="submit">
+                        {
+                            isLoading ? 
+                            <div className="spinner-grow" role="status">
+                                <span className="visually-hidden">Loading...</span>
+                            </div>
+                            :
+                            <span>Sign in</span>
+                        }
+                    </button>
                     <p className="mt-5 mb-3 text-muted pb-3">Don't have an account? <a className="link" href="#">Register</a></p>
                 </form>
             </div>
