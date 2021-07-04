@@ -17,7 +17,8 @@ namespace Devbazaar.Service.Common.IUserServices
 		Task<User> UpdateAsync (Dictionary<string, object> item, Guid userId);
 		Task DeleteAsync (IUser user);
 		Task<string> LoginAsync (IUser user);
-
+		Task AddImageAsync (byte[] image, Guid userId);
+		Task<byte[]> GetImageAsync (Guid userId);
 		string GenerateToken (IUser user, TypeOfUser role, int expireMinutes = 30);
 	}
 }

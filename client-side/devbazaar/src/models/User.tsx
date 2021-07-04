@@ -13,7 +13,7 @@ export class User implements IUser
     id?: string;
     username?: string;
     email?: string;
-    logo?: string;
+    imageUrl?: string;
     
     role: UserRole = UserRole.CLIENT;
 
@@ -48,6 +48,15 @@ export class User implements IUser
         localStorage.setItem('token', response.data);
     }
 
+    async addImage (blob: Blob): Promise<void>
+    {
+        await this.services.userService.addImage(blob);
+
+        runInAction(() => {
+            this.imageUrl = URL.createObjectURL(blob);       
+        });
+    }
+
     /**
      *  Gets the users current field values.
      */
@@ -64,7 +73,7 @@ export class User implements IUser
     {
         this.username = data.username ?? this.username;
         this.email = data.email ?? this.email;
-        this.logo = data.logo ?? this.logo;
+        this.imageUrl = data.imageUrl ?? this.imageUrl;
         this.role = data.role ?? this.role;
     }
 }

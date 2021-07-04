@@ -8,5 +8,5 @@ export interface IUser
 
     role?: UserRole;
     
-    logo?: string;
+    imageUrl?: string;
 }

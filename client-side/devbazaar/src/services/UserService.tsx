@@ -14,7 +14,7 @@ export class UserService implements IUserService
             Username: data.username,
             Email: data.email,
             Password: data.password,
-            Logo: data.logo
+            Image: data.imageUrl
         }, 
         { 
             headers: { 
@@ -22,6 +22,39 @@ export class UserService implements IUserService
             },
             params: {
                 tou: role.toString()
+            }
+        });
+        
+        if (response.status !== 200)
+            throw new Error(response.statusText);   
+
+        return response
+    }
+
+    async addImage (blob: Blob)
+    {
+        let formData = new FormData();
+        formData.append('mImage', blob);
+
+        let response = await axios.post(`${axios.defaults.baseURL}/User/AddImage`, formData,
+        { 
+            headers: { 
+                Authorization: `Bearer ${localStorage.getItem('token')}` 
+            }
+        });
+        
+        if (response.status !== 200)
+            throw new Error(response.statusText);   
+
+        return response
+    }
+
+    async getImage ()
+    {
+        let response = await axios.get<any>(`${axios.defaults.baseURL}/User/GetImage`,
+        { 
+            headers: { 
+                Authorization: `Bearer ${localStorage.getItem('token')}` 
             }
         });
         

@@ -20,6 +20,8 @@ namespace Devbazaar.Common.DTO.ClientTask
 		public int LowPrice { get; set; }
 		public int HighPrice { get; set; }
 
+		public byte[] Image { get; set; }
+
 		public DateTime DateAdded { get; set; }
 
 		public bool? IsPinned { get; set; } = null;

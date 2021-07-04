@@ -12,7 +12,7 @@ namespace Devbazaar.DAL.EntityModels
 		public string Username { get; set; }
 		public string Password { get; set; }
 		public string Email { get; set; }
-		public string Logo { get; set; }
+		public byte[] Image { get; set; }
 
 		public virtual ClientEntity Client { get; set; }
 		public virtual BusinessEntity Business { get; set; }

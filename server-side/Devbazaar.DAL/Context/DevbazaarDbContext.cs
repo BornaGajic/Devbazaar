@@ -69,7 +69,7 @@ namespace Devbazaar.DAL.Context
 			modelBuilder.Entity<UserEntity>().Property(p => p.Username).IsRequired().HasMaxLength(50);
 			modelBuilder.Entity<UserEntity>().Property(p => p.Password).IsRequired();
 			modelBuilder.Entity<UserEntity>().Property(p => p.Email).IsRequired().HasMaxLength(50);
-			modelBuilder.Entity<UserEntity>().Property(p => p.Logo).IsOptional();
+			modelBuilder.Entity<UserEntity>().Property(p => p.Image).IsOptional();
 			modelBuilder.Entity<UserEntity>().HasOptional(u => u.Client).WithRequired(uc => uc.User).WillCascadeOnDelete();
 			modelBuilder.Entity<UserEntity>().HasOptional(u => u.Business).WithRequired(uc => uc.User).WillCascadeOnDelete();
 		}

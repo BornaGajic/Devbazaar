@@ -78,10 +78,33 @@ namespace Devbazaar.Service.UserServices
 			}
 
 			user.Id = thisUser.Id;
-			user.Logo = thisUser.Logo;
 			user.Username = thisUser.Username;
 
 			return GenerateToken(user, role);
+		}
+
+		public async Task AddImageAsync (byte[] image, Guid userId)
+		{
+			var userEntity = await (from u in UnitOfWork.UserRepository.Table where u.Id == userId select u).SingleAsync();
+
+			userEntity.Image = image;
+			
+			try
+			{
+				await UnitOfWork.UpdateAsync(userEntity);
+				await UnitOfWork.CommitAsync<UserEntity>();
+			}
+			catch (Exception e)
+			{
+				throw e;
+			}
+		}
+
+		public async Task<byte[]> GetImageAsync (Guid userId)
+		{
+			var userEntity = await (from u in UnitOfWork.UserRepository.Table where u.Id == userId select u).SingleAsync();
+
+			return userEntity.Image;
 		}
 
 		public async Task<User> UpdateAsync (Dictionary<string, object> changedValues, Guid userId)
@@ -131,8 +154,7 @@ namespace Devbazaar.Service.UserServices
 				new Claim("Username", user.Username),
 				new Claim("Email", user.Email),
 				new Claim("Role", role.ToString()),
-				new Claim(ClaimTypes.Role, role.ToString()),
-				new Claim("Logo", user.Logo ?? string.Empty)
+				new Claim(ClaimTypes.Role, role.ToString())
 			};
 
 			string issuer = ConfigurationManager.AppSettings["issuer"];

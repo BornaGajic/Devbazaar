@@ -72,10 +72,15 @@ const BigCard = observer((bigCardProps: BigCardProps) => {
         <div className="modal fade mt-3 h-100" id="exampleModal" tabIndex={-1} aria-labelledby="exampleModalLabel" aria-hidden="true" style={{zIndex: 99999}}>
             <div id="bigCard" className="modal-dialog modal-dialog-centered mb-0 mt-0">
                 <div className="modal-content card h-100 shadow w-100 p-0 mb-5">
-                    <svg className="figure-img img-fluid card-img-top" width="512" height="256" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 512x256" preserveAspectRatio="xMidYMid slice" focusable="false">
-                        <rect width="100%" height="100%" fill="#868e96"></rect>
-                        <text x="43%" y="50%" fill="#dee2e6" dy=".3em">512x256</text>
-                    </svg>
+                    {
+                        card?.image ? 
+                            <img src={card.image} width="512" height="256" className="figure-img img-fluid card-img-top"/>
+                        :
+                            <svg className="figure-img img-fluid card-img-top" width="512" height="256" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 512x256" preserveAspectRatio="xMidYMid slice" focusable="false">
+                                <rect width="100%" height="100%" fill="#868e96"></rect>
+                                <text x="43%" y="50%" fill="#dee2e6" dy=".3em">512x256</text>
+                            </svg>
+                    }
                     <div className="card-body">
                         <p className="card-title display-5 text-center">{ card?.username }</p>
                         <div className="card-text fs-5">

@@ -27,9 +27,14 @@ const UserDropdown = observer(({ authStore, userStore }: UserDropdownProps) => {
                 <div className="nav-item dropdown">
                     <a className="dropdown-toggle nav-link p-0 m-0" aria-expanded="false" data-bs-toggle="dropdown" href="#">
                         <span className="d-none d-lg-inline me-2 text-gray-600 small fw-bold">{userStore.user.username}</span>
-                        <svg className="" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: avatar" preserveAspectRatio="xMidYMid slice" focusable="false">
-                            <circle cx="16" cy="16" r="16" fill="#868e96"></circle>
-                        </svg>
+                        {
+                            userStore.user.imageUrl ? 
+                                <img src={userStore.user.imageUrl} height="32" width="32" />
+                            :
+                                <svg className="" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: avatar" preserveAspectRatio="xMidYMid slice" focusable="false">
+                                    <circle cx="16" cy="16" r="16" fill="#868e96"></circle>
+                                </svg>
+                        }
                     </a>
                     <ul id="moreinfo" className="position-absolute dropdown-menu dropdown-menu-end dropdown-menu-lg-start mt-3 shadow animate__animated animate__fadeIn animate__faster">
                         <li>

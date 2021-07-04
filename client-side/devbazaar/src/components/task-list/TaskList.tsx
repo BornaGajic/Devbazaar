@@ -19,7 +19,6 @@ interface TaskListProps
 }
 
 const TaskList = observer(({ taskPageStore, pageNumber } : TaskListProps) => {
-
     let tasks = taskPageStore?.tasks_.get(pageNumber);
 
     let isMyTask = taskPageStore instanceof MyTaskPageStore ? true : false;

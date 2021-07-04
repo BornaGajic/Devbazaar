@@ -91,6 +91,7 @@ namespace Devbazaar.Service.ClientTaskServices
 
 				clientTask.Email = userEntity.Email;
 				clientTask.Username = userEntity.Username;
+				clientTask.Image = userEntity.Image;
 
 				if (businessEntity != null)
 				{

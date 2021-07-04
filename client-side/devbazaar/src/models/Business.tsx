@@ -1,6 +1,7 @@
 import { makeAutoObservable, runInAction } from "mobx";
 
 import { IRole } from "../common";
+import Helper from "../common/Helper";
 import { IServices } from "../services/contracts";
 import { CategoryStore } from "../stores/CategoryStore";
 import { BusinessStore } from "../stores/user-stores/business-stores/BusinessStore";
@@ -25,6 +26,8 @@ export class Business implements IBusiness, IRole
     website?: string;
     country: string = '';
     city: string = '';
+
+    image?: string;
     
     postalCode: number = 0;
     popularity?: number;
@@ -142,6 +145,10 @@ export class Business implements IBusiness, IRole
 
         this.isFavourited = data.isFavourited;
         this.available = data.available;
+
+        Helper.Base64ToBlob(data.image ?? '').then(blob => {
+            runInAction(() => this.image = data.image ? URL.createObjectURL(blob) : this.image)
+        });
 
         data.categories?.forEach(category => {
             let existingCategory = this.categoryStore.categories.find(item => item.id === category.id) as Category;

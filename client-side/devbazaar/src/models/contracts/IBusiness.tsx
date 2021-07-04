@@ -19,5 +19,7 @@ export interface IBusiness
     available: boolean;
     isFavourited: boolean;
 
+    image?: string;
+
     categories?: ICategory[];
 }

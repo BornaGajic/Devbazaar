@@ -275,6 +275,7 @@ namespace Devbazaar.Service.BusinessServices
 							Email = user.Email,
 							Username = user.Username,
 							Website = business.Website,
+							Image = user.Image,
 							Popularity = business.Clients.Count
 						});
 

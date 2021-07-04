@@ -22,6 +22,7 @@ namespace Devbazaar.Common.DTO.Business
 		public string City { get; set; }
 		public int PostalCode { get; set; }
 		public int Popularity { get; set; }
+		public byte[] Image { get; set; }
 		public List<ICategory> Categories { get; set; } = null;
 	}
 }

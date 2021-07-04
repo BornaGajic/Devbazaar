@@ -4,7 +4,7 @@ import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
 import { UserRole } from "../../common";
 import { useRole } from "../../hooks/useRole";
-import { Task } from "../../models";
+import { Task, User } from "../../models";
 import { RootStore } from "../../stores";
 
 interface TaskViewProps
@@ -26,9 +26,14 @@ const TaskView = observer(({ task, isMyTask }: TaskViewProps) => {
                         <button className="d-flex align-items-center justify-content-between btn" data-bs-toggle="collapse" data-bs-target={"#a" + task.id} aria-expanded="false" aria-controls={"collapse" + task.id}>
                             <div className="row w-100">
                             <div className="col text-start">
-                                <svg className="" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: avatar" preserveAspectRatio="xMidYMid slice" focusable="false">
-                                    <circle cx="16" cy="16" r="16" fill="#868e96"></circle>
-                                </svg>
+                                {
+                                    task.image ? 
+                                        <img src={task.image} width="32" height="32" />
+                                    :
+                                        <svg className="" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: avatar" preserveAspectRatio="xMidYMid slice" focusable="false">
+                                            <circle cx="16" cy="16" r="16" fill="#868e96"></circle>
+                                        </svg>
+                                }
                                 <span className="fs-6 ps-3">{ task?.username }</span>
                             </div>
                             <div className="col text-center">

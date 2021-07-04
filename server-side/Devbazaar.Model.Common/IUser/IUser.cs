@@ -12,6 +12,6 @@ namespace Devbazaar.Model.Common.IUser
 		string Username { get; set; }
 		string Password { get; set; }
 		string Email { get; set; }
-		string Logo { get; set; }
+		byte[] Image { get; set; }
 	}
 }

@@ -18,6 +18,7 @@ import { IUser } from '../../models/contracts';
 import { IServices } from '../../services/contracts';
 import { IRole } from '../../common';
 import { BusinessStore } from './business-stores/BusinessStore';
+import { Helper } from '../../common/Helper';
 
 // TODO: business / client store should be initialised lazely, because only one is needed. 
 
@@ -69,7 +70,7 @@ export class UserStore
             Username: string;
             Email: string;
             Role: string;
-            Logo: string;
+            Image: string;
         }
 
 		let payload: jwtPayload = jwtDecode(token);
@@ -81,9 +82,13 @@ export class UserStore
                 username: payload['Username'],
                 email: payload['Email'],
                 role: payload['Role'] as UserRole,
-                logo: payload['Logo']
             } as IUser;
         });
+
+        let base64Image = (await this.service.userService.getImage()).data;
+        let blobImage = await Helper.Base64ToBlob(base64Image);
+
+        this.user.imageUrl = URL.createObjectURL(blobImage);
 
         await this.fetchRoleData();
     }

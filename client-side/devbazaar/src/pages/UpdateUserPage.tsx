@@ -40,7 +40,7 @@ const UpdateUserPage = observer(({ userStore }: UpdateUserPageProps) => {
             </div>
             <div className="row justify-content-start mt-5">
                 <div className="col-lg-4">
-                    <UpdateProfilePicture />
+                    <UpdateProfilePicture userStore={userStore}/>
                     <UpdateUserSettings userStore={userStore}/>
                     {
                         user.role === UserRole.BUSINESS ? 

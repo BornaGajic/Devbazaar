@@ -160,6 +160,10 @@
     <Compile Include="Migrations\202105310956594_TitleToTask.designer.cs">
       <DependentUpon>202105310956594_TitleToTask.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202107040648127_Image.cs" />
+    <Compile Include="Migrations\202107040648127_Image.designer.cs">
+      <DependentUpon>202107040648127_Image.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -218,6 +222,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202105310956594_TitleToTask.resx">
       <DependentUpon>202105310956594_TitleToTask.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107040648127_Image.resx">
+      <DependentUpon>202107040648127_Image.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using System.Web.Http.Cors;
 using AutoMapper;
@@ -92,6 +95,47 @@ namespace Devbazaar.Controllers
 			{
 				return Request.CreateErrorResponse(HttpStatusCode.BadRequest, e);
 			}
+		}
+
+		[Authorize]
+		[HttpPost]
+		[Route("AddImage")]
+		public async Task<HttpResponseMessage> AddImageAsync ()
+		{
+			var userId = Guid.Parse(User.Identity.GetUserId());
+
+			using (var ms = new MemoryStream())
+			{
+				await Request.Content.ReadAsMultipartAsync<MultipartMemoryStreamProvider>(new MultipartMemoryStreamProvider())
+				.ContinueWith(task => {
+
+					MultipartMemoryStreamProvider provider = task.Result;
+
+					foreach (HttpContent content in provider.Contents)
+					{
+						Stream stream = content.ReadAsStreamAsync().Result;
+						Image image = Image.FromStream(stream);
+
+						image.Save(ms, image.RawFormat);
+					}
+				});
+				
+				await UserService.AddImageAsync(ms.ToArray(), userId);
+			}
+
+			return Request.CreateResponse(HttpStatusCode.OK);
+		}
+
+		[Authorize]
+		[HttpGet]
+		[Route("GetImage")]
+		public async Task<HttpResponseMessage> GetImageAsync ()
+		{
+			var userId = Guid.Parse(User.Identity.GetUserId());
+
+			var image = await UserService.GetImageAsync(userId);
+
+			return Request.CreateResponse(HttpStatusCode.OK, image);
 		}
 
 		[Authorize]

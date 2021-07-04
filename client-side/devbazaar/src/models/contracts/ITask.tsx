@@ -7,6 +7,8 @@ export interface ITask
     username?: string;
     email?: string;
 
+    image?: string;
+
     lowPrice?: number;
     highPrice?: number;
 

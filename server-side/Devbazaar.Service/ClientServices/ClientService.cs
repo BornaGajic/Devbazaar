@@ -68,6 +68,7 @@ namespace Devbazaar.Service.ClientServices
 					PostalCode = business.PostalCode,
 					Website = business.Website,
 					Popularity = business.Clients.Count,
+					Image = business.User.Image,
 					Categories = Mapper.Map<List<ICategory>>(business.Categories)
 				});
 
@@ -104,6 +105,7 @@ namespace Devbazaar.Service.ClientServices
 
 				task.Username = userEntity.Username;
 				task.Email = userEntity.Email;
+				task.Image = userEntity.Image;
 			}
 
 			return clientTasks;
@@ -145,6 +147,7 @@ namespace Devbazaar.Service.ClientServices
 				PostalCode = businessEntity.PostalCode,
 				Website = businessEntity.Website,
 				Popularity = businessEntity.Clients.Count,
+				Image = businessEntity.User.Image,
 				Categories = Mapper.Map<List<ICategory>>(businessEntity.Categories)
 			};
 

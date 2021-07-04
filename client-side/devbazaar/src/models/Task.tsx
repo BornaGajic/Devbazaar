@@ -1,4 +1,5 @@
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
+import Helper from "../common/Helper";
 
 import { ITask } from "./contracts";
 
@@ -10,6 +11,8 @@ export class Task implements ITask
     title?: string;
     username?: string;
     email?: string;
+
+    image?: string;
 
     lowPrice?: number;
     highPrice?: number;
@@ -45,6 +48,9 @@ export class Task implements ITask
         this.username = data.username ?? this.username;
         this.email = data.email ?? this.email;
         this.dateAdded = data.dateAdded ?? this.dateAdded;
+
+        Helper.Base64ToBlob(data.image ?? '').then(blob => {
+           runInAction(() => this.image = data.image ? URL.createObjectURL(blob) : this.image)
+        });
     }
-    
 }

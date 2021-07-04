@@ -31,7 +31,7 @@ export class ClientTaskStore
     async loadTasks (): Promise<void>
     {
         let response = await this.service.clientService.fetchTasks();
-
+        
         await this.updateFromJson(response.data);
     }
 
@@ -72,6 +72,7 @@ export class ClientTaskStore
         runInAction(() => {
             nTask.id = response.data.id;
             nTask.data = response.data;
+            
             nTask.email = this.clientStore.client.email;
             nTask.username = this.clientStore.client.username;
             

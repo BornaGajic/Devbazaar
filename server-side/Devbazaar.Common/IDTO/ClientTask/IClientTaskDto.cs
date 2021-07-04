@@ -11,6 +11,7 @@ namespace Devbazaar.Common.IDTO.ClientTask
 	{
 		string Username { get; set; }
 		string Email { get; set; }
+		byte[] Image { get; set; }
 
 		bool? IsPinned { get; set; }
 	}
